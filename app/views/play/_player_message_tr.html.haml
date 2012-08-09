@@ -1,0 +1,18 @@
+- if player_message.message_type == PlayerMessage::MESSAGE_COMMUNICATION
+  %tr{:valign => :top, :class => 'player_message_tr'}
+    %td{:style => 'text-align: right;', :width => 45}
+      %img{:src => player_message.from_user.photo.url(:small), :style => 'margin-right: 5px; width: 40px;', :class => 'rounded-img-small'}
+  
+    %td{:style => "padding-bottom: 1em;"}
+      %div{:class => 'player_message_content'}= raw textilize(auto_link(player_message.content))
+      %div{:style => 'font-size: 10px; color: #666;'}
+        - if player_message.entry.present?
+          = link_to player_message.program_budge.budge_level, {:controller => :stream, :action => :view, :id => player_message.entry.id}
+          &middot;
+        - elsif player_message.program_budge.present?
+          =player_message.program_budge.budge_level
+          
+- elsif player_message.message_type == PlayerMessage::MESSAGE_CHECKIN
+  %tr{:valign => :top, :class => 'player_message_tr player_message_checkin'}
+    %td{:colspan => 2}
+      %div{:class => 'player_message_content'}= raw textilize(auto_link("#{@is_coach ? "#{player_message.from_user.name}" : 'You'} #{player_message.content}."))

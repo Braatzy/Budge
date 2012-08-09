@@ -1,0 +1,25 @@
+%tr{:valign => :top}
+  %td{:style => 'width:75px; padding-top: 10px;'}= link_to image_tag(leader.user.photo.url(:small), {:style => 'width: 75px; border: 1px solid #ccc;'}), {:controller => :profile, :action => :id, :id => leader.user.id}
+  %td
+    %h3{:style => 'padding-top: 10px; margin: 0;'}
+      = link_to leader.user.name, {:host => DOMAIN, :protocol => 'http://', :controller => :profile, :action => :id, :id => leader.user.id}, {:style => 'color: #777; font-weight: bold;'}
+
+    %table
+      %tr{:valign => :top}
+        %td
+          - if leader.checkin_string.present?
+            %div{:style => 'font-family: courier; font-size: 13px; letter-spacing: -0.2em; padding-top: 3px;'}            
+              - (0..29).each do |num|
+                - if num == 0
+                  %span{:style => 'color: orange;'} &bull;                
+                - elsif leader.checkin_string[num] == '0' or leader.checkin_string[num] == 48 # 0, or false
+                  %span{:style => 'color: #ccc;'} &bull;
+                - else
+                  %span{:style => 'color: #000;'} &bull;
+                - if num == 9 or num == 19
+                  %br   
+        %td{:width => 15, :style => 'padding-top: 0;'}= image_tag 'bracket.png', {:style => 'width: 30px; height: 50px;'}
+        %td.total{:style => 'padding-top: 10px;'}                   
+          - score_hash = leader.score_hash
+          %h3{:style => 'margin: 0; padding: 0; font-size: 12px;'} #{score_hash[:amount]} 
+          %div{:style => 'font-size: 12px;'} #{score_hash[:post_text]}

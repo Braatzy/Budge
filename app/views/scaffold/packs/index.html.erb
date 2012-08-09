@@ -1,0 +1,16 @@
+<h1>Trait Packs</h1>
+<%= render :partial => 'scaffold/packs/pack_and_traits_nav' %>
+
+<% @packs.each do |pack| %>
+    <h3><%= pack.pack_name %></h3>
+    <h3 style="color: #666; font-weight: normal;">Settings: <%= pack.token %>, <%= pack.launched? ? 'launched' : 'not launched' %>, <%= pack.public? ? 'visible to users' : 'private' %>, <%= pack.requires_unlocking? ? 'requires unlocking' : "unlocked by default" %></h3>
+    <% if pack.description.present? %><p>Desc: <%= textilize pack.description %></p><% end %>
+    
+    <ol id="pack_traits_<%= pack.id %>" style="padding: 0 20px;">
+        <%= render :partial => 'pack_traits', :locals => {:pack => pack} %>
+    </ol>
+    <p><%= link_to 'Edit this pack', edit_scaffold_pack_path(pack) %> |
+    <%= link_to 'Destroy', [:scaffold, pack], :confirm => 'Are you sure?', :method => :delete %></p>
+    <hr size="1" noshade="noshade" color="#000;" />
+<% end %>
+

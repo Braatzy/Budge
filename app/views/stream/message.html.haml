@@ -1,0 +1,13 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Private message"}
+  %div{'data-role' => :content, :class => :content}
+    
+    %h3= @player_message.program.name
+    
+    %div{:class => :player_messages}
+      %table{:style => 'margin-top: 1em;'}
+        = render :partial => 'play/player_message_tr', :locals => {:player_message => @player_message}
+
+    %p= link_to "Reply", {:controller => :play, :action => :coach_stream, :id => @program_player.id}, {'data-role' => :button}
+
+= render :partial => 'home/mobile_footer'

@@ -1,0 +1,55 @@
+= form_for([:scaffold, @entry]) do |f|
+  - if @entry.errors.any?
+    #errorExplanation
+      %h2= "#{pluralize(@entry.errors.count, 'error')} prohibited this user from being saved:"
+      %ul
+      - @entry.errors.full_messages.each do |msg|
+        %li= msg
+  
+  .field
+    = f.label :user_id
+    %br
+    = f.text_field :user_id
+  .field
+    = f.label :program_player_id
+    %br
+    = f.text_field :program_player_id
+  .field
+    = f.label :program_id
+    %br
+    = f.text_field :program_id
+  .field
+    = f.label :program_budge_id
+    %br
+    = f.text_field :program_budge_id
+  .field
+    = f.label :player_message_id
+    %br
+    = f.text_field :player_message_id
+  .field
+    = f.label :tweet_id
+    %br
+    = f.text_field :tweet_id
+  .field
+    = f.label :facebook_post_id
+    %br
+    = f.text_field :facebook_post_id
+  .field
+    = f.label :location_context_id
+    %br
+    = f.text_field :location_context_id
+  .field
+    = f.label :message
+    %br
+    = f.text_area :message
+  .field
+    = f.label :message_type
+    %br
+    = f.text_field :message_type
+  .field
+    = f.label :privacy_setting
+    %br
+    = f.text_field :privacy_setting
+
+  .actions
+    = f.submit

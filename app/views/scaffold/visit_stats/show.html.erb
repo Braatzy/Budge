@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Constrained by:</b>
+  <%= @visit_stat.constrained_by %>
+</p>
+
+<p>
+  <b>Constrained by:</b>
+  <%= @visit_stat.constrained_by_id %>
+</p>
+
+<p>
+  <b>Constrained by id2:</b>
+  <%= @visit_stat.constrained_by_id2 %>
+</p>
+
+<p>
+  <b>Num visits:</b>
+  <%= @visit_stat.num_visits %>
+</p>
+
+<p>
+  <b>Total visits:</b>
+  <%= @visit_stat.total_visits %>
+</p>
+
+<p>
+  <b>Percent visits:</b>
+  <%= @visit_stat.percent_visits %>
+</p>
+
+
+<%= link_to 'Edit', edit_visit_stat_path(@visit_stat) %> |
+<%= link_to 'Back', visit_stats_path %>

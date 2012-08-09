@@ -1,0 +1,110 @@
+development:
+  twitter:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://api.twitter.com'
+    callback: "http://budge.dev/oauth/twitter_callback"
+    klout_key: 
+  twitter_coach:
+    consumer_key: 
+    consumer_secret: 
+    access_token: 2185-
+    access_secret: 
+    site: 'https://api.twitter.com'
+    callback: "http://budge.dev/oauth/twitter_coach_callback"
+  facebook:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://graph.facebook.com'
+    callback: "http://budge.dev/oauth/facebook_callback"
+    subscription_callback: "http://budge.dev/oauth/facebook_subs_callback"
+    open_graph_namespace: 'budgebeta'
+  foursquare:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://api.foursquare.com'
+    callback: "http://budge.dev/oauth/foursquare_callback"
+  klout:
+    consumer_key: 
+    consumer_secret:
+    site: 'http://api.klout.com'
+    callback: 
+  simplegeo:
+    consumer_key: 
+    consumer_secret: 
+    site: 'http://api.simplegeo.com'
+    callback:     
+  bitly:
+    username: 
+    api_key: 
+  fitbit:
+    consumer_key: 
+    consumer_secret: 
+    site: 'http://api.fitbit.com'
+    callback: "http://budge.dev/oauth/fitbit_callback"
+  withings:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://oauth.withings.com'
+    callback: 'http://budge.dev/oauth/withings_callback'
+  runkeeper:
+    consumer_key: 
+    consumer_secret: 
+    callback: "http://budge.dev/oauth/runkeeper_callback"
+  openpaths:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://openpaths.cc/api/1'
+    callback: "http://budge.dev/oauth/openpaths_callback"
+production:
+  twitter:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://api.twitter.com'
+    callback: "http://bud.ge/oauth/twitter_callback"
+    klout_key: 
+  twitter_coach:
+    consumer_key: 
+    consumer_secret: 
+    access_token: 2185-
+    access_secret: 
+    site: 'https://api.twitter.com'
+    callback: "http://bud.ge/oauth/twitter_coach_callback"
+  facebook:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://graph.facebook.com'
+    callback: "http://bud.ge/oauth/facebook_callback"
+    open_graph_namespace: 'budgebook'
+  foursquare:
+    consumer_key: 
+    consumer_secret: 
+    site: 'https://api.foursquare.com'
+    callback: "https://s.bud.ge/oauth/foursquare_callback"
+  klout: 
+    consumer_key: 
+    consumer_secret: 
+    site: http://api.klout.com'
+    callback: 
+  simplegeo:
+    consumer_key: 
+    consumer_secret: 
+    site: 'http://api.simplegeo.com'
+    callback:     
+  bitly:
+    username: 
+    api_key: 
+  fitbit:
+    consumer_key: 
+    consumer_secret: 
+    site: 'http://api.fitbit.com'
+    callback: "http://bud.ge/oauth/fitbit_callback"
+  withings:
+    consumer_key: 
+    consumer_secret: 
+    site: 'http://wbsapi.withings.net'
+    callback: 'http://bud.ge/oauth/withings_callback'
+  runkeeper:
+    consumer_key: 
+    consumer_secret: 
+    callback: "http://bud.ge/oauth/runkeeper_callback"

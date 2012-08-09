@@ -1,0 +1,24 @@
+%h1=link_to 'Messages','/dash/messages'
+
+-if @messages_paginated
+  =paginate @messages
+
+-if params[:id].present?
+  %h3=link_to "@#{@user.twitter_username}","/dash/user/#{@user.id}"
+  -show_user_info=false
+-else
+  -show_user_info=true
+
+=render :partial=>'messages', :locals=>{:messages=>@messages,:table_id=>"player_messages",:show_user_info=>show_user_info,:use_data_table=>false,:use_simple_table=>false}
+
+-if @messages_paginated
+  %div{:style=>'margin-top: 20px'}=paginate @messages
+
+:javascript
+  $(document).ready(function() {
+    tbl=$('#player_messages').dataTable( {
+      "sScrollY": "500px",
+      "bPaginate": false,
+      "aaSorting": [[ 0, "desc" ]]
+       });   
+  } );

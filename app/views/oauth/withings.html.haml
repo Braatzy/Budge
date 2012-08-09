@@ -1,0 +1,26 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Withings"}
+  %div{'data-role' => :content}
+    - if current_user and current_user.withings_user_id.present?
+      %p You're already connected to Withings under the #{current_user.withings_username} username.
+      %h1 Connect to a different Withings account 
+    - else
+      %h1 Connect your Withings scale
+
+    - if flash[:error].present?
+      %div{:class => :rounded, :style => 'border: 1px solid pink; margin: 1em 0;'}= flash[:error]
+
+    = form_tag({:controller => :oauth, :action => :withings}, {:id => 'withings_form', 'data-ajax' => 'false'}) do
+      %p 
+        %div{:style => 'font-size: 16px;'} Your Withings email address
+        = text_field :user, :withings_email, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+    
+      %p 
+        %div{:style => 'font-size: 16px;'} Your Withings password
+        = password_field :user, :withings_password, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+
+      %div{:class => 'ui-grid-a'}
+        %div{:class => 'ui-block-a'}
+          = link_to "Back", "#connect", {'data-rel' => 'back', 'data-role' => :button}
+        %div{:class => 'ui-block-b'}
+          = button "Connect", {}, {'data-theme' => 'e', :class => :submit_form, 'data-form-id' => 'withings_form'}

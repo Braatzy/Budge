@@ -1,0 +1,29 @@
+%h1 Foursquare Categories
+- @num = 0
+- @categories.each do |category_1|
+  %p{:style => 'margin-bottom: 1em;'}
+    = image_tag category_1['icon'], {:align => 'absmiddle'}
+    = link_to category_1['name'], :controller => 'scaffold/foursquare_categories', :action => :edit, :category_id => category_1['id']
+    %span{:style => 'color: #666; font-size: 11px;'}
+      = category_1['id']
+    - @num += 1
+  - if category_1['categories'].present?
+    - category_1['categories'].each do |category_2|
+      %p{:style => 'margin-bottom: 1em; margin-left: 5em;'}
+        = image_tag category_2['icon'], {:align => 'absmiddle'}
+        = link_to category_2['name'], :controller => 'scaffold/foursquare_categories', :action => :edit, :category_id => category_2['id']
+        %span{:style => 'color: #666; font-size: 11px;'}= category_2['id']
+        - @num += 1
+      - if category_2['categories'].present?
+        - category_2['categories'].each do |category_3|
+          %p{:style => 'margin-bottom: 1em; margin-left: 10em;'}
+            = image_tag category_2['icon'], {:align => 'absmiddle'}
+            = link_to category_3['name'], :controller => 'scaffold/foursquare_categories', :action => :edit, :category_id => category_3['id']
+            %span{:style => 'color: #666; font-size: 11px;'}= category_3['id']
+            - @num += 1
+          - if category_3['categories'].present?
+            - category_3['categories'].each do |category_4|
+              %p{:style => 'margin-bottom: 1em; margin-left: 15em;'}= category_4['name']
+              - raise '4'
+          
+%h2= @num.to_s + ' categories total'

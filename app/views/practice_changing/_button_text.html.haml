@@ -1,0 +1,12 @@
+- stats_hash ||= {}
+%h1 Click this button
+#subtext 
+  - if stats_hash[:day_streak].present? and stats_hash[:day_streak] > 0
+    = stats_hash[:day_streak].to_i
+    day streak.
+  - elsif stats_hash[:days_ago].present?    
+    Clicked 
+    = pluralize stats_hash[:days_ago].to_i, 'day'
+    ago.
+  - else
+    It's never been clicked before.

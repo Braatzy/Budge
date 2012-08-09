@@ -1,0 +1,33 @@
+<%= form_for(@player_note) do |f| %>
+  <% if @player_note.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@player_note.errors.count, "error") %> prohibited this player_note from being saved:</h2>
+
+      <ul>
+      <% @player_note.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :program_player_id %><br />
+    <%= f.text_field :program_player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :about_user_id %><br />
+    <%= f.text_field :about_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :note_about %><br />
+    <%= f.text_field :note_about %>
+  </div>
+  <div class="field">
+    <%= f.label :text %><br />
+    <%= f.text_area :text %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

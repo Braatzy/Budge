@@ -1,0 +1,7 @@
+%div{'data-role' => :page, :id => :coaches}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Find a coach"}
+  = render :partial => 'store/dollar_credit_nav'
+  %div{'data-role' => :content, :class => :content}
+    = render :partial => 'coach_list', :locals => {:program => @program, :program_player => @program_player}
+    =button 'Return to settings', {:controller => :profile, :action => :user_info, :id => :coaches}
+

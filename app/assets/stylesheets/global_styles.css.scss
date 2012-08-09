@@ -1,0 +1,75 @@
+// This stores all of the variables that can be shared between stylesheets
+@import 'compass';
+
+// Reset some basics
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	//vertical-align: baseline;
+}
+ol, ul {
+  padding: 1em 0 1em 20px;
+}
+p {
+  margin: 1em 0;
+}
+h1, h2, h3 {
+  margin-bottom: 1em;
+}
+strong {
+  font-weight: bold;
+}
+// Causes scrollbars to appear (from jquery-mobile)
+.ui-btn {
+  position: inherit;
+}
+
+// Colors
+$budge_green: #b6d258;
+$light_green: #c6d7a1;
+$dark_green: #4a8e4a;
+$active_link: #1c511c;
+
+// Fonts
+$handwriting: Sensibility_Italic;
+$sans_serif: Helvetica Neue, HelveticaNeue, Helvetica, Arial;
+
+@mixin handwriting{font-family: $handwriting, helvetical, arial, sans serif; font-weight: normal;}
+@mixin no_underline{text-decoration: none;}
+@mixin basic_gradient($color, $darken_by){
+  @include background-image(linear-gradient($color, darken($color, $darken_by)));
+}
+@mixin rounded($radius: 5px) {
+  @include border-radius($radius);
+}
+.rounded{
+  @include rounded;
+}
+$background_color: #fcfcfc;
+$link_default_color: #7A99AC;
+$header_bar_mobile_color: #555;
+$header_bar_web_color: #555;
+$top_nav_bar_color: #e3ecec;
+$top_nav_buttons_color: #555;
+$top_nav_buttons_selected_color: #666;
+$input_bg_color: #ffffff;
+$input_border_color: #808080;
+$happy_color: #31261d;
+
+$button_color: #fff; //#b0bbbb;
+$button_text_color: #0085AD; // #e3ecec;
+$button_important_color: #0085AD;//#d1ec9b;//#cae790;//#FFFFCC;
+$button_important_text_color: #e3ecec; //#686c6c;
+$button_cancel_color: #f81812;
+$button_cancel_text_color: #ddd;
+
+$loading_overlay_color: lighten(#707372, 20%);//darken(#e3ecec,10%); //#1e90ff; //spinney snail
+$loading_overlay_text_color: #fff;//darken($button_important_text_color,20%);
+$below_fold_background_color: #e3ecec; //#FFFFCC;
+
+.some_top_margin{
+  margin-top:  25px;
+}

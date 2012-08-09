@@ -1,0 +1,66 @@
+%div{'data-role' => :page, :id => :build_index}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Help Build Budge"}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    %h1.handwriting{:style => 'margin-bottom: 0;'}= @current_contest
+    %div On April 30th, we'll pick 2 winners from the top 20 suggested programs based on your votes. Winners will get to name a new program, get credit on our site, and collaborate with Habit Labs to design the levels.
+    
+    - if @can_add_suggestions
+      = form_tag url_for(:controller => :build, :action => :suggest), {:id => 'suggest_form', 'data-ajax' => 'false'} do
+        %h3{:style => 'margin: 1em 0 5px 0;'} Name the program (ie. Pushup Animal)
+        = text_field :suggestion, :title, {:class => 'stylized_input', :style => 'font-size: 16px; width: 95%; padding: 5px;'}
+        %h3{:style => 'margin: 1em 0 5px 0;'} Short description of your program
+        = text_area :suggestion, :description, {:class => 'stylized_input', :style => 'font-size: 16px; width: 95%; padding: 5px;'}
+        %div{:style => 'margin-top: 1em;'}
+          %label{:for => 'suggestion_vote_would_play'} 
+            = check_box :suggestion_vote, :would_play, {:style => 'display: none;'}
+            I'd play this
+          %label{:for => 'suggestion_vote_would_build'}         
+            = check_box :suggestion_vote, :would_build, {:style => 'display: none;'}
+            I'd help write this
+
+        %h3{:style => 'margin: 1em 0 5px 0;'} Your email 
+        .subtle We will only use this to let you know if your program wins.
+        = text_field :suggestion, :email, {:class => 'stylized_input', :style => 'font-size: 16px; width: 95%; padding: 5px;', :value => "#{current_user.present? ? current_user.email : ''}"}
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'suggest_form'}
+
+    - else  
+      %div{:style => 'text-align: center;'}
+        = image_tag 'build.png', :width => 300, :style => 'border-bottom: 3px solid #000; margin-bottom: 2em;'
+      = form_tag url_for(:controller => :build, :action => :code), {:id => 'code_form', 'data-ajax' => 'false'} do 
+        .ui-grid-a
+          .ui-block-a
+            %h3 Find the code
+            %p{:style => 'padding-right: 10px;'} 
+              Search far and wide around the Interweb for clues and hints about what the code might be.  Or 
+              %a{:href => "http://twitter.com/budge"} check our Twitter feed 
+              for hints.
+          .ui-block-b   
+            %h3 Enter code    
+            = text_field :contest, :code, {:style => 'width: 90%;', 'autocapitalize' => 'off', 'autocorrect' => 'off'}
+            = button "Go!", {}, {:class => :submit_form, 'data-form-id' => 'code_form'}
+
+    - if @suggestions.present?
+      %h2{:style => 'margin-top: 3em; border-top: 1px dashed #ccc; padding-top: 1em;'} Top suggestions so far&hellip;
+      %div{:id => :suggestion_list}
+        = render :partial => 'suggestions_list', :locals => {:suggestions => @suggestions}
+      - if @suggestions.total_entries > @suggestions.size
+        %div{:id => 'suggestions_more', :class => :stream_list, 'data-next-page' => 2}      
+          %div{:id => 'more_suggestions', 'data-icon' => 'false', :style => 'text-align: center;'}
+            = link_to raw("Load more&hellip;"), {:controller => :build, :action => :more_suggestions}, {:id => 'more_link'}
+        
+        :javascript
+          #{startj}
+          $('#more_suggestions a').unbind('click').click(function(){
+            $('#more_link').html("Loading more&hellip;");
+            $.ajax({
+              url: $(this).attr('href'),
+              type: 'POST',
+              dataType: 'script',
+              data: {page: $('#suggestions_more').attr('data-next-page')}
+            });
+            return false;
+          });
+          #{endj}
+
+    
+  = render :partial => 'home/mobile_footer'

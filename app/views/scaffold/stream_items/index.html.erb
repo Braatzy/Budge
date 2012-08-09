@@ -1,0 +1,35 @@
+<h1>Listing stream_items</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Item type</th>
+    <th>Related</th>
+    <th>Related sub</th>
+    <th>Text</th>
+    <th>Data</th>
+    <th>Private</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @stream_items.each do |stream_item| %>
+  <tr>
+    <td><%= stream_item.user_id %></td>
+    <td><%= stream_item.item_type %></td>
+    <td><%= stream_item.related_id %></td>
+    <td><%= stream_item.related_sub_id %></td>
+    <td><%= stream_item.text %></td>
+    <td><%= stream_item.data %></td>
+    <td><%= stream_item.private %></td>
+    <td><%= link_to 'Show', stream_item %></td>
+    <td><%= link_to 'Edit', edit_stream_item_path(stream_item) %></td>
+    <td><%= link_to 'Destroy', stream_item, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Stream item', new_stream_item_path %>

@@ -1,0 +1,19 @@
+%div{'data-role' => :page, :class=>'no_gradient'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Explore Habits', :current=>'store'}
+  %div{:id => :store_index, 'data-role' => :content, :class => :content, :style => 'padding-top: 10px;'}
+    - if @programs.present?
+      %h1.handwriting{:style => 'margin: 10px 0 15px 0;'} I want to play&hellip;
+      %ul{'data-role' => :listview, 'data-theme' => 'd', :id => :program_list}
+        - @programs.sort_by{|p|p.total_players}.reverse.each do |program|
+          %li
+            %a{:href => url_for(:controller => :store, :action => :program, :id => program.token), :class => :noajax}
+              = image_tag program.photo(:small), {:class => 'ui-li-icon rounded-img'}
+              %h2 
+                = program.name              
+              %div.small
+                #{pluralize program.total_players, 'person'} playing
+            - unless @programs_are_free
+              %span{:class => 'ui-li-count'}= number_to_currency program.price
+      %br{:clear => :all}
+
+  = render :partial => 'home/mobile_footer'

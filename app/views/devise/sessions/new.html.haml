@@ -1,0 +1,40 @@
+%div{'data-role' => :page, :class=>'no_gradient'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Log in', :current=>'login'}
+  %div{:id => :store_index, 'data-role' => :content, :class => :content, :style => 'padding-top: 10px;'}
+    
+    - if @_user and !current_user
+      %h1 Pick a password
+      %p Now that Budge is growing up a little, we need your email + password combo so you can log in directly. 
+      = form_tag({:controller => :home, :action => :migrate_user}, {:id => 'migrate_user', 'data-ajax' => 'false'}) do
+        %div= label :user, :email
+        %div= email_field :user, :email, {:value => @_user.email}
+      
+        %div= label :user, :password
+        %div= password_field :user, :password
+      
+        %div= button "Save!", {}, {:class => :submit_form, 'data-form-id' => 'migrate_user'}
+
+    - else
+      %p 
+        = button "Log in via Twitter", {:controller => "/oauth", :action => :twitter, :host => DOMAIN, :protocol => 'http://', :redirect_to => request.fullpath}, {:class => :noajax}
+        %div.subtle{:style => 'text-align: center;'}
+          (We will never auto-tweet on your behalf.)
+
+      %h1{:style => 'margin: 2em 0 1em 0;'} Log in or #{link_to "sign up", new_registration_path(resource_name), {:class => :noajax}}
+      = form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:id => 'login_user', 'data-ajax' => 'false'}) do |f|
+        %div= f.label :email
+        %div= f.email_field :email
+      
+        %div= f.label :password
+        %div= f.password_field :password
+      
+        - if devise_mapping.rememberable?
+          %div
+            = f.check_box :remember_me, {:style => 'display: none;'}
+            = f.label :remember_me
+      
+        %div= button "Log in", {}, {:class => :submit_form, 'data-form-id' => 'login_user'}
+        %div.subtle{:style => 'text-align: center;'}
+          (#{link_to "Forgot your password?", new_password_path(resource_name), {:class => :noajax}})            
+    
+  = render :partial => 'home/mobile_footer'

@@ -1,0 +1,13 @@
+%div{:id => 'program_header'}
+  %div{:id => :program_icon}
+    = image_tag program.photo(:small), {:class => 'rounded-img'}
+  %div{:id => :program_details}
+    - if @browser_type == 'web'
+      %h3{:style => 'margin-bottom: 0;'}= program.name
+    %div= raw textilize program.description
+    - if program.requirements.present?
+      %div.requirements
+        %strong Requirements:
+        = raw textilize program.requirements
+  %div
+    %br{:clear => :all}

@@ -1,0 +1,7 @@
+%div{'data-role' => :page, :id => :coaches}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Pick your coach"}
+  %div{'data-role' => :content, :class => :content}
+    = render :partial => 'coach_list', :locals => {:program => @program, :program_player => @program_player}
+    = button "Skip for now", {:controller => :play, :action => :next, :id => @player_budge.id, :program_player => @program_player.id}
+
+  = render :partial => 'home/mobile_footer'

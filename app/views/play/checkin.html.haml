@@ -1,0 +1,127 @@
+%div{'data-role' => :page, :id => :checkin}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name,:current=>'play'}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    %div{:id => :program_budge_details}
+      %div.my_program_grid_item{:style => 'text-align: left;'}
+        - program_status = @program_player.program_status
+        - if program_status == :scheduled or program_status == :caught_up
+          -# No dot
+        - elsif @program_player.needs_to_play_at > (Time.now.utc-1.day)
+          %div{:class => "status_dot green_status_dot", :style => 'right: 23px;'} &nbsp;
+        - elsif @program_player.needs_to_play_at > (Time.now.utc-2.days)
+          %div{:class => "status_dot yellow_status_dot", :style => 'right: 23px;'} &nbsp;            
+        - elsif @program_player.needs_to_play_at < (Time.now.utc-2.days)
+          %div{:class => "status_dot red_status_dot", :style => 'right: 23px;'} &nbsp;
+
+        = link_to image_tag(@program.photo(:small), {:class => 'rounded-img'}), {:controller => :play, :action => :program, :id => @program.id}
+
+      %div.status
+        %h2 #{@program_budge.name}
+        %div.small= link_to "Read instructions", '#', {:id => "review_instructions_#{@player_budge.id}", :class => :dashed}
+    
+    %br{:clear => :all}
+    %div{:id => "review_instructions_panel_#{@player_budge.id}", :class => 'hide rounded light_box', :style => 'margin-bottom: 1em;'}
+      %div{:class => 'close_x'} x
+      %h3= @player_budge.program_budge.name
+      %div.subtle #{@program_budge.budge_level} &middot; Day #{@player_budge.day_of_budge} of #{@program_budge.duration_in_days}
+      - if @player_budge.program_budge.present?
+        = raw textilize @player_budge.program_budge.coach_message
+
+    :javascript
+      #{startj}
+      $("#review_instructions_#{@player_budge.id}").unbind('click').click(function(){
+        $("#review_instructions_panel_#{@player_budge.id}").slideToggle();
+        return false;
+      });
+      $("#review_instructions_panel_#{@player_budge.id}").unbind('click').click(function(){
+        $(this).slideUp();
+        return false;
+      });
+      #{endj}
+    
+    %div{:id => :user_action_forms, :style => ''}
+      - @user_actions.each_with_index do |user_action, index|
+        %div{:id => "user_action_#{user_action.id}", :class => :user_action_div, 'data-answered' => (@checkins_hash[user_action.id][:todays_checkins].present? ? 1 : 0)}
+          = render :partial => 'user_action_checkin_form', 
+                   :locals => {:user_action => user_action, 
+                               :date => @current_checkin_date,
+                               :program_action_template => user_action.program_action_template,
+                               :checkins_hash => @checkins_hash[user_action.id],
+                               :day_number => @day_number,
+                               :index => index}
+      %div
+        %h3.thin{:style => 'margin: 15px 0 10px 0;'}
+          - if @current_checkin_date == @todays_date
+            Today 
+            %span{:id => 'message_type', 'data-message_type_id' => 'secret', :class => 'rounded'} my secret ingredient
+            is&hellip;
+          - elsif @current_checkin_date == @todays_date-1.day
+            Yesterday 
+            %span{:id => 'message_type', 'data-message_type_id' => 'secret', :class => 'rounded'} my secret ingredient
+            was&hellip;
+
+        %textarea{:id => 'checkin_message', :class => "user_action_amount_text", :name => "amount_secret_ingredient", :class => 'stylized_input', :placeholder => '(optional)', :autocapitalize => 'off'} 
+        %div{:id => 'secret_char_count', :class => 'char_count'} 95
+
+        :javascript
+          #{startj}
+          $('#checkin_message').unbind('keyup').keyup(function(){
+            $('#secret_char_count').html(95-parseInt($('#checkin_message').val().length));
+          });
+          $('#message_type').unbind('click').click(function(){
+            if ($(this).attr('data-message_type_id') == 'secret') {
+              $(this).attr('data-message_type_id', 'nemesis');
+              $(this).html("my nemesis");
+              $(this).css('background-color', '#f19292');
+              $(this).css('border-color', '#900');
+            } else if ($(this).attr('data-message_type_id') == 'nemesis') {
+              $(this).attr('data-message_type_id', 'secret');              
+              $(this).html("my secret ingredient");
+              $(this).css('background-color', '#b6d258');
+              $(this).css('border-color', '#df6');
+            }
+          });
+          #{endj}
+  
+      %div{:style => 'margin-top: 0;'}  
+        = render :partial => 'share_buttons'          
+        =button 'Done', {}, {:id=>'done_button', :class=>'button_important'}
+        =button 'Other options', {:controller => :play, :action => :options, :id => @program.id, :back => url_for(:controller => :play, :action => :checkin, :id => @program.id)}, {:id=>'options_button'}
+      
+    :javascript
+      #{startj}
+      $('#done_button').unbind('click').click(function(){
+        var chars_left = parseInt($('#secret_char_count').html())
+        if (chars_left > -1) {
+          $.mobile.showPageLoadingMsg();
+          $.ajax({
+            url: "#{url_for :controller => :play, :action => :save_day}",
+            type: 'POST',
+            dataType: 'script',
+            data: {player_budge_id: "#{@player_budge.id}",
+                   date: "#{@current_checkin_date}",
+                   message_type: $('#message_type').attr('data-message_type_id'),
+                   message: $('#checkin_message').val(),
+                   private: $('#keep_private').attr('data-private'),
+                   share_twitter: $('#share_twitter').attr('data-twitter'),
+                   share_facebook: $('#share_facebook').attr('data-facebook'),
+                   latitude: $('#location').attr('data-lat'),
+                   longitude: $('#location').attr('data-lon')}
+          });
+        } else {
+          alert("Whoops, that's too many letters! Can you trim a few off?");
+        }
+        return false;
+      });
+      #{endj}
+
+
+  
+  - if false
+    %div{:class => :subcontent}
+      %div{:class => :content_transition}
+      %div{:class => :subcontent_container}    
+        =button 'Pause',{:controller => :play, :action => :pause, :id => @player_budge.id}, {:id=>'pause_button'}
+        - if @program_player.max_level > 1
+          =button 'Pick another level',{:controller => :play, :action => :map, :id => @program.id, :back => url_for(:controller => :play, :action => :checkin, :id => @program.id)},{:id=>'map_button'}
+  = render :partial => 'home/mobile_footer'

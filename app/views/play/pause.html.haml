@@ -1,0 +1,8 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  %div{'data-role' => :content, :class => :content}
+    %h2 #{@program.name}
+    %h3 Need a break? Pause this program for&hellip;
+    = render :partial => 'schedule_form', :locals => {:player_budge => @player_budge, :pause => true}
+    
+  = render :partial => 'home/mobile_footer'

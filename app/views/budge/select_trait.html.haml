@@ -1,0 +1,99 @@
+%div{'data-role' => :page, 'data-theme' => @data_theme, :id => "trait_#{@trait.token}"}
+  %div{'data-role' => :header}
+    = back_button
+    %h1 Send a budge
+
+  %div{'data-role' => :content}
+    %form{:method => :post, :action => "#{url_for :controller => :budge, :action => :send_budge, :id => (@budge_request ? @budge_request.id : nil)}", :user_id => (@user.present? ? @user.id : nil), :class => :save_selected_trait, :id => "save_selected_trait_#{@trait.id}", 'data-transition' => 'slide'}
+      %div Your #{@alignment} budge:
+      - if @trait.setup_required?
+        %div{'data-role' => 'fieldcontain', :style => 'border: 0; padding-bottom: 5px;'}
+          %label{:for => "select_trait_custom_name_#{@trait.id}"}
+            %strong #{@select_trait_label}
+          %input{:type => :hidden, :name => :select_trait_custom_name_template, :id => "select_trait_custom_name_template_#{@trait.id}", :value => @trait_name}
+          - if @substitution_type == :allowed
+            %input{:type => :text, :name => :select_trait_custom_name, :id => "select_trait_custom_name_#{@trait.id}", :value => @select_trait_placeholder}          
+          - elsif @substitution_type == :required
+            %input{:type => :text, :name => :select_trait_custom_name, :id => "select_trait_custom_name_#{@trait.id}", :placeholder => @select_trait_placeholder}
+      - else
+        %h2{:style => 'margin-top: 0;'}
+          = @select_trait_label
+      - if @budge_request
+        %input{:type => :hidden, :name => :select_budge_request_id, :value => @budge_request.id, :id => "select_budge_request_id_#{@trait.id}"}
+      - elsif @user
+        %input{:type => :hidden, :name => :select_user_id, :value => @user.id, :id => "select_user_id_#{@trait.id}"}
+      
+      %input{:type => :hidden, :name => :select_trait_name, :value => @trait_name, :id => "select_trait_name_#{@trait.id}", :placeholder => @select_trait_placeholder}
+      %input{:type => :hidden, :name => :select_trait_id, :value => @trait.id, :id => "select_trait_id_#{@trait.id}"}
+      %input{:type => :hidden, :name => :select_trait_do, :value => "#{@do == true ? 'true' : 'false'}", :id => "select_trait_do_#{@trait.id}"}
+      %input{:type => :hidden, :name => :select_trait_alignment, :value => @alignment, :id => "select_trait_alignment_#{@trait.id}"}
+
+      %div{:style => 'font-size: 12px;'}
+      - if current_user.unlocked(:budge_duration_week) or current_user.unlocked(:budge_duration_month)
+        %div{'data-role' => :fieldcontain, :style => 'border: 0;'}
+          %label{:for => :select_trait_duration} 
+            Time given to complete?
+          %select{:name => :select_trait_duration, :id => "select_trait_duration_#{@trait.id}"} 
+            %option{:value => :day} 24 hours
+            - if current_user.unlocked(:budge_duration_week)
+              %option{:value => :week} 1 week
+            - if current_user.unlocked(:budge_duration_month)
+              %option{:value => :week} 1 month
+              
+      - else
+        %div{:style => 'margin-top: 1em;'} If accepted, your budge will live:
+        %input{:type => :hidden, :name => :select_trait_duration, :value => :day, :id => "select_trait_duration_#{@trait.id}"}
+        %h2{:style => 'margin-top: 0;'} 24 hours
+
+      %div{:style => 'font-size: 12px;'}
+      - if current_user.unlocked(:budge_quantity_small)
+        %div{'data-role' => :fieldcontain, :style => 'border: 0; padding-top: 0;'}
+          %label{:for => :select_trait_quantity} 
+            - if @do
+              How many times?
+            - else
+              Allow moderation?
+          %select{:name => :select_trait_quantity, :id => "select_trait_quantity_#{@trait.id}"} 
+            %option{:value => 1} #{@do ? "1 time" : "Nope"}
+            %option{:value => 2} #{@do ? "2 times" : "Allow 1"}
+            %option{:value => 3} #{@do ? "3 times" : "Allow 2"}
+            %option{:value => 4} #{@do ? "4 times" : "Allow 3"}
+            %option{:value => 5} #{@do ? "5 times" : "Allow 4"}
+            - if current_user.unlocked(:budge_quantity_medium)
+              %option{:value => 6} #{@do ? "6 times" : "Allow 5"}
+              %option{:value => 7} #{@do ? "7 times" : "Allow 6"}
+              %option{:value => 8} #{@do ? "8 times" : "Allow 7"}
+              %option{:value => 9} #{@do ? "9 times" : "Allow 8"}
+              %option{:value => 10} #{@do ? "10 times" : "Allow 9"}
+              
+      - else
+        %input{:type => :hidden, :name => :select_trait_quantity, :value => 1, :id => "select_trait_quantity_#{@trait.id}"}
+
+      
+      %input{:type => :submit, 'data-role' => :button, :value => "Budge this", 'data-inline' => true}
+  
+    :javascript
+      $('.save_selected_trait').submit(function(){
+        $.ajax({
+          type: "POST",
+          url: $(this).attr('action'),
+          data: {budge_request_id: $('#select_budge_request_id_#{@trait.id}').val(),
+                 user_id: $('#select_user_id_#{@trait.id}').val(),
+                 trait_id: $('#select_trait_id_#{@trait.id}').val(),
+                 trait_do: $('#select_trait_do_#{@trait.id}').val(),
+                 trait_alignment: $('#select_trait_alignment_#{@trait.id}').val(),
+                 trait_custom_name: $('#select_trait_custom_name_#{@trait.id}').val(),
+                 trait_name: $('#select_trait_name_#{@trait.id}').val(),
+                 latitude: $('#location').attr('data-lat'),
+                 longitude: $('#location').attr('data-lon'),
+                 trait_duration: $('#select_trait_duration_#{@trait.id}').val(),
+                 trait_quantity: $('#select_trait_quantity_#{@trait.id}').val()}
+        });
+        return false;        
+      });
+      
+    - if @children.present?
+      <br /><br />
+      = render :partial => 'budge/select_traits_list', :locals => {:traits => @children.sort_by{|t|t.do_name.present? ? t.do_name : t.token}, :limit => (@do == true ? :do : :dont), :budge_request_id => @budge_request, :alignment => @alignment}
+
+  = render :partial => 'home/footer'

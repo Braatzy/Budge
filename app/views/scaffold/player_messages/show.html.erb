@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>From user:</b>
+  <%= @player_message.from_user_id %>
+</p>
+
+<p>
+  <b>From remote user:</b>
+  <%= @player_message.from_remote_user %>
+</p>
+
+<p>
+  <b>To user:</b>
+  <%= @player_message.to_user_id %>
+</p>
+
+<p>
+  <b>To remote user:</b>
+  <%= @player_message.to_remote_user %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @player_message.content %>
+</p>
+
+<p>
+  <b>Program player:</b>
+  <%= @player_message.program_player_id %>
+</p>
+
+<p>
+  <b>Player step:</b>
+  <%= @player_message.player_step_id %>
+</p>
+
+<p>
+  <b>Delivered via:</b>
+  <%= @player_message.delivered_via %>
+</p>
+
+<p>
+  <b>Remote post:</b>
+  <%= @player_message.remote_post_id %>
+</p>
+
+<p>
+  <b>Message data:</b>
+  <%= @player_message.message_data %>
+</p>
+
+<p>
+  <b>Delivered:</b>
+  <%= @player_message.delivered %>
+</p>
+
+<p>
+  <b>Deliver at:</b>
+  <%= @player_message.deliver_at %>
+</p>
+
+<p>
+  <b>From coach:</b>
+  <%= @player_message.from_coach %>
+</p>
+
+<p>
+  <b>To coach:</b>
+  <%= @player_message.to_coach %>
+</p>
+
+
+<%= link_to 'Edit', edit_player_message_path(@player_message) %> |
+<%= link_to 'Back', player_messages_path %>

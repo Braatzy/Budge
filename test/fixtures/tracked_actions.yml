@@ -1,0 +1,41 @@
+# == Schema Information
+#
+# Table name: tracked_actions
+#
+#  id                  :integer(4)      not null, primary key
+#  user_id             :integer(4)
+#  token               :string(255)
+#  num_triggers        :integer(4)      default(0)
+#  trigger_data        :string(255)
+#  tag_week            :integer(4)
+#  tag_month           :integer(4)
+#  tag_year            :integer(4)
+#  created_at          :datetime
+#  updated_at          :datetime
+#  num_days_this_week  :integer(4)      default(0)
+#  num_days_this_month :integer(4)      default(0)
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  token: MyString
+  num_triggers: 0
+  trigger_data: MyText
+  tag_week: 1
+  tag_month: 1
+  tag_year: 2011
+  num_days_this_week: 0
+  num_days_this_month: 0
+
+two:
+  user_id: 1
+  token: MyString
+  num_triggers: 0
+  trigger_data: MyText
+  tag_week: 1
+  tag_month: 1
+  tag_year: 2011
+  num_days_this_week: 0
+  num_days_this_month: 0

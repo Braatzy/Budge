@@ -1,0 +1,15 @@
+%p
+  %div= link_to "Start it up again.", {:protocol => 'http://', :host => DOMAIN, :controller => :play, :action => :unpause_player_budge, :id => @message_data[:data].id}
+  %div Start getting reminders again.
+
+%p
+  %div= link_to "Turn on NAG MODE.", {:protocol => 'http://', :host => DOMAIN, :controller => :profile, :action => :user_info, :id => :nag_mode, :program_id => @message_data[:data].program_player.program_id}
+  %div Up the intensity - for one week, get up to four reminders a day and a phone call at night if you don't complete your tasks.
+
+%p
+  %div= link_to "Pick a different challenge.", {:protocol => 'http://', :host => DOMAIN, :controller => :play, :action => :map, :id => @message_data[:data].program_player.program_id}
+  %div Is this one too hard or too easy? Choose something else.
+
+%p
+  %div= link_to "End the program.", {:protocol => 'http://', :host => DOMAIN, :controller => :play, :action => :end, :id => @message_data[:data].program_player.program_id}
+  %div Want to declare victory/defeat? 

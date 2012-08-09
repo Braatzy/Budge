@@ -1,0 +1,1 @@
+window.location = "#{@done_page_token == 'comment' ? url_for(:controller => :stream, :action => :view, :id => @entry.parent_id) : url_for(:controller => :play, :action => :done, :token => @done_page_token, :id => @program.id)}";

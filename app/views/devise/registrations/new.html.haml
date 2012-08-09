@@ -1,0 +1,30 @@
+%div{'data-role' => :page, :class=>'no_gradient'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Log in', :current=>'login'}
+  %div{'data-role' => :content, :class => :content, :style => 'padding-top: 10px;'}
+    
+    - if false
+      %p 
+        = button "Sign up via Twitter", {:controller => "/oauth", :action => :twitter, :host => DOMAIN, :protocol => 'http://', :redirect_to => request.fullpath}, {:class => :noajax}
+        %div.subtle{:style => 'text-align: center;'}
+          (We will never auto-tweet on your behalf.)
+  
+    %h1{:style => 'margin: 2em 0 1em 0;'} Sign up or #{link_to "log in", new_session_path(resource_name), {:class => :noajax}}
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:id => 'signup_user', 'data-ajax' => 'false'}) do |f|
+      %div= f.label :name
+      %div= f.email_field :name
+
+      %div= f.label :email
+      %div= f.email_field :email
+    
+      %div= f.label :password
+      %div= f.password_field :password
+
+      %div= f.label :password_confirmation
+      %div= f.password_field :password_confirmation
+    
+      %div= button "Sign up", {}, {:class => :submit_form, 'data-form-id' => 'signup_user'}
+    
+  = render :partial => 'home/mobile_footer'
+  
+  
+

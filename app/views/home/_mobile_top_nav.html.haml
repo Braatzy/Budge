@@ -1,0 +1,89 @@
+- title ||= nil
+- current ||= nil
+- image ||= image_path('mobile-web/1/transparent.png')
+- link ||= '/store'
+- @head_title = title
+
+%div{:id => :header, 'data-role' => 'header', 'data-backbtn' => (params[:back].present? ? true : false), :class => "top_nav_drawer"}
+  %div{:class => "nav_tray #{@browser_type == 'mobile' ? 'drawer_up' : ''}", :id => :menu, :style => "max-height: #{50*2}px; #{@browser_type == 'mobile' ? 'display: none;' : ''}"}
+    %div{:class => "nav_tray_contents"}
+      - if @browser_type=='web'
+        %div{:class=>:tray_title}
+          =link_to({:controller => "/play", :action => :index, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax"}) do
+            =image_tag('budge-snail-transparent-50w.png', :width => '20px')
+            budge
+      - if current_user
+        - if @browser_type=='mobile'
+          %div.item.homebutton
+            = link_to "Friends", {:controller => "/stream", :action => :index, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='stream' and @browser_type=='web' then 'selected_nav' end}"}
+        - else
+          %div.item= link_to "Friends", {:controller => "/stream", :action => :index, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='stream' and @browser_type=='web' then 'selected_nav' end}"}
+        
+        %div.item= link_to "Explore", {:controller => "/store", :action => :index, :host => SECURE_DOMAIN, :protocol => "https://"}, {:class => "nav_tray_link noajax #{if current=='store' and @browser_type=='web' then 'selected_nav' end}"}
+        %div.item= link_to "Settings", {:controller => "/profile", :action => :settings, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='settings' and @browser_type=='web' then 'selected_nav' end}"}
+        %div.item= link_to "About", {:controller => "/help", :action => :about, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='about' and @browser_type=='web' then 'selected_nav' end}"}   
+
+      - else 
+        %div.item= link_to "Log in",  {:controller => :sessions, :action => :new, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='login' and @browser_type=='web' then 'selected_nav' end}"}
+        %div.item= link_to "Explore", {:controller => "/store", :action => :index, :host => SECURE_DOMAIN, :protocol => 'https://'}, {:class => 'nav_tray_link noajax'}
+        %div.item= link_to "About", {:controller => "/help", :action => :about, :host => DOMAIN, :protocol => 'http://'}, {:class => "nav_tray_link noajax #{if current=='about' and @browser_type=='web' then 'selected_nav' end}"}      
+      
+
+    %br{:clear => :all}
+  -if @browser_type=='mobile'
+    %div{:class => :header_bar}
+      %span{:style => 'float: left; background: none; box-shadow: none; pointer: cursor; margin-top: 7px; margin-left: 5px;', :class => 'backbutton'}
+        - if params[:back].present?
+          = back_button(params[:back])
+        - else
+          = image_tag 'transparent.png', {:style => 'width: 38px; height: 1px;'}      
+      %span{:style => 'float: right; background: none; box-shadow: none; pointer: cursor; margin-top: 7px; margin-right: 5px;', :id => 'showmenu'}
+        = image_tag 'mobile-web/menu_open.png', {:class => :open_sesame, :style=>'width: 38px;'}
+      - if title.present?
+        %h1{:style => 'text-decoration: none;'}= title
+      - else
+        %h1 Budge
+        
+  %div{:class => :flash_message, :style => 'color: #aaa; font-weight: normal; background-color: #fefefe;'}     
+    %a{:href => 'http://habitlabs.tumblr.com/post/27719242771/budge-is-closing-down-august-31st',:style => 'color: #aaa; font-weight: normal; background-color: #fefefe;'} Budge is closing down on August 31st. :(
+
+  -if flash[:message]
+    %div{:class => 'flash_message', :style => 'color: #666; background-color: #eee;'}=raw flash[:message]
+  -if flash[:notice]
+    %div{:class => 'flash_message', :style => 'color: #666; background-color: #eee;'}=raw flash[:notice]
+  -if flash[:alert]
+    %div{:class => 'flash_message', :style => 'color: #666; background-color: pink;'}=raw flash[:alert]
+
+  -if @browser_type != 'web'
+    :javascript
+      var allow_drawer_opening = true;
+      $(document).bind( "pageshow", function(){
+        allow_drawer_opening = true;
+      });
+      #{startj}
+      $(".backbutton").click(function(event) {
+        allow_drawer_opening = false;
+      });
+      $('.top_nav_drawer').unbind('click').click(function(){
+        if (allow_drawer_opening && $(this).find('.nav_tray').is(':hidden')) {
+          $('.top_nav_drawer').each(function(){$(this).removeClass('drawer_up')});
+          $('.nav_tray').each(function(){$(this).slideDown({duration: 400, easing: 'easeOutBack'})});
+          $('img.open_sesame').each(function(){$(this).attr('src', "#{image_path('mobile-web/menu_close.png')}")});
+        } else {          
+          $('.top_nav_drawer').each(function(){$(this).addClass('drawer_up')});
+          $('.nav_tray').each(function(){$(this).slideUp({duration: 200, easing: 'easeInBack'})});
+          $('img.open_sesame').each(function(){$(this).attr('src', "#{image_path('mobile-web/menu_open.png')}")});
+        }
+      });
+      $('.nav_tray_link').unbind('click').click(function(){
+        if (!$(this).hasClass('drawer_up')) {
+          $('.nav_tray').each(function(){$(this).addClass('drawer_up')});
+        }
+        $('.nav_tray').each(function(){$(this).removeClass('drawer_up')});
+        $('.nav_tray').each(function(){$(this).slideUp({duration: 200, easing: 'easeInBack'})});
+        $('img.open_sesame').each(function(){$(this).attr('src', "#{image_path('mobile-web/menu_close.png')}")});
+      });
+      $('.flash_message').click(function(){
+        $(this).slideUp({duration: 200, easing: 'easeInBack'});
+      });
+      #{endj}

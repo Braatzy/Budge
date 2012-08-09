@@ -1,0 +1,146 @@
+%header
+  %h1.title=@program.name
+  .subnav
+    %ul.nav.nav-pills
+      %li=link_to 'Edit',"/dash/edit_program/#{@program.id}"
+      %li=link_to 'Summary','#summary'
+      %li=link_to 'Levels','#levels'
+      %li=link_to 'Users','#users'
+
+
+
+%section#summary
+  .page-header
+    %h2 Summary
+  .row
+    .span8
+      #histogram
+      -unless @behavior_historgram[:count].empty?
+        :javascript
+          var histogram=#{@behavior_historgram.to_json};
+          histogram.behavior=histogram.behavior.map(function(x){return parseFloat(x)})
+          var g = gg.graph(histogram)
+            .layer(gg.layer.bar()
+              .map('x', 'behavior')
+              .map('y', 'count')
+              )
+            .scale('x', gg.scale.continuous().min(0))
+            .opts('title','Behavior change')
+            .opts('label-x', '#{@program_trait_name} in the past 30 days')
+            .opts('label-y', 'users')
+            .opts('width', 550).opts('height', 350)
+            .render('#histogram');
+    .span4
+      %h3{:style=>'padding-top: 20px'} Levels
+      =render :partial=>'state_breakdown_player',:locals=>{:player_state_counts=>@aggregate_status}
+  .row{:style=>'padding-left: 20px'}
+    %h4=link_to_collapse 'Statistics',"#behavior_stats"
+    #behavior_stats.collapse
+      %table
+        %tr
+          %td count
+          %td= @program_trait_stats[:count]
+        %tr 
+          %td sum
+          %td= number_with_precision @program_trait_stats[:sum], :precision=>0, :significant => false
+        %tr  
+          %td average
+          %td= number_with_precision @program_trait_stats[:average], :precision=>1, :significant => false
+        %tr
+          %td std. dev.
+          %td=number_with_precision @behavior_stdev, :precision=>1, :significant => false
+          
+          
+
+      
+%section#levels  
+  .page-header
+    %h2 Levels
+  .simple_table
+    %table#levels_table
+      %thead
+        %tr
+          %th Level
+          %th Name
+          %th Actions
+          %th Duration
+          %th{:title=>'no. people currently working on this level'} In-progress
+          %th{:title=>'no. people scheduled to start (by self or budge) in the future'} Scheduled
+          %th{:title=>'no. tries at this level'} Total Past Tries
+          %th{:title=>'tries where level finished without user checking in'} No-show
+          %th{:title=>'tries completed with less than 2/3 desired actions done'} Failed
+          %th{:title=>'tries completed with more than 2/3 desired actions done'} Passed
+          %th{:title=>'tries completed with every action completed as desired'} Perfect
+      %tbody
+        - @program_budges.each do |pb|
+          -status=@program_budges_status[pb.id]
+          %tr
+            %td.num_column=pb.level
+            %td=pb.nickname
+            %td.num_column=pb.number_of_actions
+            %td.duration=pb.duration_in_words
+            %td.num_column=status['in-progress']
+            %td.num_column=status['scheduled']
+            %td.num_column=status['in-past']
+            %td.num_column{:title=>"#{status['no-show']} tries"}=get_percentage(status['no-show'],status['in-past'])
+            %td.num_column{:title=>"#{status['failed']} tries"}= get_percentage(status['failed'], status['in-past'])
+            %td.num_column{:title=>"#{status['passed']} tries"}= get_percentage(status['passed'], status['in-past'])
+            %td.num_column{:title=>"#{status['perfect']} tries"}=get_percentage(status['perfect'],status['in-past'])
+
+%section#users
+  .page-header
+    %h2 Users
+
+  - if @leaders.present?
+    %table#leaderboard
+      %thead
+        %th #
+        %th Name
+        %th=@program_trait_name
+        / %th Status
+        %th Seen Days Ago
+      %tbody
+        - @leaders.each_with_index do |leader,index|
+          %tr
+            %td.num_column=index+1
+            %td=link_to "#{leader.user.name}","/dash/user/#{leader.user.id}"
+            %td.num_column=leader.score.to_i
+            / %td{:style=>'width: 250px'}=leader.program_status.gsub('_',' ')
+            %td.num_column=leader.last_played_days_ago
+
+
+:javascript
+  $(document).ready(function() {
+    tbl=$('#levels_table').dataTable( {
+      "bPaginate": false,
+      "aaSorting": [[ 0, "asc" ]]
+       });   
+    $('#leaderboard').dataTable( {
+      "bPaginate": false,
+      "sScrollY": "400px",
+      "aaSorting": [[ 0, "asc" ]]
+    });
+    
+    $('.subnav').scrollspy()
+    // fix sub nav on scroll
+      var $win = $(window)
+        , $nav = $('.subnav')
+        , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+        , isFixed = 0
+
+      processScroll()
+
+      $win.on('scroll', processScroll)
+
+      function processScroll() {
+        var i, scrollTop = $win.scrollTop()
+        if (scrollTop >= navTop && !isFixed) {
+          isFixed = 1
+          $nav.addClass('subnav-fixed')
+        } else if (scrollTop <= navTop && isFixed) {
+          isFixed = 0
+          $nav.removeClass('subnav-fixed')
+        }
+      }
+    
+  } );

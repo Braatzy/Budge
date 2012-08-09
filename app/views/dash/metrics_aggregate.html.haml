@@ -1,0 +1,161 @@
+%header
+  %h1.title Aggregate Metrics
+  .subnav
+    %ul.nav.nav-pills
+      %li=link_to 'Growth','#growth'
+      %li=link_to 'Retention','#retention'
+      %li=link_to 'Revenue','#revenue'
+
+%section#growth.page-header
+  %h2 Growth
+  #user_activation.row
+  :javascript
+    var formatDate = d3.time.format.iso;
+    var data = #{raw(@users_activated.to_json)}
+    function x_value(d){return formatDate.parse(d.date);};
+    function y2_value(d){return +d.activated;};
+
+    var chart = time_series_chart()
+      .x(function(d) { return x_value(d); })
+      .y(function(d) { return +d.acquired; })
+      .y2(function(d){ return +d.activated;})
+      .height(200)
+      .width(12*60)
+      .yaxis_label('users')
+      .yseries_label('interested')
+      .yseries2_label('users activated')
+      .page_element("#user_activation")
+      .style('scatter')
+      .plot(data)
+
+%section#retention.page-header
+  %h2 Retention
+  #time_retention.row
+  :javascript
+    var data=#{raw @retention.to_json};
+    var series_names=#{raw @user_statuses.to_json};
+    data=d3.layout.stack()(
+      series_names.map(function(metric_type) { 
+        return data.map(function(d){ return {x: formatDate.parse(d.date), y: +d[metric_type]}; });
+    }));
+    var chart = time_series_chart()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; })
+      .height(200)
+      .height_overview(0)
+      .width(12*60)
+      .yaxis_label('users')
+      .page_element("#time_retention")
+      .style('stacked bar')
+      .series_names(series_names)
+      .series_colors(#{raw @user_status_colors.to_json})
+      .plot(data)
+
+  %h4=link_to_collapse 'Status Descriptions','#status_desc'
+  #status_desc.collapse{:style=>'margin-bottom: 40px'}
+    =render 'user_status_descriptions'
+
+
+  %h2 Visitation
+  #visitation.row
+  :javascript
+    var data = #{raw(@dailygrr.to_json)}
+    var show_date = d3.time.format("%Y-%m-%d");
+    var chart = time_series_chart()
+      .x(function(d) { return formatDate.parse(d.date); })
+      .y(function(d) { return +d.logins_7day; })
+      .y2(function(d){ return +d.logins_1day;})
+      .height(200)
+      .width(12*60)
+      .yaxis_label('percentage users')
+      .yseries_label(function (d){return show_date(formatDate.parse(d.date))+' -- '+d.logins_7day_raw.toString()+' users visited in last 7 days';})
+      .yseries2_label(function (d){return show_date(formatDate.parse(d.date))+' -- '+d.logins_1day_raw.toString()+' users visited today';})
+      .page_element("#visitation")
+      .style('scatter')
+      .plot(data)
+
+
+%section#revenue.page-header
+  %h2 Net Revenue
+  #revenue.row
+  :javascript
+    var chart = time_series_chart()
+      .x(function(d) { return formatDate.parse(d.date); })
+      .y(function(d) { return +d.net_revenue; })
+      .height(200)
+      .width(12*60)
+      .yaxis_label('dollars')
+      .yseries_label('dollars')
+      .page_element("#revenue")
+      .style('scatter')
+      .plot(data)
+  
+
+/ %h2 Interested Potential Users
+/ #user_acquisition
+/ :javascript
+/   var formatDate = d3.time.format.iso;
+/   var chart = time_series_chart()
+/     .x(function(d) { return formatDate.parse(d.metric.date); })
+/     .y(function(d) { return +d.metric.number; })
+/     .height(200)
+/     .width(12*60)
+/     .yaxis_label('interested')
+/     .page_element("#user_acquisition")
+/     .style('scatter')
+/     .plot(#{raw(@user_acquisition.to_json)})
+/     
+/ %h2 Activated Users
+/ #user_activation
+/ :javascript
+/   var formatDate = d3.time.format.iso;
+/   var chart = time_series_chart()
+/     .x(function(d) { return formatDate.parse(d.metric.date); })
+/     .y(function(d) { return +d.metric.number; })
+/     .height(200)
+/     .width(12*60)
+/     .yaxis_label('users')
+/     .page_element("#user_activation")
+/     .style('scatter')
+/     .plot(#{raw(@user_activation.to_json)})
+/     
+/ %h3 Interested potential users by cohort
+/ #cohort_acquisition
+/ :javascript
+/   var chart = time_series_chart()
+/     .x(function(d) { return formatDate.parse(d.metric.cohort); })
+/     .y(function(d) { return +d.metric.number; })
+/     .height(200)
+/     .height_overview(40)
+/     .width(12*60)
+/     .yaxis_label('interested')
+/     .xaxis_label('cohort')
+/     .page_element("#cohort_acquisition")
+/     .style('bar')
+/     .plot(#{raw(@cohort_acquisition.to_json)})
+
+:javascript
+  $(document).ready(function() {
+    $('.subnav').scrollspy()
+    // fix sub nav on scroll
+      var $win = $(window)
+        , $nav = $('.subnav')
+        , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+        , isFixed = 0
+
+      processScroll()
+
+      $win.on('scroll', processScroll)
+
+      function processScroll() {
+        var i, scrollTop = $win.scrollTop()
+        if (scrollTop >= navTop && !isFixed) {
+          isFixed = 1
+          $nav.addClass('subnav-fixed')
+        } else if (scrollTop <= navTop && isFixed) {
+          isFixed = 0
+          $nav.removeClass('subnav-fixed')
+        }
+      }
+
+  } );

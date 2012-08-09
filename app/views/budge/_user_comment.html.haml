@@ -1,0 +1,35 @@
+%div{:class => "rounded user_comment #{user_comment.comment_type}", :id => "user_comment_#{user_comment.id}"}
+  - if user_comment.comment_type.present?
+    - if user_comment.comment_type == 'like'
+      %div{:class => :byline}
+        %span{:class => 'heart liked'} &hearts;
+        = link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}
+        supports this.
+    - elsif user_comment.comment_type == 'status'
+      %div{:class => :byline}
+        = link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}
+        #{user_comment.comment_text}
+        #{time_ago_in_words user_comment.created_at} ago.
+    - elsif user_comment.comment_type == 'checkin'
+      - if user_comment.user_id == user_comment.related_model.user_id
+        %div{:class => :byline}
+          = link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}
+          #{user_comment.comment_text}
+          #{time_ago_in_words user_comment.created_at} ago.
+      - else
+        %div{:class => :byline}
+          According to #{link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}}, 
+          = user_comment.related_model.user.name
+          #{user_comment.comment_text}
+          #{time_ago_in_words user_comment.created_at} ago.
+    - elsif user_comment.comment_type == 'checkin_level_up'
+      %div{:class => :byline}
+        = link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}
+        #{user_comment.comment_text}
+        #{time_ago_in_words user_comment.created_at} ago.
+      
+  - else
+    = raw(textilize(user_comment.comment_text))
+    %div{:class => :byline}
+      = link_to user_comment.user.name, {:controller => :profile, :action => :id, :id => user_comment.user_id}
+      #{time_ago_in_words user_comment.created_at} ago.

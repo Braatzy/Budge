@@ -1,0 +1,178 @@
+%div{'data-role' => :page, :class => :coach_stream}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program_player.user.name}
+  %div{'data-role' => :content, :class => :content}
+    %div{:id => :program_budge_details}
+      %div.my_program_grid_item
+        - if !@program_player.needs_to_play_at or @program_player.needs_to_play_at > Time.now.utc
+          %div{:class => "status_dot green_status_dot"} &nbsp;
+        - elsif @program_player.needs_to_play_at > (Time.now.utc-2.days)
+          %div{:class => "status_dot yellow_status_dot"} &nbsp;            
+        - else
+          %div{:class => "status_dot red_status_dot"} &nbsp;    
+        - if @program_coach and @program_coach.user == current_user
+          = link_to image_tag(@program.photo(:small), {:class => 'rounded-img'}), {:controller => :profile, :action => :coaching, :id => @program.id}        
+        - else
+          = link_to image_tag(@program.photo(:small), {:class => 'rounded-img'}), {:controller => :play, :action => :program, :id => @program.id}
+
+      %div.status
+        %h2 
+          - if @program_player.needs_to_play_at > Time.now.utc
+            %span{:style => 'color: #696;'} Looking good!
+          - elsif @program_player.needs_to_play_at > (Time.now.utc-2.days)
+            %span{:style => 'color: #c60;'} Needs attention
+          - else
+            %span{:style => 'color: #900;'} Needs help
+        %p 
+          - if @player_budge.present? and (@program_player.playing? or @program_player.scheduled?)
+            %strong Currently working on:
+            = @player_budge.program_budge.budge_name_and_level
+            - if @day_number > @duration_in_days
+              (over #{pluralize @day_number-@duration_in_days,'day'} ago)
+            - elsif @day_number < 1
+              (starting in #{pluralize @day_number.abs,'day'})
+            - else
+              (day #{@day_number} of #{@duration_in_days})
+
+            %ul{:style => 'padding: 0 20px; '}
+              - @player_budge.user_actions_for_checkin.each do |user_action|
+                - unless user_action.completed? or user_action.victorious?
+                  %li{:style => 'margin-bottom: 5px;'}= user_action.action_wording    
+          - else
+            %strong Next step:
+            = @program_player.status_for_player
+    %br{:clear => :all}
+
+    - if @is_coach
+      =button "Context info for coaches", '#', {:id => "context_button_#{@program_player.id}"}
+      %div{:style => 'display: none; background-color: #fff;', :id => "context_data_#{@program_player.id}", :class => :rounded}
+        %div{:style => 'width: 50px; font-size: 10px; cursor: pointer; float: right; text-align: right;', :id => "context_close_#{@program_player.id}"} (close)
+        %h1.handwriting{:style => 'margin-top: 0;'} Survey answers
+        - if @program_player.success_statement.present?
+          %p{:style => 'font-weight: bold; margin-bottom: 0;'} Success statement:
+          %div= @program_player.success_statement
+        - if @program_player.program.present?
+          - if @program_player.required_answer_1.present?
+            %p{:style => 'font-weight: bold; margin-bottom: 0;'} #{@program_player.program.required_question_1}:
+            %div= @program_player.required_answer_1
+          - if @program_player.required_answer_2.present?
+            %p{:style => 'font-weight: bold;margin-bottom: 0;'} #{@program_player.program.required_question_2}: 
+            %div= @program_player.required_answer_2
+          - if @program_player.optional_answer_1.present?
+            %p{:style => 'font-weight: bold;margin-bottom: 0;'} #{@program_player.program.optional_question_1}:
+            %div= @program_player.optional_answer_1
+          - if @program_player.optional_answer_2.present?
+            %p{:style => 'font-weight: bold;margin-bottom: 0;'} #{@program_player.program.optional_question_2}:
+            %div= @program_player.optional_answer_2
+
+        %hr{:style => 'margin: 1em 0;'}
+        %h1.handwriting{:style => 'margin-top: 0;'} Context
+        %table
+          %tr
+            %td Last visited: 
+            %td #{time_ago_in_words @program_player.user.last_logged_in} ago
+          %tr
+            %td Their time: 
+            %td
+              = Time.now.in_time_zone(@program_player.user.time_zone_or_default).strftime('%I:%M%p')
+              - if @program_player.user.time_zone.present?
+                %span{:style => 'color: #ccc;'} (#{@program_player.user.time_zone})
+              - else
+                %span{:style => 'color: #ccc;'} (unknown time zone)
+          - if latest_location_context = @program_player.user.last_location_context
+            - current_location_context_guess = @program_player.user.current_location_context_guess
+            - if current_location_context_guess[:weather].present?
+              %tr
+                %td Now:
+                %td #{current_location_context_guess[:weather][:conditions]} #{current_location_context_guess[:weather][:temperature]}&#186;
+              %tr
+                %td Tomorrow: 
+                %td #{current_location_context_guess[:weather][:forecast][:tomorrow][:conditions]} #{current_location_context_guess[:weather][:forecast][:tomorrow][:temperature][:max]}&#186;
+                
+            - if latest_location_context.place_name.present?
+              %tr  
+                %td Foursquare:  
+                - if latest_location_context.foursquare_guess?
+                  %td Near #{latest_location_context.place_name} (a guess)
+                - else
+                  %td= latest_location_context.place_name
+            
+            - if latest_location_context.foursquare_category.present?
+              %tr
+                %td Category:
+                - if latest_location_context.foursquare_guess?
+                  %td #{latest_location_context.foursquare_category.name} (a guess)
+                - else
+                  %td= latest_location_context.foursquare_category.name
+            
+            %tr
+              %td City:
+              - if latest_location_context.simplegeo_context.present? and latest_location_context.simplegeo_context[:address].present?
+                %td 
+                  #{latest_location_context.simplegeo_context[:address][:properties][:city]}, 
+                  - if latest_location_context.simplegeo_context[:address][:properties][:state].present?
+                    #{latest_location_context.simplegeo_context[:address][:properties][:state]}
+                  - else
+                    #{latest_location_context.simplegeo_context[:address][:properties][:country]}
+            %tr 
+              %td Population: 
+              %td #{latest_location_context.population_density} people/mile
+            %tr
+              %td Map it
+              %td 
+                %a{:href => "http://maps.google.com/maps?q=#{latest_location_context.latitude},#{latest_location_context.longitude}&hl=en&sll=#{latest_location_context.latitude},#{latest_location_context.longitude}", :target => "_new"} Google Map
+
+
+                  
+      :javascript
+        $("#context_button_#{@program_player.id}").unbind('click').click(function(){
+          $("#context_data_#{@program_player.id}").fadeIn();
+          $("#context_button_#{@program_player.id}").hide();
+        });
+        $("#context_close_#{@program_player.id}").unbind('click').click(function(){
+          $("#context_data_#{@program_player.id}").hide();
+          $("#context_button_#{@program_player.id}").fadeIn();
+        });
+    - else
+      %div{:class => 'horiz_line_2'} &nbsp;
+    
+            
+    - @can_leave_note = false
+    - if current_user and current_user.id == @program_player.user_id 
+      - @can_leave_note = true
+      - if @program_coach.present?
+        %h3 Send #{@program_coach.user.name} a private message
+      - elsif @supporters.present?
+        %h3 Send #{@supporters.map{|s|s.user.name}.join(', ')} a private message
+      - else
+        %h3 Write a private note to yourself
+    
+    - elsif @is_coach
+      - @can_leave_note = true
+      %h3 Send #{@program_player.user.name} a private message
+    
+
+    - if @can_leave_note
+      = render :partial => 'play/ask_coach_form', :locals => {:program_player => @program_player, :player_budge => @player_budge, :program_coach => @program_coach}
+  
+      %div{:class => :player_messages}
+        %table{:id => "conversation_history_messages_#{@program_player.id}", :style => 'margin-top: 1em;'}
+          - if @player_messages.present?
+            %tr
+              %td{:colspan => 2}
+                %h3 From #{time_ago_in_words @player_messages.first.created_at} ago&hellip;
+            - @player_messages.each do |player_message|
+              = render :partial => 'player_message_tr', :locals => {:player_message => player_message}
+  
+          %tr
+            %td{:style => 'text-align: right;', :width => 45}
+              = image_tag @program.photo(:small), {:class => 'rounded-img-small', :style => 'width: 40px;margin-right: 5px; '}
+            %td{:style => "padding-bottom: 1em;"}
+              %div
+                %strong{:style => 'margin-top: 0;'} Bought the #{link_to @program.name, {:controller => :store, :action => :program, :id => @program.token, :host => SECURE_DOMAIN, :protocol => 'https://'}} program #{time_ago_in_words @program_player.created_at} ago
+            
+        - if @player_messages.present?
+          %p= will_paginate @player_messages
+
+  
+  = render :partial => 'home/mobile_footer'
+          

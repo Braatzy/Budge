@@ -1,0 +1,16 @@
+%h1= t '.title'
+%p
+  = link_to t('back'), scaffold_daily_grrs_path
+  = link_to t('edit'), edit_scaffold_daily_grr_path(@daily_grr)
+
+%dl
+  %dt= DailyGrr.human_attribute_name :date
+  %dd= @daily_grr.date
+  %dt= DailyGrr.human_attribute_name :signups
+  %dd= @daily_grr.signups
+  %dt= DailyGrr.human_attribute_name :logins_1day
+  %dd= @daily_grr.logins_1day
+  %dt= DailyGrr.human_attribute_name :logins_7day
+  %dd= @daily_grr.logins_7day
+  %dt= DailyGrr.human_attribute_name :revenue
+  %dd= @daily_grr.revenue

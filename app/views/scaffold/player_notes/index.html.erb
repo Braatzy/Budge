@@ -1,0 +1,29 @@
+<h1>Listing player_notes</h1>
+
+<table>
+  <tr>
+    <th>Program player</th>
+    <th>About user</th>
+    <th>Note about</th>
+    <th>Text</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @player_notes.each do |player_note| %>
+  <tr>
+    <td><%= player_note.program_player_id %></td>
+    <td><%= player_note.about_user_id %></td>
+    <td><%= player_note.note_about %></td>
+    <td><%= player_note.text %></td>
+    <td><%= link_to 'Show', player_note %></td>
+    <td><%= link_to 'Edit', edit_player_note_path(player_note) %></td>
+    <td><%= link_to 'Destroy', player_note, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Player note', new_player_note_path %>

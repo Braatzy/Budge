@@ -1,0 +1,78 @@
+.share_buttons
+  %table{:style => 'width: 100%;'}
+    %tr
+      %td= image_tag 'mobile-web/1/button_lock_inactive.png', {:class => 'share', :id => 'keep_private', 'data-private' => 0}
+      %td{:id => 'privacy_option', :width => (@browser_type == 'mobile' ? 200 : 300)} Share publicly
+      %td
+        = image_tag 'mobile-web/1/button_twitter_inactive.png', {:class => "#{(current_user.oauth_for_site_token('twitter').present?) ? 'share' : 'connect'}", :id => 'share_twitter', 'data-twitter' => 0}
+      
+      %td
+        = image_tag 'mobile-web/1/button_facebook_inactive.png', {:class => "#{(current_user.oauth_for_site_token('facebook').present?) ? 'share' : 'connect'}", :id => 'share_facebook', 'data-facebook' => 0}
+
+:javascript
+  #{startj}
+  var privacy_statement = "Keep private";
+  var public_statement = "Post to stream";
+  
+  function click_private_button() {
+    if ($('#keep_private').attr('data-private') == '0') {
+      $('#keep_private').attr('data-private','1');
+      $('#privacy_option').html(privacy_statement);
+      $('#keep_private').attr('src',"#{image_path('mobile-web/1/button_lock_active.png')}");
+      $('#share_twitter').attr('data-twitter','0');
+      $('#share_twitter').attr('src',"#{image_path('mobile-web/1/button_twitter_inactive.png')}");          
+      $('#share_facebook').attr('data-facebook','0');
+      $('#share_facebook').attr('src',"#{image_path('mobile-web/1/button_facebook_inactive.png')}");          
+    } else {
+      $('#keep_private').attr('data-private','0');
+      $('#privacy_option').html(public_statement);
+      $('#keep_private').attr('src',"#{image_path('mobile-web/1/button_lock_inactive.png')}");          
+    }                  
+  }
+  function click_twitter_button() {
+    if ($('#share_twitter').attr('data-twitter') == '0') {
+      $('#share_twitter').attr('data-twitter','1');
+      $('#share_twitter').attr('src',"#{image_path('mobile-web/1/button_twitter_active.png')}");
+      $('#privacy_option').html(public_statement);
+      $('#keep_private').attr('data-private','0');
+      $('#keep_private').attr('src',"#{image_path('mobile-web/1/button_lock_inactive.png')}");          
+    } else {
+      $('#share_twitter').attr('data-twitter','0');
+      $('#share_twitter').attr('src',"#{image_path('mobile-web/1/button_twitter_inactive.png')}");          
+    }                  
+  }
+  function click_facebook_button() {
+    if ($('#share_facebook').attr('data-facebook') == '0') {
+      $('#share_facebook').attr('data-facebook','1');
+      $('#share_facebook').attr('src',"#{image_path('mobile-web/1/button_facebook_active.png')}");
+      $('#privacy_option').html(public_statement);
+      $('#keep_private').attr('data-private','0');
+      $('#keep_private').attr('src',"#{image_path('mobile-web/1/button_lock_inactive.png')}");          
+    } else {
+      $('#share_facebook').attr('data-facebook','0');
+      $('#share_facebook').attr('src',"#{image_path('mobile-web/1/button_facebook_inactive.png')}");          
+    }
+  }
+  
+  $('#keep_private').unbind('tap').tap(function(){
+    click_private_button();
+  }) 
+  $('#share_twitter').unbind('tap').tap(function(){
+    click_twitter_button();
+  }) 
+  $('#share_facebook').unbind('tap').tap(function(){
+    click_facebook_button();
+  }) 
+  $('.connect').unbind('click').click(function(){
+    $.mobile.showPageLoadingMsg();
+    if ($(this).attr('id') == 'share_twitter') {
+      window.location = '/oauth/twitter?redirect_to=#{request.fullpath}';
+      return false;
+    } else if ($(this).attr('id') == 'share_facebook') {
+      window.location = '/oauth/facebook/?redirect_to=#{request.fullpath}';
+      return false;
+    }
+  });
+  #{flash[:authenticated_twitter] ? 'click_twitter_button();' : ''}
+  #{flash[:authenticated_facebook] ? 'click_facebook_button();' : ''}
+  #{endj}

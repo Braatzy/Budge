@@ -1,0 +1,62 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Rate #{@program_coach.user.name}"}
+  %div{'data-role' => :content, :class => :content}
+    
+    %div{:id => :coaches}
+      %h1.handwriting{:style => 'margin: 0;'} Your coach
+      = render :partial => 'play/coach_row', :locals => {:program_coach => @program_coach, :program_player => @program_player, :show_info => false}
+    %br{:clear => :all}
+
+    :css
+      #rate_#{@program_player.id} {
+        display: none;
+      }
+      
+    = form_for :program_player, :url => url_for(:controller => :profile, :action => :rate_coach, :id => @program_player.id), :html => {:id => "rate_coach_form_#{@program_player.id}", 'data-ajax' => 'false'} do |f|
+      %h3.handwriting How would you rate the effectiveness of #{@program_coach.user.name} as a coach? 
+      %div.handwriting{:id => "rating_#{@program_player.id}", :style => 'padding: 1em 0 5px 0; font-weight: bold; color: #666; font-size: 20px;'} 
+      %div{:id => "rating_slider_#{@program_player.id}"}
+        = f.label :program_coach_rating, "Rating", {:class => 'ui-hidden-accessible'}
+        = f.range_field :program_coach_rating, {:in => 0..10, :id => "rate_#{@program_player.id}"}
+
+      %h3.handwriting Write a short review. 
+      %p= f.text_area :program_coach_testimonial, {:class => :stylized_input}
+      %p= button "Save", '#', {:id => "save_review_button_#{@program_player.id}"}
+    %br{:clear => :all}
+      
+    :javascript
+      #{startj}
+      $('#coaches ul.unlinked_coach_rows li a').unbind('click').click(function(e){
+        return false;
+      });
+      $('.buy_program_coach_button').unbind('click').click(function(e){
+        return false;
+      });
+    
+      var rating_text = new Array();
+      rating_text['0'] = "0 stars: You want a full refund.";
+      rating_text['1'] = "1 star: You feel cheated.";
+      rating_text['2'] = "2 stars: Definitely no help at all.";
+      rating_text['3'] = "3 stars: Little to no help.";
+      rating_text['4'] = "4 stars: Barely helpful.";
+      rating_text['5'] = "5 stars: Helpful enough.";
+      rating_text['6'] = "6 stars: Quite helful.";
+      rating_text['7'] = "7 stars: Worth it!";
+      rating_text['8'] = "8 stars: You're grateful for their help.";
+      rating_text['9'] = "9 stars: Above and beyond helpful.";
+      rating_text['10'] = "10 stars: #{@program_coach.user.name} is your personal hero.";
+      $("#rating_slider_#{@program_player.id} .ui-slider").live('mouseup', function(){
+        $("#rating_#{@program_player.id}").html(rating_text[$('#rate_#{@program_player.id}').val()])
+      });
+      $("#rating_slider_#{@program_player.id} .ui-slider").live('touchend', function(){
+        $("#rating_#{@program_player.id}").html(rating_text[$('#rate_#{@program_player.id}').val()])
+      });      
+      $("#rating_#{@program_player.id}").html(rating_text[$('#rate_#{@program_player.id}').val()]);
+      
+      $("#save_review_button_#{@program_player.id}").unbind('click').click(function(){
+        $("#rate_coach_form_#{@program_player.id}").submit();
+        return false;
+      });
+      #{endj}    
+    
+  = render :partial => 'home/mobile_footer'

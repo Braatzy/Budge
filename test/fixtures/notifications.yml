@@ -1,0 +1,112 @@
+# == Schema Information
+#
+# Table name: notifications
+#
+#  id                     :integer(4)      not null, primary key
+#  user_id                :integer(4)
+#  short_id               :string(255)
+#  delivered              :boolean(1)      default(FALSE)
+#  delivered_at           :datetime
+#  delivered_hour_of_day  :integer(4)
+#  delivered_day_of_week  :integer(4)
+#  delivered_week_of_year :integer(4)
+#  responded_at           :datetime
+#  responded_hour_of_day  :integer(4)
+#  responded_day_of_week  :integer(4)
+#  responded_week_of_year :integer(4)
+#  delivered_via          :string(255)
+#  message_style_token    :string(255)
+#  message_data           :text
+#  responded_minutes      :integer(4)
+#  total_clicks           :integer(4)      default(0)
+#  responded              :boolean(1)      default(FALSE)
+#  completed_response     :boolean(1)      default(FALSE)
+#  method_of_response     :integer(4)
+#  shared_results         :boolean(1)      default(FALSE)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  remote_user_id         :string(255)
+#  remote_site_token      :string(255)
+#  remote_post_id         :string(255)
+#  delivered_immediately  :boolean(1)      default(FALSE)
+#  num_signups            :integer(4)      default(0)
+#  for_object             :string(255)
+#  for_id                 :integer(4)
+#  from_system            :boolean(1)      default(FALSE)
+#  from_user_id           :integer(4)
+#  delivered_off_hours    :boolean(1)      default(FALSE)
+#  broadcast              :boolean(1)      default(FALSE)
+#  ref_site               :string(255)
+#  ref_url                :string(255)
+#  expected_response      :boolean(1)      default(FALSE)
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  hashed_id: MyString
+  notification_number: 1
+  delivered: false
+  delivered_at: 2011-04-14 19:36:47
+  delivered_hour_of_day: 1
+  delivered_day_of_week: 1
+  delivered_week_of_year: 1
+  include_competitive: false
+  include_collaborative: false
+  include_tip: false
+  include_social: false
+  include_social_plea: false
+  include_gift: false
+  responded: false
+  responded_at: 2011-04-14 19:36:47
+  responded_hour_of_day: 1
+  responded_day_of_week: 1
+  responded_week_of_year: 1
+  method_of_delivery: 1
+  style_of_message: 1
+  num_current_traits: 1
+  num_additional_traits: 1
+  traits_included: MyText
+  randomness_level: 1
+  streak: 1
+  responded_minutes: 1
+  direct_link: false
+  num_clickthrus: false
+  completed_response: false
+  method_of_response: 1
+  shared_results: false
+
+two:
+  user_id: 1
+  hashed_id: MyString
+  notification_number: 1
+  delivered: false
+  delivered_at: 2011-04-14 19:36:47
+  delivered_hour_of_day: 1
+  delivered_day_of_week: 1
+  delivered_week_of_year: 1
+  include_competitive: false
+  include_collaborative: false
+  include_tip: false
+  include_social: false
+  include_social_plea: false
+  include_gift: false
+  responded: false
+  responded_at: 2011-04-14 19:36:47
+  responded_hour_of_day: 1
+  responded_day_of_week: 1
+  responded_week_of_year: 1
+  method_of_delivery: 1
+  style_of_message: 1
+  num_current_traits: 1
+  num_additional_traits: 1
+  traits_included: MyText
+  randomness_level: 1
+  streak: 1
+  responded_minutes: 1
+  direct_link: false
+  num_clickthrus: false
+  completed_response: false
+  method_of_response: 1
+  shared_results: false

@@ -1,0 +1,7 @@
+$('#suggestions_list').append("#{escape_javascript(render :partial => 'suggestions_list', :locals => {:suggestions => @suggestions})}");
+$('#more_link').html("Load more&hellip;")
+$('#more_suggestions').removeClass('ui-btn-active');
+- if @suggestions.blank?
+  $('#more_link').slideUp();
+- else
+  $('#suggestions_more').attr('data-next-page', "#{params[:page].to_i+1}");

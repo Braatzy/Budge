@@ -1,0 +1,8 @@
+- index ||= nil
+.thread_item
+  .thread_icon{:style => 'color: #ccc;'}
+    - if index == nil or index == 0
+      = image_tag 'chat.png', {:style => 'height: 10px; width: 10px;'}
+  .thread_text
+    %strong= link_to "#{comment.user.name}:", :controller => :profile, :action => :id, :id => comment.user_id, :back => request.fullpath
+    = auto_link(comment.message, :all, {:target => '_new', :style => 'color: #000;'})

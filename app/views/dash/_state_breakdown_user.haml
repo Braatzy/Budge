@@ -1,0 +1,31 @@
+-show_not_in_beta=false if show_not_in_beta.nil?
+-table_id||='user_states'
+
+-skip_statuses=['total_size','unknown'] 
+-skip_statuses.push('interested') if show_not_in_beta
+
+
+-if user_group_state_counts.present?
+  .simple_table
+    %table{:id=>table_id}
+      %thead
+        %th Count
+        %th State
+        %th Percentage
+      %tbody
+        -total=user_group_state_counts['total_size']
+        -user_group_state_counts.each do |state,count|
+          -next if skip_statuses.include? state 
+          %tr
+            %td.num_column=count
+            %td=state
+            %td.num_column{:title=>"#{count} users"}=get_percentage(count,total)
+
+  :javascript
+    $(document).ready(function() {
+      tbl=$("##{table_id}").dataTable( {
+        "bPaginate": false,
+        "aoColumns": [ { "bVisible":    false },null,null],
+        "aaSorting": [[ 0, "desc" ]]
+         });   
+    } );

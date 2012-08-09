@@ -1,0 +1,49 @@
+<h1>Listing twitter_scores</h1>
+
+<table>
+  <tr>
+    <th>Twitter</th>
+    <th>Twitter screen name</th>
+    <th>Klout score</th>
+    <th>Klout slope</th>
+    <th>Klout class</th>
+    <th>Klout class name</th>
+    <th>Klout network score</th>
+    <th>Klout amplification score</th>
+    <th>Klout true reach</th>
+    <th>Klout delta 1day</th>
+    <th>Klout delta 5day</th>
+    <th>Num followers</th>
+    <th>Num following</th>
+    <th>Num tweets</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @twitter_scores.each do |twitter_score| %>
+  <tr>
+    <td><%= twitter_score.twitter_id %></td>
+    <td><%= twitter_score.twitter_screen_name %></td>
+    <td><%= twitter_score.klout_score %></td>
+    <td><%= twitter_score.klout_slope %></td>
+    <td><%= twitter_score.klout_class_id %></td>
+    <td><%= twitter_score.klout_class_name %></td>
+    <td><%= twitter_score.klout_network_score %></td>
+    <td><%= twitter_score.klout_amplification_score %></td>
+    <td><%= twitter_score.klout_true_reach %></td>
+    <td><%= twitter_score.klout_delta_1day %></td>
+    <td><%= twitter_score.klout_delta_5day %></td>
+    <td><%= twitter_score.num_followers %></td>
+    <td><%= twitter_score.num_following %></td>
+    <td><%= twitter_score.num_tweets %></td>
+    <td><%= link_to 'Show', twitter_score %></td>
+    <td><%= link_to 'Edit', edit_twitter_score_path(twitter_score) %></td>
+    <td><%= link_to 'Destroy', twitter_score, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Twitter score', new_twitter_score_path %>

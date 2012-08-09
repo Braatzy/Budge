@@ -1,0 +1,24 @@
+development:
+  bucket_name: budge_development
+  access_key_id: AKIAI34KM7ZVWXAWOIUQ
+  secret_access_key: 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
+
+adam_local:
+  bucket_name: budge_development
+  access_key_id: AKIAI34KM7ZVWXAWOIUQ
+  secret_access_key: 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
+staging:
+  bucket_name: budge_development
+  access_key_id: AKIAI34KM7ZVWXAWOIUQ
+  secret_access_key: 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
+
+
+test:
+  bucket_name: budge_test
+  access_key_id: AKIAI34KM7ZVWXAWOIUQ
+  secret_access_key: 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
+
+production:
+  bucket_name: budge_production
+  access_key_id: AKIAI34KM7ZVWXAWOIUQ
+  secret_access_key: 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

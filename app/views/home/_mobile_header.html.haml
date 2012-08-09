@@ -1,0 +1,2 @@
+%h1{:style => "#{current_user.present? ? 'margin: 1em auto;' : 'text-align: center; padding: 10px; border-radius: 10px; background-color: #fff; margin: 0 auto;'}", :class => "header_width_for_#{@browser_type}"}
+  = link_to image_tag('budge-logo-300.png', :style => "#{current_user.present? ? '' : 'width: 260px;'}"), {:controller => :waiting_room, :action => :index}, {:class => :noajax}

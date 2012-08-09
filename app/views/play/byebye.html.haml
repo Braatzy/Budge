@@ -1,0 +1,45 @@
+- time_of_day = (Time.zone.now.hour > 15 or Time.zone.now.hour < 7) ? 'evening' : 'morning'
+- background_asset_path = "mobile-web/1/#{time_of_day}_background.png"
+-if @browser_type == 'mobile'
+  - asset_path  = "mobile-web/1/#{time_of_day}_snail.png"
+  - snail_style = "width: 320px; height: 460px; display: none; background-image: url('#{image_path(asset_path)}');"
+-else
+  - asset_path  = "mobile-web/1/#{time_of_day}_snail_web.png"
+  - snail_style = "width: 600px; height: 440px; display: none; background-image: url('#{image_path(asset_path)}'); position: absolute; bottom: 0px; left:300px;"
+
+
+%div{'data-role' => :page, :id => :byebye, :style => "background-image: url('#{image_path(background_asset_path)}');"}
+  %div{:id => "byebyesnail_#{@program.id}", :class=>'bye_bye_snail', :style =>snail_style}
+    %div{:id => "byewords", :class => 'rounded handwriting', :style => 'display: none;', 'data-index' => 0} Bye bye!
+    
+  :javascript
+    #{startj}
+
+    var sayings = ["Swim in the <a href='/stream' style='color:#000;' class='noajax'>stream</a>!", "Wanna go <a href='/' style='color:#000;' class='noajax'>home</a>?", "Bye bye!", "I <3 you", "You are pretty.", "Hee hee!", "Go outside!", "Woah there.", "Quack.", "Yeah, I work out.", "I'm on a boat!", "<span style='font-size: 20px;line-height: 18px;'>I'm up in ur phone mixin' ur health stuffs.</span>", "You rock.", "Knock knock", "O rly?", "Y'all come back now, y'hear?", "Yeah, I've met Siri. She's cool."];
+    function slideInSnail() {
+      $('#byebyesnail_#{@program.id}').toggle('slide', {easing: 'easeOutBack', direction: 'down'}, 2000);
+      setTimeout(sayBye, 2000);      
+    }
+    function sayBye() {
+      $('#byewords').fadeIn();
+    }
+    setTimeout(slideInSnail, 2000);
+
+    var clicks = 0;
+    $('#byebyesnail_#{@program.id}').unbind('click').click(function(){
+      clicks += 1;
+      var num;
+      click_modulus = clicks % 5;
+      if (click_modulus == 1) {
+        num = 0;
+      } else if (click_modulus == 2) {
+        num = 1;
+      } else {
+        num = Math.floor(Math.random()*sayings.length);
+      }
+      var saying = sayings[num]
+      $('#byewords').html(saying);
+    });
+    #{endj}
+  
+  = render :partial => 'home/mobile_footer'

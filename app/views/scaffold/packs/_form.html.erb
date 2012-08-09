@@ -1,0 +1,51 @@
+<%= render :partial => 'scaffold/packs/pack_and_traits_nav' %>
+
+<%= form_for([:scaffold, @pack]) do |f| %>
+  <% if @pack.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pack.errors.count, "error") %> prohibited this pack from being saved:</h2>
+
+      <ul>
+      <% @pack.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :do_name %><br />
+    <%= f.text_field :do_name %>
+  </div>
+  <div class="field">
+    <%= f.label :dont_name %><br />
+    <%= f.text_field :dont_name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :launched %><br />
+    <%= f.check_box :launched %>
+  </div>
+  <div class="field">
+    <%= f.label :public %><br />
+    <%= f.check_box :public %>
+  </div>
+  <div class="field">
+    <%= f.label :requires_unlocking %><br />
+    <%= f.check_box :requires_unlocking %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

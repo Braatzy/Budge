@@ -1,0 +1,60 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @oauth_token.user_id %>
+</p>
+
+<p>
+  <b>Site token:</b>
+  <%= @oauth_token.site_token %>
+</p>
+
+<p>
+  <b>Site name:</b>
+  <%= @oauth_token.site_name %>
+</p>
+
+<p>
+  <b>Token:</b>
+  <%= @oauth_token.token %>
+</p>
+
+<p>
+  <b>Secret:</b>
+  <%= @oauth_token.secret %>
+</p>
+
+<p>
+  <b>Remote name:</b>
+  <%= @oauth_token.remote_name %>
+</p>
+
+<p>
+  <b>Remote username:</b>
+  <%= @oauth_token.remote_username %>
+</p>
+
+<p>
+  <b>Remote user:</b>
+  <%= @oauth_token.remote_user_id %>
+</p>
+
+<p>
+  <b>Cached user info:</b>
+  <%= @oauth_token.cached_user_info %>
+</p>
+
+<p>
+  <b>Cached datetime:</b>
+  <%= @oauth_token.cached_datetime %>
+</p>
+
+<p>
+  <b>Working:</b>
+  <%= @oauth_token.working %>
+</p>
+
+
+<%= link_to 'Edit', edit_oauth_token_path(@oauth_token) %> |
+<%= link_to 'Back', oauth_tokens_path %>

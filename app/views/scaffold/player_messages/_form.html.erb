@@ -1,0 +1,73 @@
+<%= form_for(@player_message) do |f| %>
+  <% if @player_message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@player_message.errors.count, "error") %> prohibited this player_message from being saved:</h2>
+
+      <ul>
+      <% @player_message.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :from_user_id %><br />
+    <%= f.text_field :from_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :from_remote_user %><br />
+    <%= f.text_field :from_remote_user %>
+  </div>
+  <div class="field">
+    <%= f.label :to_user_id %><br />
+    <%= f.text_field :to_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :to_remote_user %><br />
+    <%= f.text_field :to_remote_user %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br />
+    <%= f.text_area :content %>
+  </div>
+  <div class="field">
+    <%= f.label :program_player_id %><br />
+    <%= f.text_field :program_player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :player_step_id %><br />
+    <%= f.text_field :player_step_id %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_via %><br />
+    <%= f.text_field :delivered_via %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_post_id %><br />
+    <%= f.text_field :remote_post_id %>
+  </div>
+  <div class="field">
+    <%= f.label :message_data %><br />
+    <%= f.text_area :message_data %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered %><br />
+    <%= f.check_box :delivered %>
+  </div>
+  <div class="field">
+    <%= f.label :deliver_at %><br />
+    <%= f.datetime_select :deliver_at %>
+  </div>
+  <div class="field">
+    <%= f.label :from_coach %><br />
+    <%= f.check_box :from_coach %>
+  </div>
+  <div class="field">
+    <%= f.label :to_coach %><br />
+    <%= f.check_box :to_coach %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

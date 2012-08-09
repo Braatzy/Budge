@@ -1,0 +1,13 @@
+PassengerEnabled on
+PassengerAppRoot /home/betag/budge/
+RailsEnv development
+RackEnv development
+
+AddType text/cache-manifest .manifest
+# This is to make sure the manifest file isn't cached using regular HTTP
+# ExpiresActive On
+# ExpiresDefault "access"
+
+# RewriteEngine On
+# RewriteCond %{HTTP_HOST} ^www\.healthmonth.com [NC]
+# RewriteRule ^(.*) http://healthmonth.com/$1 [L,R=301]

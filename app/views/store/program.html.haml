@@ -1,0 +1,189 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  - unless @has_program or @invitation
+    = render :partial => 'store/dollar_credit_nav'
+  %div{:id => :store_program, 'data-role' => :content, :class => :content, :style => 'padding-top: 15px'}
+    - if @invitation
+      = render :partial => 'store/invitation', :locals => {:invitation => @invitation}
+    = render :partial => 'store/program_header', :locals => {:program => @program}
+
+    - if @programs_are_free or !@has_program
+      %div#program_preview{:style => 'margin: 1em 0 2em 0;'}
+        %div{:id => "program_preview_actions_#{@program.id}"}
+          %div{:id => "program_preview_question_#{@program.id}"}          
+            %p Try to do this right now and report back&hellip;
+            %h2.handwriting{:style => 'margin-top: 0;'} #{@first_action_template.action_wording}
+            =button 'Did it!',{},{:id=>"question_yes_#{@program.id}", :cls=>'button_important noajax'}
+            =button 'Too difficult :(',{},{:id=>"question_no_#{@program.id}", :cls => 'noajax'}
+          %div{:id => "program_preview_yes_#{@program.id}", :style => 'display: none;'}     
+            %h2.handwriting{:style => 'margin-bottom: 0;'} Great!
+            - if @programs_are_free
+              %p If you'd like to take this as your free program, choose the level that best fits you right now.
+            - else
+              %p To continue, choose the level that best fits you right now.
+            %div.preview_map
+              - @program_budge_placement_levels.each do |program_budge|
+                = render :partial => 'play/program_budge_map_row', :locals => {:program => @program, :program_budge => program_budge, :program_budge_to_state => Hash.new(:preview), :show_num_playing=>false}
+
+          %div{:id => "program_preview_no_#{@program.id}", :style => 'display: none;'}          
+            %h2.handwriting That's okay! 
+            %p There's plenty of time to get there.  Would you like to start by practicing this level a bit more?
+            %div.preview_map
+              = render :partial => 'play/program_budge_map_row', :locals => {:program => @program, :program_budge => @program.first_budge, :program_budge_to_state => Hash.new(:preview)}
+            %p Or, let us know what you can do, and we'll create a new level that matches your abilities!
+            %p= mail_to "support@bud.ge", "Email us", {:subject => "Please make #{@program.name} easier!", :encode => :javascript, 'data-role'=>'button'}
+
+        :javascript
+          $("#question_yes_#{@program.id}").unbind('click').click(function(){
+            $("#program_preview_question_#{@program.id}").hide();
+            $("#program_preview_yes_#{@program.id}").fadeIn();
+            return false;
+          });
+          $("#question_no_#{@program.id}").unbind('click').click(function(){
+            $("#program_preview_question_#{@program.id}").hide();
+            $("#program_preview_no_#{@program.id}").fadeIn();          
+            return false;
+          });
+
+    - elsif @has_program
+      =button 'Launch program',{:controller => :play, :action => :program, :id => @program.id},{:style => 'margin-top: 10px;', :class => 'noajax'}        
+
+    - if false
+      =button "Buy for #{number_to_currency @program.price}", {:controller => :store, :action => :pay, :id => @program.id, :type => :program}, {:style => 'margin-top: 1em;', :class => 'noajax pay_button', 'data-transition' => 'slideup'}
+
+
+
+    - if false  
+      - if @program.program_budges.present?
+        %div{:class => 'iscroll_wrapper', :id => "iscroll_wrapper_#{@program.id}"}
+          %ul{:id => "program_challenges_#{@program.id}", :class => :program_challenges}
+            - @program.program_budges.sort_by{|pb|pb.level || pb.position}.each_with_index do |program_budge, index|
+              %li.panel
+                %strong= program_budge.budge_name_and_level
+                %ol{:style => 'padding-left: 20px;'}
+                  - program_budge.program_action_templates.sort_by{|p|p.sort_by}.each do |program_action_template|
+                    %li= program_action_template.action_wording
+             
+        %div{:class => :iscroll_bottom}
+          %div{:class => :iscroll_nav}
+            %ul{:class => :iscroll_bubbles, :id => "iscroll_bubbles_#{@program.id}"}
+              - @program.program_budges.each_with_index do |program_budge, index|
+                - if index == 0
+                  %li{:class => :active} #{index}              
+                - else
+                  %li #{index}
+          %div{:class => 'horiz_line_2'} &nbsp;
+        
+        :javascript
+          #{startj}
+          var myScroll;
+          $(document).ready(function() {
+            setTimeout(function () { 
+              $("#program_challenges_#{@program.id}").show(); 
+              $("#iscroll_bubbles_#{@program.id}").css('width','#{@program.program_budges.size*12 }px'); // number of li * 12
+              myScroll = new iScroll("iscroll_wrapper_#{@program.id}", {
+                snap: 'li.panel',
+                momentum: false,
+                hScrollbar: false,
+                vScrollbar: false,
+                vScroll: false,
+                onScrollEnd: function () {
+                  document.querySelector('#iscroll_bubbles_#{@program.id} > li.active').className = '';
+                  document.querySelector('#iscroll_bubbles_#{@program.id} > li:nth-child(' + (this.currPageX+1) + ')').className = 'active';
+                },
+                
+                // To allow vertical scrolling to occur on the same area
+                // https://groups.google.com/forum/?pli=1#!search/vertical$20scroll$20with$20horizontal$20carousel/iscroll/ESlql_dv-kY/MLLs9_0RZqkJ
+                onBeforeScrollStart: function (e) { 
+                  if (e.touches) {
+                  point = e.touches[0]; 
+                  pointStartX = point.pageX; 
+                  pointStartY = point.pageY; 
+                  null; 
+                  }
+                }, 
+                onBeforeScrollMove: function(e){ 
+                  deltaX = Math.abs(point.pageX - pointStartX); 
+                  deltaY = Math.abs(point.pageY - pointStartY); 
+                  if (deltaX >= deltaY) { 
+                  e.preventDefault(); 
+                  } else { 
+                  null; 
+                  } 
+                } 
+              });        
+            }, 300);
+          });
+          #{endj}
+      
+      - if @program.requirements.present?
+        %div{:id => :program_requirements, :style => 'margin: 1em 0;'}
+          %strong Requirements
+          %p= raw textilize @program.requirements.html_safe
+        %div{:class => 'horiz_line_2'} &nbsp;
+  
+      - if @program.program_coaches.where(:currently_accepting_applications => true).present?
+        - coaches = @program.program_coaches.where(:currently_accepting_applications => true)
+        - if coaches.present?
+          %div{:id => :program_coaches, :style => 'margin: 1em 0;'}
+            %strong #{pluralize coaches.size, 'coach'} available
+            - coaches.each do |program_coach|
+              = render :partial => 'play/coach_row', :locals => {:program_coach => program_coach, :coach_icon_size => :tiny}
+        %div{:class => 'horiz_line_1'} &nbsp;
+          
+      - if @program.program_players.present?
+        %div{:id => :program_players, :style => 'margin: 1em 0;'}
+          %strong #{pluralize @program.total_players, 'person'} playing
+          - if @program.program_players.size > 7
+            %ul
+              - @program.program_players[-7..-1].each do |program_player|
+                %li= image_tag program_player.user.photo(:tiny), {:title => program_player.user.name, :class => 'rounded-img-small'}                     
+          - else
+            %ul
+              - @program.program_players.each do |program_player|
+                %li= image_tag program_player.user.photo(:tiny), {:title => program_player.user.name, :class => 'rounded-img-small'}       
+          %br{:clear => :all}
+        %div{:class => 'horiz_line_1'} &nbsp;
+          
+      %div{:id => :program_metadata, :style => 'margin: 1em 0;'}
+        %table{:width => '100%'}
+          - if @program.company_name.present?
+            %tr
+              %td{:style => 'text-align: right;'}
+                %strong Company
+              %td
+                - if @program.company_url.present?
+                  %a{:href => @program.company_url, :target => '_new'}= @program.company_name
+                - else
+                  = @program.company_name
+          - if @program.adapted_from_name.present?
+            %tr
+              %td{:style => 'text-align: right;'}
+                %strong Inspiration
+              %td
+                - if @program.adapted_from_url.present?
+                  %a{:href => @program.adapted_from_url, :target => '_new'}= @program.adapted_from_name
+                - else
+                  = @program.adapted_from_name
+          - if @program.first_published_on.present?
+            %tr
+              %td{:style => 'text-align: right;'}
+                %strong Post Date
+              %td
+                = @program.first_published_on.strftime('%a %b %d, %Y')
+    
+          - if @program.program_version.present?
+            %tr
+              %td{:style => 'text-align: right;'}
+                %strong Version
+              %td
+                = @program.program_version
+    
+          - if @program.maturity_rating.present?
+            %tr
+              %td{:style => 'text-align: right;'}
+                %strong Rating
+              %td
+                = @program.maturity_rating
+  = render :partial => 'home/mobile_footer'
+  

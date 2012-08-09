@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Category:</b>
+  <%= @foursquare_category.category_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @foursquare_category.name %>
+</p>
+
+<p>
+  <b>Plural name:</b>
+  <%= @foursquare_category.plural_name %>
+</p>
+
+<p>
+  <b>Icon:</b>
+  <%= @foursquare_category.icon %>
+</p>
+
+<p>
+  <b>Parent:</b>
+  <%= @foursquare_category.parent_id %>
+</p>
+
+<p>
+  <b>Parent category:</b>
+  <%= @foursquare_category.parent_category_id %>
+</p>
+
+<p>
+  <b>Num children:</b>
+  <%= @foursquare_category.num_children %>
+</p>
+
+<p>
+  <b>Level deep:</b>
+  <%= @foursquare_category.level_deep %>
+</p>
+
+
+<%= link_to 'Edit', edit_scaffold_foursquare_category_path(@foursquare_category) %> |
+<%= link_to 'Back', scaffold_foursquare_categories_path %>

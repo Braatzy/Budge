@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @relationship.user_id %>
+</p>
+
+<p>
+  <b>Followed user:</b>
+  <%= @relationship.followed_user_id %>
+</p>
+
+<p>
+  <b>Auto:</b>
+  <%= @relationship.auto %>
+</p>
+
+<p>
+  <b>Invisible:</b>
+  <%= @relationship.invisible %>
+</p>
+
+<p>
+  <b>Blocked:</b>
+  <%= @relationship.blocked %>
+</p>
+
+<p>
+  <b>From:</b>
+  <%= @relationship.from %>
+</p>
+
+<p>
+  <b>Found on other network:</b>
+  <%= @relationship.found_on_other_network %>
+</p>
+
+<p>
+  <b>Referred signup:</b>
+  <%= @relationship.referred_signup %>
+</p>
+
+<p>
+  <b>Referred signup via:</b>
+  <%= @relationship.referred_signup_via %>
+</p>
+
+<p>
+  <b>Referrred by budge request:</b>
+  <%= @relationship.referrred_by_budge_request_id %>
+</p>
+
+<p>
+  <b>Referred by budge:</b>
+  <%= @relationship.referred_by_budge_id %>
+</p>
+
+<p>
+  <b>Num given budges:</b>
+  <%= @relationship.num_given_budges %>
+</p>
+
+<p>
+  <b>Num accepted budges:</b>
+  <%= @relationship.num_accepted_budges %>
+</p>
+
+<p>
+  <b>Num successful budges:</b>
+  <%= @relationship.num_successful_budges %>
+</p>
+
+
+<%= link_to 'Edit', edit_relationship_path(@relationship) %> |
+<%= link_to 'Back', relationships_path %>

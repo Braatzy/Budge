@@ -1,0 +1,2 @@
+module OldDashHelper
+end

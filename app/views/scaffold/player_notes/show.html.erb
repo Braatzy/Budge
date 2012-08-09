@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Program player:</b>
+  <%= @player_note.program_player_id %>
+</p>
+
+<p>
+  <b>About user:</b>
+  <%= @player_note.about_user_id %>
+</p>
+
+<p>
+  <b>Note about:</b>
+  <%= @player_note.note_about %>
+</p>
+
+<p>
+  <b>Text:</b>
+  <%= @player_note.text %>
+</p>
+
+
+<%= link_to 'Edit', edit_player_note_path(@player_note) %> |
+<%= link_to 'Back', player_notes_path %>

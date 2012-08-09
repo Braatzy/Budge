@@ -1,0 +1,45 @@
+<%= form_for(@player_step) do |f| %>
+  <% if @player_step.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@player_step.errors.count, "error") %> prohibited this player_step from being saved:</h2>
+
+      <ul>
+      <% @player_step.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :program_player_id %><br />
+    <%= f.text_field :program_player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :program_step_id %><br />
+    <%= f.text_field :program_step_id %>
+  </div>
+  <div class="field">
+    <%= f.label :num_times_played %><br />
+    <%= f.text_area :num_times_played %>
+  </div>
+  <div class="field">
+    <%= f.label :outcome_token %><br />
+    <%= f.text_field :outcome_token %>
+  </div>
+  <div class="field">
+    <%= f.label :response_token %><br />
+    <%= f.text_field :response_token %>
+  </div>
+  <div class="field">
+    <%= f.label :response_id %><br />
+    <%= f.text_field :response_id %>
+  </div>
+  <div class="field">
+    <%= f.label :response_sorted_by %><br />
+    <%= f.text_field :response_sorted_by %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

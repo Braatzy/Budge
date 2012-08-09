@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @user_addon.user_id %>
+</p>
+
+<p>
+  <b>Addon:</b>
+  <%= @user_addon.addon_id %>
+</p>
+
+<p>
+  <b>Level credits spent:</b>
+  <%= @user_addon.level_credits_spent %>
+</p>
+
+<p>
+  <b>Dollars spent:</b>
+  <%= @user_addon.dollars_spent %>
+</p>
+
+<p>
+  <b>Activated:</b>
+  <%= @user_addon.activated %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_addon_path(@user_addon) %> |
+<%= link_to 'Back', user_addons_path %>

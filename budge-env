@@ -1,0 +1,5 @@
+BUNDLE_WITHOUT=development:test
+LANG=en_US.UTF-8
+LOG_LEVEL=DEBUG
+MAINTENANCE_PAGE_URL=http://bud.ge/page/maintenance.html
+RACK_ENV=production

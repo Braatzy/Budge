@@ -1,0 +1,199 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+  %div{'data-role' => 'header'}
+    - if current_user
+      = back_button
+    %h1 Survey
+  %div{'data-role' => 'content'}
+    %h1{:style => 'text-align: center; border-radius: 10px; padding: 10px; background-color: #fff;'}
+      = link_to image_tag('budge-logo-300.png', {:style => 'width: 270px;'}), {:controller => :waiting_room, :action => :index}, {:style => 'border: 0; padding: 0; margin: 0;', :rel => 'external'}
+    %div{:class => "body_width_for_#{@browser_type}", :style => 'text-align: left; margin: 0 auto; font-size: 20px; line-height: 28px;'}
+      - if @program
+        %h2= @program.name
+        - if @program.description.present?
+          = raw textilize @program.description
+          
+        - if current_user.blank?
+          %p= link_to "Log in via Twitter to apply", {:controller => :oauth, :action => :twitter, :redirect_to => raw(url_for(:controller => :waiting_room, :action => :application, :id => @program.token))}, {'data-ajax' => 'false', 'data-role' => 'button', 'data-theme' => 'e'}
+        - else
+          %form{:method => :post, :action => url_for(:controller => :waiting_room, :action => :apply, :id => @program.id), :id => 'apply_form'}
+            - if @program.required_question_1.present?
+              %p 
+                %div{:style => 'font-size: 16px;'}= @program.required_question_1
+                = text_area :program_player, :required_answer_1, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "(Required)"}
+            
+            - if @program.required_question_2.present?
+              %p 
+                %div{:style => 'font-size: 16px;'}= @program.required_question_2
+                = text_area :program_player, :required_answer_2, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "(Required)"}
+            
+            - if @program.optional_question_1.present?
+              %p 
+                %div{:style => 'font-size: 16px;'} #{@program.optional_question_1}
+                = text_area :program_player, :optional_answer_1, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "(Optional)"}
+            
+            - if @program.optional_question_2.present?
+              %p 
+                %div{:style => 'font-size: 16px;'} #{@program.optional_question_2}
+                = text_area :program_player, :optional_answer_2, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "(Optional)"}
+  
+            %p
+              %div{:style => 'font-size: 16px;'} How would you like to describe your life a month from now if you were able to complete this program?
+              = text_area :program_player, :success_statement, {:style => 'width: 95%; font-size: 14px;', :placeholder => "ie. I am no longer craving soda in the afternoons.", 'data-theme' => 'c'}
+  
+            - if current_user.time_zone.blank?
+              %p 
+                %div{:style => 'font-size: 16px;'} Which time zone are you usually in?
+                = time_zone_select :user, :time_zone, ActiveSupport::TimeZone.us_zones, :include_blank => true
+                      
+            - if @program.require_email? and (current_user.email.blank?)
+              %p 
+                %div{:style => 'font-size: 16px;'} Your email address is required for this program
+                = text_field :user, :email, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+            
+            - if @program.require_phone? and (current_user.phone.blank? or !current_user.phone_verified?)
+              %p 
+                %div{:style => 'font-size: 16px;'} Your phone is required for this program (enter 0 if outside the US)
+                = text_field :user, :phone, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+
+            - if @program.program_coaches.present?
+              %p 
+                %div{:style => 'font-size: 16px;'} 
+                  %strong Choose your budger! 
+                  This person will be personally accountable for making sure you do well in this program. Or your money back!
+                = select :program_player, :coach_user_id, @program.program_coaches.sort_by{|p|(p.head_coach? ? 1 : 0) | p.total_players}.map{|p|[p.user.name, p.user_id]}, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+              
+              - @program.program_coaches.each do |program_coach|
+                %div{:style => 'display: none; background-color: #cfc;', :class => 'rounded program_coaches', :id => "program_coach_#{program_coach.user_id}"}
+                  %strong You will be budged by #{program_coach.user.name}
+                  %table
+                    %tr
+                      %td
+                        = image_tag program_coach.user.photo(:small)
+                      %td
+                        %div 
+                        - if program_coach.price > 0
+                          Charges #{number_to_currency program_coach.price}
+                        - else
+                          Charges $0 &middot; AKA it's free!
+                        - if program_coach.total_players > 0
+                          %div Has helped #{pluralize program_coach.total_players, 'person'}
+                          - if program_coach.avg_rating > 0
+                            %div Avg rating: #{program_coach.avg_rating} stars
+                        - else
+                          %div #{program_coach.user.he_or_she.capitalize} is a brand new budger!
+              
+              :javascript
+                $('#program_player_coach_user_id').unbind('change').change(function() {
+                  $('.program_coaches').each(function(){$(this).hide()});
+                  $('#program_coach_'+$('#program_player_coach_user_id').val()).show();
+                });                
+                $('#program_coach_'+$('#program_player_coach_user_id').val()).show();
+
+            - if @program_player and !@program_player.new_record?
+              %p
+                = submit_tag 'Save', {'data-theme' => 'e'}
+              %p (or #{link_to "delete this application", {:controller => :waiting_room, :action => :unapply, :id => @program_player.id}, {'rel' => 'external'}})
+            - else
+              %p
+                = submit_tag 'Buy', {'data-theme' => 'e'}
+                  
+              
+          :javascript
+            $('#apply_form').submit(function(){
+              var okay_to_submit = true;
+              
+              if ($('#program_player_required_answer_1').length && !$('#program_player_required_answer_1').val().length) {
+                okay_to_submit = false;
+                alert("Your answer to the first question is required.");
+              }
+  
+              if ($('#program_player_required_answer_2').length && !$('#program_player_required_answer_2').val().length) {
+                okay_to_submit = false;
+                alert("Your answer to the second question is required.");
+              }
+  
+              if ($('#user_email').length && !$('#user_email').val().length) {
+                okay_to_submit = false;
+                alert("This program requires your email address.");
+              }
+  
+              if ($('#user_phone').length && !$('#user_phone').val().length) {
+                okay_to_submit = false;
+                alert("This program requires your phone number.");
+              }
+  
+              if (okay_to_submit == true) {
+                $.ajax({
+                  url: $(this).attr('action'),
+                  type: 'POST',
+                  dataType: 'script',
+                  data: {required_answer_1: $('#program_player_required_answer_1').val(),
+                         required_answer_2: $('#program_player_required_answer_2').val(),
+                         optional_answer_1: $('#program_player_optional_answer_1').val(),
+                         optional_answer_2: $('#program_player_optional_answer_2').val(),
+                         email: $('#user_email').val(),
+                         phone: $('#user_phone').val(),
+                         time_zone: $('#user_time_zone').val(),
+                         success_statement: $('#program_player_success_statement').val(),                          
+                         latitude: $('#location').attr('data-lat'),
+                         longitude: $('#location').attr('data-lon'),
+                         coach_user_id: $('#program_player_coach_user_id').val()}
+                });            
+              }
+              return false;
+            });
+        
+      - else
+        %form{:method => :post, :action => url_for(:controller => :waiting_room, :action => :apply, :id => (@program.present? ? @program.id : nil)), :id => 'apply_form'}
+          %p 
+            %div{:style => 'font-size: 16px;'} Which aspect of your health do you wish you could change? Be as specific as you want.
+            = text_area :program_player, :wants_to_change, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "ie. weight, habits, mood, relationships, etc."}
+          %p
+            %div{:style => 'font-size: 16px;'} How much would you pay to change this?
+            = text_area :program_player, :how_badly, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => "Just curious. This one's on us."}
+          %p
+            %div{:style => 'font-size: 16px;'} How would you describe your life a month from now if you were able to make this change?
+            = text_area :program_player, :success_statement, {:style => 'width: 95%; font-size: 14px;', :placeholder => "ie. I am no longer craving soda in the afternoons.", 'data-theme' => 'c'}
+
+          - if current_user.time_zone.blank?
+            %p 
+              %div{:style => 'font-size: 16px;'} Which time zone are you usually in?
+              = time_zone_select :user, :time_zone, ActiveSupport::TimeZone.us_zones, :include_blank => true
+                    
+          - if current_user.email.blank? or !current_user.email_verified?
+            %p 
+              %div{:style => 'font-size: 16px;'} Your email address is required for this program
+              = text_field :user, :email, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c'}
+
+          %p
+            = submit_tag 'Send', {'data-theme' => 'e'}
+            
+        :javascript
+          $('#apply_form').submit(function(){
+            if (!$('#program_player_wants_to_change').val().length || !$('#program_player_how_badly').val().length || !$('#program_player_success_statement').val().length) {
+              alert("Budge the snail senses that at least one of the answers is missing.");
+        
+            } else if (parseInt($('#program_player_wants_to_change').val().length) > 255) {
+              alert("Your answer to what you want to change is a bit too long. Can you limit it to 255 chars or less?");
+            } else if (parseInt($('#program_player_how_badly').val().length) > 255) {
+              alert("Your answer to how much you're willing to pay is a bit too long. Can you limit it to 255 chars or less?");
+            } else if (parseInt($('#program_player_success_statement').val().length) > 255) {
+              alert("Your answer to how you would describe your life a month from now is a bit too long. Can you limit it to 255 chars or less?");
+        
+            } else {
+              $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                dataType: 'script',
+                data: {wants_to_change: $('#program_player_wants_to_change').val(),
+                       how_badly: $('#program_player_how_badly').val(),
+                       success_statement: $('#program_player_success_statement').val(),                          
+                       time_zone: $('#user_time_zone').val(),
+                       latitude: $('#location').attr('data-lat'),
+                       longitude: $('#location').attr('data-lon')
+                       }
+              });
+              
+            }
+            return false;
+          });

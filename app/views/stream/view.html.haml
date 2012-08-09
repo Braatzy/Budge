@@ -1,0 +1,15 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => (@program.present? ? @program.name : nil)}
+
+  %div{'data-role' => :content, :class => :content}
+    - if !current_user
+      %div.rounded.light_box{:style => 'margin-bottom: 1em;'}
+        %strong #{@entry.user.name} 
+        is using Budge &ndash; a light-hearted and fun new motivational tool that helps you improve your habits. Choose a habit you want to improve, start with easy steps, and unlock levels until you are a master! #{link_to "Sign up through Twitter", {:controller => :oauth, :action => :twitter, :redirect_to => request.url}, {:class => :noajax}} (we'll never tweet without your permission), or #{link_to "learn more", {:controller => :help, :action => :about}}.
+    - if @viewable
+      %div{:class => :stream_index_list}
+        = render :partial => 'stream_item', :locals => {:entry => @entry}
+    - else
+      %p This entry is protected.
+
+= render :partial => 'home/mobile_footer'

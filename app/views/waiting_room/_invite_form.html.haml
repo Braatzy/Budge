@@ -1,0 +1,10 @@
+-email_width= @browser_type == 'mobile' ? 'span2' : 'span3'
+%center.some_top_margin
+  =form_for :invitation, :url => url_for(:controller => :waiting_room, :action => :request_invite), :html => {:id => "get_invite_form", 'data-ajax' => 'false', 'data-transition' => 'none','class'=>'form-inline'} do |f|    
+    =f.email_field :email, {:id => :user_email, :autocapitalize=>:off, :autocorrect=>:off, :class=>email_width,:placeholder=>'Email'}
+    %button.btn.btn-primary#invite_button Invite me
+
+  :javascript
+    $("#invite_button").unbind('click').click(function(){
+      $("#get_invite_form").submit();
+    });

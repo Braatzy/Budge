@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @stream_item.user_id %>
+</p>
+
+<p>
+  <b>Item type:</b>
+  <%= @stream_item.item_type %>
+</p>
+
+<p>
+  <b>Related:</b>
+  <%= @stream_item.related_id %>
+</p>
+
+<p>
+  <b>Related sub:</b>
+  <%= @stream_item.related_sub_id %>
+</p>
+
+<p>
+  <b>Text:</b>
+  <%= @stream_item.text %>
+</p>
+
+<p>
+  <b>Data:</b>
+  <%= @stream_item.data %>
+</p>
+
+<p>
+  <b>Private:</b>
+  <%= @stream_item.private %>
+</p>
+
+
+<%= link_to 'Edit', edit_stream_item_path(@stream_item) %> |
+<%= link_to 'Back', stream_items_path %>

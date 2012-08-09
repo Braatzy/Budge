@@ -1,0 +1,37 @@
+= form_for(PlayerMessage.new(), :url => {:controller => :play, :action => :send_player_message, :id => program_player.id}, :html => {:id => "message_to_coach_#{program_player.id}"}) do |f|
+  = hidden_field :deliver, :direct_message, {:value => 0}
+  = f.text_area :content, {:class => 'stylized_input', :style => 'height: 3em;', :id => "player_message_content_#{program_player.id}"}
+
+  %div{:class => 'ui-grid-a'}
+    %div{:class => 'ui-block-a'}
+      %div{:style => 'font-size: 11px; color: #666; padding: 5px;', :id => "char_count_#{program_player.id}"} 140
+    %div{:class => 'ui-block-b'}= button "Send", '#', {:id => "message_to_coach_button_#{program_player.id}"}
+  
+  
+:javascript
+  #{startj}
+  $("#char_count_#{program_player.id}").html(140-parseInt($("#player_message_content_#{program_player.id}").val().length));
+  $("#player_message_content_#{program_player.id}").keyup(function(){
+    $("#char_count_#{program_player.id}").html(140-parseInt($("#player_message_content_#{program_player.id}").val().length));
+  });
+  $("#message_to_coach_button_#{program_player.id}").unbind('click').click(function() {
+    $("#message_to_coach_#{program_player.id}").submit();
+    return false;
+  });
+  $("#message_to_coach_#{program_player.id}").unbind('submit').submit(function(){
+    $.mobile.showPageLoadingMsg();
+    $.ajax({
+      type: "POST",
+      url: $(this).attr('action'),
+      data: {content: $("#player_message_content_#{program_player.id}").val(),
+             program_player_id: #{program_player.id},
+             program_coach_id: #{program_coach.present? ? program_coach.id : "''"}},       
+      success: function(){
+        $("#player_message_content_#{program_player.id}").val('').css('height', '50px');
+        $.mobile.hidePageLoadingMsg();
+        $("#char_count_#{program_player.id}").html(140-parseInt($("#player_message_content_#{program_player.id}").val().length));
+      }
+    });
+    return false;
+  });
+  #{endj}

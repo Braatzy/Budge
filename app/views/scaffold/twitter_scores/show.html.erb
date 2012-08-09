@@ -1,0 +1,75 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Twitter:</b>
+  <%= @twitter_score.twitter_id %>
+</p>
+
+<p>
+  <b>Twitter screen name:</b>
+  <%= @twitter_score.twitter_screen_name %>
+</p>
+
+<p>
+  <b>Klout score:</b>
+  <%= @twitter_score.klout_score %>
+</p>
+
+<p>
+  <b>Klout slope:</b>
+  <%= @twitter_score.klout_slope %>
+</p>
+
+<p>
+  <b>Klout class:</b>
+  <%= @twitter_score.klout_class_id %>
+</p>
+
+<p>
+  <b>Klout class name:</b>
+  <%= @twitter_score.klout_class_name %>
+</p>
+
+<p>
+  <b>Klout network score:</b>
+  <%= @twitter_score.klout_network_score %>
+</p>
+
+<p>
+  <b>Klout amplification score:</b>
+  <%= @twitter_score.klout_amplification_score %>
+</p>
+
+<p>
+  <b>Klout true reach:</b>
+  <%= @twitter_score.klout_true_reach %>
+</p>
+
+<p>
+  <b>Klout delta 1day:</b>
+  <%= @twitter_score.klout_delta_1day %>
+</p>
+
+<p>
+  <b>Klout delta 5day:</b>
+  <%= @twitter_score.klout_delta_5day %>
+</p>
+
+<p>
+  <b>Num followers:</b>
+  <%= @twitter_score.num_followers %>
+</p>
+
+<p>
+  <b>Num following:</b>
+  <%= @twitter_score.num_following %>
+</p>
+
+<p>
+  <b>Num tweets:</b>
+  <%= @twitter_score.num_tweets %>
+</p>
+
+
+<%= link_to 'Edit', edit_twitter_score_path(@twitter_score) %> |
+<%= link_to 'Back', twitter_scores_path %>

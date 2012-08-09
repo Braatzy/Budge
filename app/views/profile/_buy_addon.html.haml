@@ -1,0 +1,16 @@
+%div{:class => 'rounded', :style => 'background-color: #fff;'} 
+  You have #{pluralize current_user.level_up_credits, 'coin'}
+
+  =link_to "Upgrade for #{@addon.level_credit_cost} coins", {:controller => :profile, :action => :buy_addon_with_credits, :id => @addon.id}, {:class => 'toggle_addon', :style => 'color: #666;', 'data-role' => :button}
+  =link_to "Upgrade for #{number_to_currency @addon.dollar_cost}", {:controller => :profile, :action => :buy_addon_with_money, :id => @addon.id}, {:class => 'toggle_addon', :style => 'color: #666;', 'data-role' => :button}
+
+:javascript
+  #{startj}
+  $('.toggle_addon').unbind('click').click(function(){
+    $.ajax({
+      url: $(this).attr('href'),
+      type: 'POST',
+      dataType: 'script'});
+    return false;
+  });        
+  #{endj}

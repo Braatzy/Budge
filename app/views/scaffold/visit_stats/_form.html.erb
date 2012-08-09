@@ -1,0 +1,41 @@
+<%= form_for(@visit_stat) do |f| %>
+  <% if @visit_stat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@visit_stat.errors.count, "error") %> prohibited this visit_stat from being saved:</h2>
+
+      <ul>
+      <% @visit_stat.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :constrained_by %><br />
+    <%= f.text_field :constrained_by %>
+  </div>
+  <div class="field">
+    <%= f.label :constrained_by_id %><br />
+    <%= f.text_field :constrained_by_id %>
+  </div>
+  <div class="field">
+    <%= f.label :constrained_by_id2 %><br />
+    <%= f.text_field :constrained_by_id2 %>
+  </div>
+  <div class="field">
+    <%= f.label :num_visits %><br />
+    <%= f.text_field :num_visits %>
+  </div>
+  <div class="field">
+    <%= f.label :total_visits %><br />
+    <%= f.text_field :total_visits %>
+  </div>
+  <div class="field">
+    <%= f.label :percent_visits %><br />
+    <%= f.text_field :percent_visits %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

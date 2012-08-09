@@ -1,0 +1,17 @@
+- if false
+  - if current_user and current_user.hasnt_bought_anything_yet?
+    %div{:style => 'background-color: #d0e6aa; padding: 10px; color: green;'} 
+      Your first game is on us!
+  
+  - elsif current_user and current_user.dollars_credit > 0
+    %div{:style => 'background-color: #d0e6aa; padding: 10px; color: green;'} 
+      You have 
+      %strong{:style => 'color: green;'} #{number_to_currency current_user.dollars_credit} 
+      in Budge credit.
+  - elsif !current_user
+    %div{:style => 'background-color: #cfc; padding: 10px; color: green;'} 
+      During our super-early testing, all new signups get  
+      %strong 1 free program
+      PLUS
+      %strong #{number_to_currency User::DOLLARS_ON_SIGNUP} 
+      in Budge credit to play with.  

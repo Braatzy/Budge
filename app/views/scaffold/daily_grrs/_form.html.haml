@@ -1,0 +1,31 @@
+= form_for([:scaffold, @daily_grr]) do |f|
+  - if @daily_grr.errors.any?
+    #errorExplanation
+      %h2= "#{pluralize(@daily_grr.errors.count, 'error')} prohibited this user from being saved:"
+      %ul
+      - @daily_grr.errors.full_messages.each do |msg|
+        %li= msg
+  
+  .field
+    = f.label :date
+    %br
+    = f.date_select :date
+  .field
+    = f.label :signups
+    %br
+    = f.text_field :signups
+  .field
+    = f.label :logins_1day
+    %br
+    = f.text_field :logins_1day
+  .field
+    = f.label :logins_7day
+    %br
+    = f.text_field :logins_7day
+  .field
+    = f.label :revenue
+    %br
+    = f.text_field :revenue
+
+  .actions
+    = f.submit

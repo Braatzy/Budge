@@ -1,0 +1,23 @@
+- if @toggle == :destroy
+  if ($('#heart_budge_#{@user_budge.id}').length) {
+  $('#heart_budge_#{@user_budge.id}').addClass('notliked').removeClass('liked');
+  }
+  if ($('#heart_budge_#{@user_budge.id}_full_view').length) {
+  $('#heart_budge_#{@user_budge.id}_full_view').removeClass('liked').addClass('notliked');
+  $('#heart_count_budge_#{@user_budge.id}').html("#{@user_budge.num_supporters-1}");
+  }
+  -# Delete the comment
+  - if @user_comment
+    $('#user_comment_#{@user_comment.id}').hide();
+
+- elsif @toggle == :create
+  if ($('#heart_budge_#{@user_budge.id}').length) {
+  $('#heart_budge_#{@user_budge.id}').removeClass('notliked').addClass('liked');
+  }
+  if ($('#heart_budge_#{@user_budge.id}_full_view').length) {
+  $('#heart_budge_#{@user_budge.id}_full_view').removeClass('notliked').addClass('liked');
+  $('#heart_count_budge_#{@user_budge.id}').html("#{@user_budge.num_supporters+1}");
+  }
+  -# Add the comment
+  - if @user_comment
+    $('#user_budge_comments_#{@user_budge.id}').prepend("#{escape_javascript(render :partial => 'budge/user_comment', :locals => {:user_comment => @user_comment})}");

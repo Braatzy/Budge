@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @nag_mode.name
+%p
+  %b Description:
+  = @nag_mode.description
+
+= link_to 'Edit', edit_scaffold_nag_mode_path(@nag_mode)
+\|
+= link_to 'Back', scaffold_nag_modes_path

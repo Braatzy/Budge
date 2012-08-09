@@ -1,0 +1,106 @@
+%header
+  %h1.title Metrics
+  .subnav
+    %ul.nav.nav-pills
+      %li=link_to 'Growth','#growth'
+      %li=link_to 'Retention','#retention'
+      %li=link_to 'Revenue','#revenue'
+
+:javascript
+  var formatDate = d3.time.format.iso;
+  
+%section#growth.page-header
+  %h2 Growth
+  #cohort_activation.row.collapse.in
+  :javascript
+    var data=#{raw(@cohort_activation.to_json)};
+    var series_names=["activated","acquired"]
+    data=d3.layout.stack()(
+      series_names.map(function(metric_type) { 
+        return data.map(function(d){ return {x: formatDate.parse(d.cohort), y: +d[metric_type]}; });
+    }));
+    var chart = time_series_chart()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; })
+      .height(200)
+      .height_overview(0)
+      .width(12*60)
+      .yaxis_label('users')
+      .yseries_label('users activated')
+      .xaxis_label('cohort')
+      .page_element("#cohort_activation")
+      .style('stacked bar')
+      .series_names(["activated","interested"])
+      .plot(data)
+
+
+%section#retention.page-header
+  %h2 Retention
+  #cohort_retention.row.collapse.in
+  :javascript
+    var data=#{raw @retention.to_json};
+    var series_names=#{raw @user_statuses.to_json};
+    data=d3.layout.stack()(
+      series_names.map(function(metric_type) { 
+        return data.map(function(d){ return {x: formatDate.parse(d.cohort), y: +d[metric_type]}; });
+    }));
+    var chart = time_series_chart()
+      .x(function(d) { return d.x; })
+      .y(function(d) { return d.y; })
+      .height(200)
+      .height_overview(0)
+      .width(12*60)
+      .yaxis_label('users')
+      .xaxis_label('cohort')
+      .page_element("#cohort_retention")
+      .style('stacked bar')
+      .series_names(series_names)
+      .series_colors(#{raw @user_status_colors.to_json})
+      .plot(data)
+      
+  %h4=link_to_collapse 'Status Descriptions','#status_desc'
+  #status_desc.collapse{:style=>'margin-bottom: 40px'}
+    =render 'user_status_descriptions'
+
+%section#revenue.page-header
+  %h2 Daily Revenue
+  #revenue.row
+  :javascript
+    var data = #{raw(@dailygrr.to_json)}
+    var chart = time_series_chart()
+      .x(function(d) { return formatDate.parse(d.daily_grr.date); })
+      .y(function(d) { return +d.daily_grr.revenue; })
+      .height(200)
+      .width(12*60)
+      .yaxis_label('dollars')
+      .yseries_label('dollars')
+      .page_element("#revenue")
+      .style('scatter')
+      .plot(data)
+
+
+:javascript
+  $(document).ready(function() {
+    $('.subnav').scrollspy()
+    // fix sub nav on scroll
+      var $win = $(window)
+        , $nav = $('.subnav')
+        , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+        , isFixed = 0
+
+      processScroll()
+
+      $win.on('scroll', processScroll)
+
+      function processScroll() {
+        var i, scrollTop = $win.scrollTop()
+        if (scrollTop >= navTop && !isFixed) {
+          isFixed = 1
+          $nav.addClass('subnav-fixed')
+        } else if (scrollTop <= navTop && isFixed) {
+          isFixed = 0
+          $nav.removeClass('subnav-fixed')
+        }
+      }
+
+  } );

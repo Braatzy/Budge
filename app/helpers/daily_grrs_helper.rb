@@ -1,0 +1,2 @@
+module DailyGrrsHelper
+end

@@ -1,0 +1,35 @@
+# == Schema Information
+#
+# Table name: addons
+#
+#  id                     :integer(4)      not null, primary key
+#  token                  :string(255)
+#  name                   :string(255)
+#  visible_at_level       :integer(4)      default(0)
+#  level_credit_cost      :integer(4)      default(0)
+#  dollar_cost            :decimal(6, 2)   default(0.0)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  parent_id              :integer(4)
+#  purchasable            :boolean(1)      default(TRUE)
+#  description            :string(255)
+#  auto_unlocked_at_level :integer(4)
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  token: MyString
+  name: MyString
+  visible_at_level: 1
+  auto_unlocked: false
+  level_credit_cost: 1
+  dollar_cost: 9.99
+
+two:
+  token: MyString
+  name: MyString
+  visible_at_level: 1
+  auto_unlocked: false
+  level_credit_cost: 1
+  dollar_cost: 9.99

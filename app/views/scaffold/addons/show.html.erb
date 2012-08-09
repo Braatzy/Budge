@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Token:</b>
+  <%= @addon.token %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @addon.name %>
+</p>
+
+<p>
+  <b>Visible at level:</b>
+  <%= @addon.visible_at_level %>
+</p>
+
+<p>
+  <b>Auto unlocked:</b>
+  <%= @addon.auto_unlocked %>
+</p>
+
+<p>
+  <b>Level credit cost:</b>
+  <%= @addon.level_credit_cost %>
+</p>
+
+<p>
+  <b>Dollar cost:</b>
+  <%= @addon.dollar_cost %>
+</p>
+
+
+<%= link_to 'Edit', edit_addon_path(@addon) %> |
+<%= link_to 'Back', addons_path %>

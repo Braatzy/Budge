@@ -1,0 +1,30 @@
+%h3 
+  =link_to 'Everything', '/dash/god_view'
+  that is going down in Budge.
+
+%div=will_paginate @tracked_actions
+%table
+  - @tracked_actions_grouped.each do |action_time_user, actions|        
+    %tr
+      %td.time{:style => 'font-size: 80%; vertical-align: top;'}= actions[0].created_at.strftime '%Y-%m-%d %H:%M'
+  
+      %td
+        .photo{:style => 'float: left; width: 30px;'}
+          - if actions[0].user
+            =link_to image_tag(actions[0].user.photo.url(:tiny), :width=>30, :style => 'padding-right: 20px;'), "/dash/user/#{actions[0].user.id}"
+            
+        .entry_user{:style => 'margin-bottom: 1em; margin-left: 33px;'}
+          - if actions[0].user
+            <!-- tracked_user_id: #{actions[0].user.id} -->
+            = link_to actions[0].user.name, "/dash/god_view/#{actions[0].user.id}", {:style => 'font-size: 20px;'}
+          - else
+            A visitor
+
+        .entry_actions{:style => 'margin-bottom: 1em; margin-left: 40px;'}
+          -actions.each do |action|
+            .action{:style => 'margin-bottom: .3em;'}
+              = action.token.gsub(/\_/,' ')
+              <!-- tracked_action_id: #{action.id} -->
+
+/ %p=paginate @tracked_actions
+%div=will_paginate @tracked_actions

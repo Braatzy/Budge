@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @user_budge.user_id %>
+</p>
+
+<p>
+  <b>Trait:</b>
+  <%= @user_budge.trait_id %>
+</p>
+
+<p>
+  <b>User trait:</b>
+  <%= @user_budge.user_trait_id %>
+</p>
+
+<p>
+  <b>Num supporters:</b>
+  <%= @user_budge.num_supporters %>
+</p>
+
+<p>
+  <b>Secret:</b>
+  <%= @user_budge.secret %>
+</p>
+
+<p>
+  <b>Note:</b>
+  <%= @user_budge.note %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_budge_path(@user_budge) %> |
+<%= link_to 'Back', user_budges_path %>

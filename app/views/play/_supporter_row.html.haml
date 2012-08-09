@@ -1,0 +1,45 @@
+- supporter ||= nil
+- program_player ||= nil
+%div{:class => 'supporter_row'}
+  - if supporter # This supporter has registered on Budge
+    - if supporter.user.present? and supporter.active?
+      %div{:class => :supporter_icon}
+        = image_tag supporter.user.photo(:small), {:class => 'rounded-img'}
+      %div{:class => :supporter_details}
+        %h3{:style => 'margin-bottom: 0;'}
+          = supporter.user.name
+
+      %p= link_to "Fire them", {:controller => :play, :action => :cancel_supporter, :id => supporter.id, :redirect_to => request.url}, {:class => 'dashed noajax'}
+    
+    - else # Supporter is invited but not registered
+      %div{:class => :supporter_icon}
+        = image_tag 'missing.jpg', {:class => 'rounded-img', :width => 75, :height => 75}
+      %div{:class => :supporter_details}
+        %h3{:style => 'margin-bottom: 0;'}= supporter.user_name
+        %div Invited. Awaiting response.
+
+      %p= link_to "Cancel invite", {:controller => :play, :action => :cancel_supporter, :id => supporter.id, :redirect_to => request.url}, {:class => 'dashed noajax'}
+  
+  - elsif program_player.num_supporter_invites > 0 # Invite a new supporter
+    %div{:class => :supporter_icon}
+      = image_tag 'missing.jpg', {:class => 'rounded-img', :width => 75, :height => 75}
+    %div{:class => :supporter_details}
+      %h3{:style => 'margin-bottom: 0;'} Invite a friend           
+      %div #{pluralize program_player.num_supporter_invites, 'invite'} left
+
+    %p= link_to "Find friend", '#', {:id => "supporter_row_more_link_search", :class => :dashed}
+
+    %br{:clear => :all}
+    %div{:id => "supporter_row_more_search", :class => 'rounded light_box supporter_row_more'}
+      = render :partial => 'play/invite_supporter_form', :locals => {:program_player => program_player}
+
+    :javascript
+      #{startj}
+      $("#supporter_row_more_link_search").unbind('click').click(function(){
+        $("#supporter_row_more_search").slideToggle();
+      });
+      #{endj}
+
+
+-# %a{:href => url_for(:controller => :play, :action => :supporter_detail, :id => supporter.id, :host => DOMAIN, :protocol => 'http://')}
+-# %a{:href => url_for(:controller => :play, :action => :invite_supporter, :id => program_player.program.id, :host => DOMAIN, :protocol => 'http://')}

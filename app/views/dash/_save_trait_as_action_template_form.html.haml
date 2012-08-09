@@ -1,0 +1,126 @@
+%div{:class => :rounded, :style => "background-color: #ffe; margin-bottom: 1em; padding: 10px; margin-top: 10px;", :id => "add_action_template_div_#{@program_budge.id}_#{do_or_dont}"}
+  = form_for(@program_action_template, :url => {:controller => :dash, :action => :add_action_template_to_budge}, :html => {:id => "add_action_#{@program_budge.id}_#{do_or_dont}"}) do |f|
+    %input{:type => :hidden, :name => :trait_do_or_dont, :value => "#{do_or_dont}", :id => "trait_do_or_dont_#{@program_budge.id}_#{do_or_dont}"}
+    - if trait.setup_required?
+      %div
+        - if do_or_dont == :do
+          %strong #{trait.select_trait_do_label}
+          %br
+          - if trait.setup_substitution_type == :required
+            %input{:type => :text, :name => :trait_custom_text, :id => "trait_custom_text_#{@program_budge.id}_#{do_or_dont}", :placeholder => trait.select_trait_do_placeholder, :style => 'font-size: 16px; padding: 5px;'}                   
+          - else
+            %input{:type => :text, :name => :trait_custom_text, :id => "trait_custom_text_#{@program_budge.id}_#{do_or_dont}", :value => trait.select_trait_do_placeholder, :style => 'font-size: 16px; padding: 5px;'}         
+        - elsif do_or_dont == :dont
+          %strong #{trait.select_trait_dont_label}
+          %br
+          - if trait.setup_substitution_type == :required
+            %input{:type => :text, :name => :trait_custom_text, :id => "trait_custom_text_#{@program_budge.id}_#{do_or_dont}", :placeholder => trait.select_trait_dont_placeholder, :style => 'font-size: 16px; padding: 5px;'}          
+          - else
+            %input{:type => :text, :name => :trait_custom_text, :id => "trait_custom_text_#{@program_budge.id}_#{do_or_dont}", :value => trait.select_trait_dont_placeholder, :style => 'font-size: 16px; padding: 5px;'}                    
+        
+    - else
+      %h2{:style => 'margin-top: 0;'}
+        - if do_or_dont == :do
+          = trait.select_trait_do_label
+        - elsif do_or_dont == :dont
+          = trait.select_trait_dont_label
+
+    %div{:style => 'font-size: 12px; margin-top: 1em;'}
+      %div{:style => 'font-weight: bold;'} Action to complete
+      %textarea{:name => :trait_wording, :id => "trait_wording_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; height: 3em;'}= @program_action_template.wording
+      %div{:style => 'color: #666;'} Example: Weigh yourself 2 times.  Tip: Leave it blank to have us generate the default wording for this trait.
+
+    %div{:style => 'font-size: 12px; margin-top: 1em;'}
+      %div{:style => 'font-weight: bold;'} Question to user
+      %textarea{:name => :trait_daily_question, :id => "trait_daily_question_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; height: 3em;'}= @program_action_template.question(suppress_help_text = true)
+      %div{:style => 'color: #666;'} Tip: Don't be specific about the date range for the question. Use "How many drinks have you had?" instead of "How many drinks have you had today?"
+
+    %div{:style => 'font-size: 12px; margin-top: 1em;'}
+      %div 
+        %strong Day number 
+        (If you leave it blank, this action will repeat every day for #{@program_budge.duration_in_words})
+      = f.text_field :day_number, {:style => 'width: 45%; font-size: 14px;', :id => "trait_day_number_#{@program_budge.id}_#{do_or_dont}"}
+
+    - if @program_action_template.present? and !@program_action_template.new_record?
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %div{:style => 'font-weight: bold;'} Sort order
+        = f.text_field :position, {:style => 'width: 45%; font-size: 14px;', :id => "trait_position_#{@program_budge.id}_#{do_or_dont}"}
+        
+    - if trait.count_days?
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %div
+          - if do_or_dont == :do
+            %strong Do this how many times on a given day?
+          - elsif do_or_dont == :dont
+            %strong Allow this how many times in a given day?
+        -current_quantity_needed=@program_action_template.nil? ? 1 : @program_action_template.completion_requirement_number.to_i
+        %select{:name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}"} 
+          - 1.upto(@program_budge.duration_in_days).each do |number|
+            %option{:value => number, :selected => (current_quantity_needed==number) } #{raw(trait.name_with_formatting(do_or_dont,nil,number))}
+        -# %pre=@program_action_template.to_yaml #.completion_requirement_number
+
+    - elsif trait.answer_type == ":minutes"
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Do this for how many minutes on the given day #{do_or_dont == :do ? 'to succeed' : 'without failing'}?
+      %input{:type => :text, :name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; font-size: 16px; padding: 3px;', :value => @program_action_template.completion_requirement_number} 
+
+    - elsif trait.answer_type == ":seconds"
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Do this for how many seconds on the given day #{do_or_dont == :do ? 'to succeed' : 'without failing'}?
+      %input{:type => :text, :name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; font-size: 16px; padding: 3px;', :value => @program_action_template.completion_requirement_number} 
+
+    - elsif trait.answer_type == ":miles"
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Go how many miles on the given day #{do_or_dont == :do ? 'to succeed' : 'without failing'}?
+      %input{:type => :text, :name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; font-size: 16px; padding: 3px;', :value => @program_action_template.completion_requirement_number} 
+
+    - elsif trait.answer_type == ":quantity"
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Do/have how many on the given day #{do_or_dont == :do ? 'to succeed' : 'without failing'}?
+      %input{:type => :text, :name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; font-size: 16px; padding: 3px;', :value => @program_action_template.completion_requirement_number} 
+
+    - elsif trait.answer_type == ":steps"
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Go how many steps on the given day #{do_or_dont == :do ? 'to succeed' : 'without failing'}?
+      %input{:type => :text, :name => :trait_quantity, :id => "trait_quantity_#{@program_budge.id}_#{do_or_dont}", :style => 'width: 90%; font-size: 16px; padding: 3px;', :value => @program_action_template.completion_requirement_number} 
+      
+    - else
+      %div{:style => 'font-size: 12px; margin-top: 1em;'}
+        %strong Need to update _save_trait_as_action_template_form.html.haml with new answer_type
+
+    %div{:style => 'font-size: 12px; margin-top: 1em;'}
+      %div{:style => 'font-weight: bold;'} End when...
+      %select{:name => :trait_completion_requirement, :id => "trait_completion_requirement_#{@program_budge.id}_#{do_or_dont}"} 
+        - if do_or_dont == :do
+          %option{:value => 'action_complete'} Player succeeds or time runs out
+        - elsif do_or_dont == :dont
+          %option{:value => 'action_complete'} Player goes over the limit or time runs out
+        - if @program_action_template.completion_requirement_type == 'duration_over' 
+          %option{:value => 'duration_over', :selected => 'selected'} Only after time runs out        
+        - else
+          %option{:value => 'duration_over'} Only after time runs out
+        
+    %div{:style => 'margin-top: 1em;'}
+      %input{:type => :submit, :value => "Save action", :id => "save_action_#{@program_budge.id}_#{do_or_dont}_button"}
+
+  :javascript
+    $("#save_action_#{@program_budge.id}_#{do_or_dont}_button").click(function(){
+      $.ajax({
+        type: "POST",
+        url: "#{url_for :controller => :dash, :action => :add_action_template_to_budge}",
+        data: {trait_id: "#{trait.id}", 
+               do_or_dont: $("#trait_do_or_dont_#{@program_budge.id}_#{do_or_dont}").val(),
+               program_id: "#{program.id}",
+               program_budge_id: "#{@program_budge.id}",
+               program_action_template_id: "#{(@program_action_template.new_record? ? '' : @program_action_template.id)}",
+               custom_text: $("#trait_custom_text_#{@program_budge.id}_#{do_or_dont}").val(),
+               wording: $("#trait_wording_#{@program_budge.id}_#{do_or_dont}").val(),
+               daily_question: $("#trait_daily_question_#{@program_budge.id}_#{do_or_dont}").val(),
+               completion_requirement_type: $("#trait_completion_requirement_#{@program_budge.id}_#{do_or_dont}").val(),
+               quantity: $("#trait_quantity_#{@program_budge.id}_#{do_or_dont}").val(),
+               position: $("#trait_position_#{@program_budge.id}_#{do_or_dont}").val(),
+               day_number: $("#trait_day_number_#{@program_budge.id}_#{do_or_dont}").val(),
+               redirect: "#{params[:action] == 'edit_program_budge' ? 'true' : 'false'}"}
+      });
+      return false;
+    });    

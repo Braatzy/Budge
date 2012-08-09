@@ -1,0 +1,2 @@
+$("#follow_button_#{@user.id}").html("#{escape_javascript(render :partial => 'follow_button', :locals => {:relationship => @relationship, :follow_user => @relationship.followed_user})}");
+$('.follow_button').each(function(){$(this).button()});

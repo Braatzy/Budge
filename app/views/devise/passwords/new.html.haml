@@ -1,0 +1,15 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Forgot password', :current=>'login'}
+  %div{'data-role' => :content, :class => :content}
+
+    %h1 Forgot your password?
+  
+    = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => {:method => :post, :id => :forgot_password_form, 'data-ajax' => 'false'}) do |f|
+      = devise_error_messages!
+  
+      %div= f.label :email, "What's the email address you signed up with?"
+      %div= f.email_field :email
+  
+      %div= button "Reset password", {}, {:class => :submit_form, 'data-form-id' => :forgot_password_form}
+    
+    = render :partial => 'home/mobile_footer'

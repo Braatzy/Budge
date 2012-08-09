@@ -1,0 +1,49 @@
+line
+  stroke: #000
+  stroke-width: 1.5px
+
+rect
+  fill: none
+  pointer-events: all
+
+circle.dot
+  fill: darkgray
+
+$true-weight-color: #B6D258 //steelblue
+
+path.weight.smoothed
+  stroke: $true-weight-color
+  stroke-width: 2px
+.smoothed
+  color: $true-weight-color
+  font-size: 120%
+svg
+  font-size: 10px
+
+rect
+  fill: #eeeeee
+
+
+.axis line
+  stroke-width: .5px
+  shape-rendering: crispEdges
+
+.grid
+  line
+    stroke-width: .5px
+    shape-rendering: crispEdges
+    stroke: #fff
+    &.minor
+      stroke-opacity: .5
+  text
+    display: none
+
+.axis line
+  stroke: #000
+
+.grid path, .axis path
+  display: none
+  
+#chart
+  background-color: rgba(255,255,255,0.5)
+    

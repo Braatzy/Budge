@@ -1,0 +1,33 @@
+<%= form_for(@pack_trait) do |f| %>
+  <% if @pack_trait.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pack_trait.errors.count, "error") %> prohibited this pack_trait from being saved:</h2>
+
+      <ul>
+      <% @pack_trait.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :trait_id %><br />
+    <%= f.text_field :trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :pack_id %><br />
+    <%= f.text_field :pack_id %>
+  </div>
+  <div class="field">
+    <%= f.label :level %><br />
+    <%= f.text_field :level %>
+  </div>
+  <div class="field">
+    <%= f.label :position %><br />
+    <%= f.text_field :position %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,66 @@
+@import "global_styles";
+
+body.aw {
+  .content, .ui-content {
+    width: 400px;
+    margin: 35px auto;
+    margin-top: 50px;
+    padding:  10px 15px;
+  }  
+  .uppercontent {
+    width: 400px;
+    margin: 0 auto !important;
+    padding:  10px 15px;
+  }
+  .subcontent_container {
+    width: 400px;
+    margin: 0 auto !important;
+    padding:  10px 15px;
+  }
+  #header {
+  }
+  .content_transition{
+    position: relative;
+    top: -20px;
+    left: -5%;
+    width: 110%;
+  }
+  .nav_tray{
+    background-image: none !important;
+    background-color: $header_bar_web_color !important;
+    .nav_tray_contents{
+      margin: 0 auto; width: 450px;
+    }
+    .item a {
+      border: 1px solid #777;
+      background-image: none !important;
+      background-color: $header_bar_web_color !important;
+      width: 60px !important;
+    }
+    .tray_title a{
+      color: $top_nav_buttons_color;
+      @include handwriting;
+      font-size: 23px !important;
+      // @inlcude single-text-shadow($top_nav_buttons_color,0.5px,0.5px,1px);
+      text-shadow: #666 -1px 2px 2px;
+    }
+    border-bottom: 2px solid #ccc; 
+  }
+    
+  //play/index
+  #my_program_grid {
+    width: 360px !important;
+    .my_program_grid_item {
+      width: 105px !important;
+      height: 130px !important;
+      img {
+        height: 82px !important;
+        width: 82px !important;
+      }
+      margin-right: 15px !important;
+    }
+    .program_grid_name {
+      font-size: 12px !important;
+    }
+  }
+}

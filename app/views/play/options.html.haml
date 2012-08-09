@@ -1,0 +1,23 @@
+%div{'data-role' => :page, :id => :checkin}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Other options", :current=>'play'}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    %h2 Other options 
+    
+    - if @player_budge.present?
+      %div{:style => 'margin-bottom: 3em;'}
+        =button 'Pause the program', {:controller => :play, :action => :pause, :id => @player_budge.id, :back => url_for(:controller => :play, :action => :options, :id => @program.id)}
+        .subtle{:style => 'padding: 0 10px;'} Pick a day to start getting reminders again.
+
+    %div{:style => 'margin-bottom: 3em;'}
+      =button 'Activate NAG MODE', {:controller => :profile, :action => :user_info, :id => :nag_mode, :program_id => @program.id, :back => url_for(:controller => :play, :action => :options, :id => @program.id)}
+      .subtle{:style => 'padding: 0 10px;'} Up the intensity - for 1 week, get up to 4 reminders a day and a phone call at night if you don't complete your tasks.
+
+    - if @player_budge.present?
+      %div{:style => 'margin-bottom: 3em;'}
+        =button 'Pick different challenge', {:controller => :play, :action => :map, :id => @program.id, :back => url_for(:controller => :play, :action => :options, :id => @program.id)}
+        .subtle{:style => 'padding: 0 10px;'} Is this one too difficult, or too easy? Choose something else.
+
+    %div{:style => 'margin-bottom: 3em;'}
+      =button 'End program', {:controller => :play, :action => :end, :id => @program.id, :back => url_for(:controller => :play, :action => :options, :id => @program.id)}, {:class => 'button_cancel'}
+      .subtle{:style => 'padding: 0 10px;'} Want to declare victory or defeat?
+    

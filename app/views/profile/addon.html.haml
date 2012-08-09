@@ -1,0 +1,15 @@
+%div{'data-role' => :page, :id => :profile_level_up, 'data-theme' => @data_theme}
+  %div{'data-role' => :header, :class => :page_header}
+    = back_button
+    %h1= @addon.name
+  %div{'data-role' => :content, :class => :content}
+    %strong What it enables:
+    %p= @addon.description
+    - if @user_addon.present?
+      %div{:id => "toggle_#{@addon.token}"}
+        = render :partial => 'profile/addon_switch'
+    - else
+      %div{:id => "toggle_#{@addon.token}"}
+        = render :partial => 'profile/buy_addon'
+      
+  = render :partial => 'home/footer'

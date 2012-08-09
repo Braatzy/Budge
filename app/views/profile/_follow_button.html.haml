@@ -1,0 +1,42 @@
+- relationship ||= nil
+- reverse_relationship ||= nil
+- if relationship and !relationship.invisible?
+  = button "Following", url_for(:controller => :profile, :action => :toggle_follow, :id => follow_user.id), {:class => 'button_important follow_button', 'data-theme' => 'e'} 
+  - if current_user and current_user.can_sms?
+    %div{:style => 'text-align: center; padding-top: 5px;'}
+      - if relationship.super_follow?
+        (<i class="icon-star"></i> #{link_to "Turn pings off", {:controller => :profile, :action => :toggle_pings, :id => follow_user.id}, {:class => 'pings_link'}})
+      - else
+        (<i class="icon-star-empty"></i> #{link_to "Turn pings on", {:controller => :profile, :action => :toggle_pings, :id => follow_user.id}, {:class => 'pings_link'}})
+
+- else
+  = button "Follow", url_for(:controller => :profile, :action => :toggle_follow, :id => follow_user.id), {:class => 'follow_button'} 
+
+- if false
+  %div{:style => 'font-size: 11px;'}
+    - if reverse_relationship and !reverse_relationship.invisible?
+      - if follow_user.gender.present?
+        #{follow_user.he_or_she.capitalize} follows you
+      - else
+        They follow you
+    - else        
+      - if follow_user.gender.present?
+        #{follow_user.he_or_she.capitalize} doesn't follow you
+      - else
+        They don't follow you
+    
+:javascript
+  $('.follow_button').unbind('click').click(function(){
+    $.ajax({
+      url: $(this).attr('href'),
+      type: 'POST',
+      dataType: 'script'});
+    return false;
+  });
+  $('.pings_link').unbind('click').click(function(){
+    $.ajax({
+      url: $(this).attr('href'),
+      type: 'POST',
+      dataType: 'script'});
+    return false;  
+  });

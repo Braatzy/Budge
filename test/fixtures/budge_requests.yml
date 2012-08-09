@@ -1,0 +1,33 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  id: 23
+  short_id: n
+  user_id: 1
+  alignment: 1
+  post_to_budge: true
+  post_to_facebook: true
+  post_to_twitter: true
+  post_to_foursquare: true
+  foursquare_place_id: 43598100f964a520f4281fe3
+  message: I want to be more virtuous. Will you budge me?
+  total_views: 0
+  budge_views: 0
+  facebook_views: 0
+  twitter_views: 0
+  foursquare_views: 0
+  num_signups: 0
+  num_budges: 0
+  latitude: 47.6050509000
+  longitude: -122.3227483000
+  closes_at: <%= Time.now.utc+3.hours %>
+  created_hour_of_day: 21
+  created_day_of_week: 0
+  created_week_of_year: 17
+  facebook_post_id: 
+  tweet_id: 
+  foursquare_checkin_id: 
+  delivered: false
+  foursquare_category_name: Hospital
+  foursquare_category_id: 4bf58dd8d48988d196941735
+

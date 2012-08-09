@@ -1,0 +1,154 @@
+%div{:id => 'pay', 'data-role' => :page, :style => "#{current_user ? 'background-color: #fff; background-image: none;' : ''}"}
+  - if current_user.blank?
+    = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Welcome to Budge!'}
+    %div{'data-role' => :content, :class => :content}
+
+      -# Have them log in or create an account first
+      %h3 So pleased to meet you!
+      %p To get started using Budge, please sign in using Twitter!
+      %div
+        =button "Sign in via Twitter", {:controller => :oauth, :action => :twitter, :redirect_to => url_for(:controller => :store, :action => :pay, :id => @item_being_purchased.id, :type => params[:type], :optional_id => (@program_budge.present? ? @program_budge.id : nil))}
+                
+  - else
+    %div{'data-role' => :content, :class => :content}
+      - if params[:error].present?
+        %div{:class => :rounded, :style => 'background-color: pink'}
+          = params[:error]
+      - if @item_being_purchased.present?
+        - if @item_being_purchased.class == Program
+          %h3 Charging: #{number_to_currency @item_being_purchased.price} for:
+          %table
+            %tr
+              %td= image_tag @program.photo(:small), :class => 'rounded-img'
+              %td{:style => 'padding-left: 10px;'}
+                %h2{:style => 'margin-top: 0;'}= @program.name
+                = raw textilize @program.description
+        - elsif @item_being_purchased.class == ProgramCoach
+          %h3 Charging: #{number_to_currency @item_being_purchased.price} per month for:
+          %p
+          %table
+            %tr
+              %td= image_tag @item_being_purchased.user.photo(:small), :class => 'rounded-img'
+              %td{:style => 'padding-left: 10px;'}
+                %h3{:style => 'margin-top: 0;'}
+                  Coaching from
+                  = @item_being_purchased.user.name
+                  on 
+                  = @item_being_purchased.program.name
+                = raw textilize @item_being_purchased.message
+
+          %p{:style => 'color: #c60;'}
+            %strong{:style => 'color: #c60;'} Note!
+            Coaching subscriptions will 
+            %strong{:style => 'color: #c60;'} auto-cancel 
+            if you don't use the program in over 30 days.
+        - elsif @item_being_purchased.class == NagMode
+          %h3 Charging: #{number_to_currency @item_being_purchased.price} for:
+          %h2{:style => 'margin-top: 0;'}= @nag_mode.name
+          = raw textilize @nag_mode.description
+        
+      - else
+        %h3 Add a new credit card
+        
+      - if @item_being_purchased.present? and current_user.dollars_credit > 0
+        %div{:class => :rounded, :style => 'background-color: #eee; margin-top: 10px;'}
+          %strong{:style => 'color: green;'} You have #{number_to_currency current_user.dollars_credit} in Budge credit.
+          - if current_user.dollars_credit >= @item_being_purchased.price
+            =button 'Buy with credits',{:controller => :store, :action => :pay_with_budge_dollars, :id => @item_being_purchased.id, :type => params[:type], :optional_id => (@optional_id.present? ? @optional_id : nil), :protocol => 'http://', :host => DOMAIN}, {:class=>'button_important'}
+          - else
+            %p{:style => 'font-size: 11px; color: #666;'} Unfortunately, it's not quite enough to cover this purchase.  Don't worry, this credit doesn't expire, and we'll be sure to apply it to the next potential purchase that is #{number_to_currency current_user.dollars_credit} or less.
+
+      - if @customer and @credit_card.present? and !params[:enter_new_card].present?
+        - if @item_being_purchased.present?
+          %h3 Charge the card on my account
+        - else
+          %h3 Authorize this card
+        
+        = form_for :charge, :url => url_for(:controller => :store, :action => :pay_with_card, :id => (@item_being_purchased.present? ? @item_being_purchased.id : nil), :optional_id => (@optional_id.present? ? @optional_id : nil)), :html => {'data-ajax' => 'false', :action => "POST", :style => 'margin: 0; padding: 0;', :autocomplete => 'off', :id => :pay_with_card_form} do |f|
+          %input{:type => :hidden, :name => :type, :value => params[:type]}
+          %p
+            = hidden_field :credit_card, :token, :value => @credit_card.token
+            #{@credit_card.card_type} *#{@credit_card.last_4} (exp #{@credit_card.expiration_date})
+            &middot; #{link_to "Enter new card", {:controller => :store, :action => :pay, :enter_new_card => 1, :type => params[:type], :optional_id => (@optional_id.present? ? @optional_id : nil)}, {'data-transition' => :fade}}
+                
+          %div{:style => 'margin-top: 2em;'}
+            - if @item_being_purchased.present?
+              =button 'Buy now',{},{:id=>'pay_with_card_button'}
+            - else
+              =button 'Authorize',{},{:id=>'pay_with_card_button'}
+            %p.subtle{:style => 'text-align: center;'} (or #{link_to "Cancel", {}, {'data-role' => :none, :class => :cancel_button}})
+ 
+      - else
+        = form_for :transaction, :url => Braintree::TransparentRedirect.url, :html => {:action => "POST", :style => 'margin: 0; padding: 0;', :autocomplete => 'off', :id => :pay_with_card_form} do |f|
+          %input{:type => :hidden, :name => :type, :value => params[:type]}
+          - if @optional_id.present?
+            %input{:type => :hidden, :name => :optional_id, :value => @optional_id}
+          %input{:type => 'hidden', :name => :tr_data, :value => "#{@braintree_transparent_redirect_data}"}
+          %input{:type => 'hidden', :name => "transaction[options][add_billing_address_to_payment_method]", :value => "true"}          
+  
+          %ul{'data-role' => :listview, 'data-inset' => 'true'}
+            = f.fields_for :credit_card do |credit_fields|
+              %li{'data-role' => 'fieldcontain'}
+                %div Name on card
+                %div= credit_fields.text_field :cardholder_name, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Card number
+                %div= credit_fields.text_field :number, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Security code
+                %div= credit_fields.text_field :cvv, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Expiration date
+                %div
+                  = credit_fields.select :expiration_month, [['1 - January',1],['2 - February', 2],['3 - March', 3],['4 - April', 4],['5 - May', 5],['6 - June', 6],['7 - July', 7],['8 - August', 8],['9 - September', 9],['10 - October', 10],['11 - November', 11],['12 - December', 12]], {}, {'data-role' => :none}
+                  = credit_fields.select :expiration_year, Time.now.year.upto(Time.now.year+15).to_a, {}, {'data-role' => :none}
+            = f.fields_for :options do |option_fields|
+              %li
+                %input{:type => :checkbox, :id => :remember_card, :name => "transaction[options][store_in_vault]", :value => 'true', :checked => :checked, 'data-role' => :none, :style => 'float: left;'} 
+                %label{:for => :remember_card, :style => "font-family: helvetica, arial; font-size: 14px; margin-left: 30px;"} Remember this card
+          
+          = f.fields_for :billing do |customer_fields|
+            %h3 This card's billing address
+            %ul{'data-role' => :listview, 'data-inset' => 'true'}
+              %li{'data-role' => 'fieldcontain'}
+                %div Billing address line one
+                %div= customer_fields.text_field :street_address, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Billing address line two
+                %div= customer_fields.text_field :extended_address, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div City
+                %div= customer_fields.text_field :locality, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div State or region
+                %div= customer_fields.text_field :region, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Zip code
+                %div= customer_fields.text_field :postal_code, :class => :stylized_input
+              %li{'data-role' => 'fieldcontain'}
+                %div Country
+                %div= customer_fields.select :country_code_alpha3, User::COUNTRIES.sort.map{|c,c_data|[c,c_data[:long]]}, {:selected => 'USA'}, {'data-role' => :none}
+  
+
+          %p
+            - if @item_being_purchased.present?
+              =button 'Buy now',{},{:id=>'pay_with_card_button', :class=>'button_important'}
+            - else
+              =button 'Add to card',{},{:id=>'pay_with_card_button'}
+              
+          %div{:style => 'text-align: center;'} (or #{link_to "Cancel", {}, {'data-role' => :none, :class => :cancel_button}})
+ 
+
+      :javascript
+        #{startj}
+        $('#pay_with_card_button').unbind('click').click(function(){
+          $('#pay_with_card_form').submit();
+          return false;
+        });
+        $('.cancel_button').unbind('click').click(function(){ 
+          window.location = "#{url_for @cancel_url}";
+          return false;
+        });            
+        #{endj}
+
+  = render :partial => 'home/mobile_footer'

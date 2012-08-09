@@ -1,0 +1,18 @@
+%p #{@invitation.user.name} thinks you'd like #{@invitation.program.name} on Budge!
+
+- if @invitation.program_player.testimonial.present?
+  %p Here's #{@invitation.user.his_or_her} review of the program:
+  - if @invitation.program_player.testimonial.length < 160
+    %h2= raw textilize @invitation.program_player.testimonial
+  - elsif @invitation.program_player.testimonial.length < 300
+    %div{:style => 'font-size: 20px;'}= raw textilize @invitation.program_player.testimonial
+  - else
+    %div{:style => 'font-size: 14px;'}= raw textilize @invitation.program_player.testimonial
+
+%h3 
+  =link_to "Try it out?", {:protocol => 'http://', :host => DOMAIN, :controller => :home, :action => :invitation, :id => @invitation.token}
+  
+%p{:style => 'color: #d3d3d3;'} 
+  PS. If you're not interested in trying this out, no worries... we at 
+  = link_to "Habit Labs","http://habitlabs.com"
+  will not use this email address again for any nefarious purposes.

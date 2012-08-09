@@ -1,0 +1,35 @@
+- stats_hash ||= {}
+
+%table.table.table-striped{:style => 'width: 280px; margin: 1em auto;'}
+  %tr
+    %td 
+      %strong Total clicks
+    %td= stats_hash[:clicks]
+  %tr
+    %td 
+      %strong Total clicks today
+    %td= stats_hash[:clicks_today]
+  - if stats_hash[:clicks_at_this_hour].present?
+    %tr
+      %td
+        %strong 
+          Total clicks at
+          - if stats_hash[:button_hit].hour_of_day == 0
+            midnight
+          - elsif stats_hash[:button_hit].hour_of_day == 12
+            noon
+          - elsif stats_hash[:button_hit].hour_of_day < 12
+            #{stats_hash[:button_hit].hour_of_day}am
+          - else        
+            #{stats_hash[:button_hit].hour_of_day-12}pm
+      %td
+        = stats_hash[:button_hit].num_clicks_this_hour
+        - if stats_hash[:clicks_at_this_hour] > stats_hash[:button_hit].num_clicks_this_hour
+          today / 
+          = stats_hash[:clicks_at_this_hour]
+          total
+  - if stats_hash[:clicks_near_here].present?
+    %tr
+      %td Total clicks near here
+      %td
+        = stats_hash[:clicks_near_here]

@@ -1,0 +1,28 @@
+%h1 Other tools
+
+#social.page-header
+  %h2 Social
+  %h4=link_to 'Player Reminders','/dash/messages'
+  %h4=link_to 'Share Messages','/dash/share_messages'
+  %h4=link_to 'Returns on Links','/dash/links'
+
+#debug.page-header
+  %h2 Debugging tools
+  %h4=link_to 'God view','/dash/god_view'
+  %h4=link_to 'Program messages','/dash/messages'
+  %h4=link_to 'Program nudges','/dash/nudges'
+
+#metrics.page-header
+  %h2 Metrics
+  %h4=link_to 'Time of day visit stats','/dash/visit_stats'
+  %h4=link_to 'Effective notification times','/dash/effective_notifications'
+
+  %h4 Operations
+  .well.span4
+    Heroku stats:
+    .stat Dynos in use: #{@dynos_in_use}
+    .stat Queue wait time: #{@queue_wait_time}
+    .stat Dyno queue depth: #{@dynos_queue_depth}
+
+
+

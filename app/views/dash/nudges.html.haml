@@ -1,0 +1,27 @@
+
+%h1 Nudges:
+%p #{@user_nudges.count} scheduled since last week
+
+.simple_table
+  %table#nudges
+    %thead
+      %tr
+        %th Next Nudge
+        %th User
+        %th Status
+        %th Last Visit (days)    
+    %tbody
+      - @user_nudges.each do |user|
+        %tr
+          %td.date_column=basic_datestamp user.next_nudge_at
+          %td.twitter_column=link_to "@#{user.twitter_username}", "/dash/user/#{user.id}"
+          %td{:style=>'width: 6em'}=user.get_state
+          %td.num_column=user.visit_streak.abs
+      
+:javascript
+  $(document).ready(function() {
+    $('#nudges').dataTable({
+    "bPaginate": false,
+    "aaSorting": [[ 0, "desc" ]]
+    });   
+  });

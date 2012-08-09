@@ -1,0 +1,53 @@
+<%= form_for([:scaffold, @foursquare_category]) do |f| %>
+  <% if @foursquare_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@foursquare_category.errors.count, "error") %> prohibited this foursquare_category from being saved:</h2>
+
+      <ul>
+      <% @foursquare_category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :category_id %><br />
+    <%= f.text_field :category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trait_token %><br />
+    <%= f.text_field :trait_token %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :plural_name %><br />
+    <%= f.text_field :plural_name %>
+  </div>
+  <div class="field">
+    <%= f.label :icon %><br />
+    <%= f.text_field :icon %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %><br />
+    <%= f.text_field :parent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_category_id %><br />
+    <%= f.text_field :parent_category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :num_children %><br />
+    <%= f.text_field :num_children %>
+  </div>
+  <div class="field">
+    <%= f.label :level_deep %><br />
+    <%= f.text_field :level_deep %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Save" %>
+  </div>
+<% end %>

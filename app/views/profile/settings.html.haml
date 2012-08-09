@@ -1,0 +1,207 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Settings",:current=>'settings'}
+  %div{'data-role' => :content, :class => :content}
+    %ul{'data-role' => :listview, :id => :settings_list, 'data-theme' => 'd'}
+      - @earn_options_shown = 0
+
+      %li
+        = link_to "Export your data", {:controller => :profile, :action => :export, :id => "budgedata", :format => :csv}, {:class => :noajax}
+
+      %li
+        = link_to "View profile", {:controller => :profile, :action => :id, :id => current_user.id}
+
+      %li
+        = link_to "Log out", {:controller => :home, :action => :logout}, {:class => :noajax}
+
+      %li{'data-icon' => 'check'}
+        %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :communication_pref, :redirect_to => '/profile/settings')}
+          How and when to talk to me
+
+      - if !TrackedAction.user_has_token(current_user, :verified_phone)
+        - @earn_options_shown += 1
+        %li 
+          - if current_user.send_phone_verification? or params[:phone] == 'verify'
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :phone, :redirect_to => '/profile/settings')}
+              Edit your phone number
+          - else
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :phone, :redirect_to => '/profile/settings')}
+              Add your phone number
+
+      - else 
+        - if current_user.nag_mode_is_on?
+          %li{'data-icon' => 'check'}
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :nag_mode, :redirect_to => '/profile/settings')}
+              De-activate NAG MODE
+        - else
+          %li
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :nag_mode, :redirect_to => '/profile/settings')}
+              Activate NAG MODE
+
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :phone, :redirect_to => '/profile/settings')}
+            Edit your phone number
+
+      - if current_user.name.blank?
+        - @earn_options_shown += 1
+        %li
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :name, :redirect_to => '/profile/settings')}
+            Add your name
+
+      - else 
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :name, :redirect_to => '/profile/settings')}
+            Edit your name
+
+      - if false and @browser_type == 'web'
+        - if current_user.photo.blank?
+          - @earn_options_shown += 1
+          %li
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :photo, :redirect_to => '/profile/settings')}
+              Add your photo
+  
+        - else 
+          %li{'data-icon' => 'check'}
+            %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :photo, :redirect_to => '/profile/settings')}
+              Edit your photo
+
+      - if current_user.email.blank?
+        - @earn_options_shown += 1
+        %li
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :email, :redirect_to => '/profile/settings')}
+            Add your email address
+
+      - else 
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :email, :redirect_to => '/profile/settings')}
+            Edit your email address
+
+      - if current_user.encrypted_password.present?
+        %li
+          %a{:href => url_for(:controller => :users, :action => :edit, :back => '/profile/settings'), :class => :noajax}
+            Edit your password
+      
+      - if current_user.oauth_for_site_token(:facebook).blank? 
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :oauth, :action => :facebook, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connect to Facebook
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :oauth, :action => :facebook, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connected to Facebook
+
+      - if current_user.oauth_for_site_token(:twitter).blank?
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :oauth, :action => :twitter, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connect to Twitter
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :oauth, :action => :twitter, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connected to Twitter
+
+      - if current_user.oauth_for_site_token(:foursquare).blank?
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :oauth, :action => :foursquare, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connect to Foursquare
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :oauth, :action => :foursquare, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connected to Foursquare
+
+      - if current_user.withings_user_id.blank?
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :oauth, :action => :withings, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connect to Withings
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :oauth, :action => :withings, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Connected to Withings
+
+      - if false
+        - if current_user.oauth_for_site_token(:fitbit).blank?
+          - @earn_options_shown += 1
+          %li 
+            %a{:href => url_for(:controller => :oauth, :action => :fitbit, :redirect_to => '/profile/settings'), :class => :noajax} 
+              Connect to Fitbit
+        - else
+          %li{'data-icon' => 'check'}
+            %a{:href => url_for(:controller => :oauth, :action => :fitbit, :redirect_to => '/profile/settings'), :class => :noajax} 
+              Connected to Fitbit
+
+      - if false
+        - if current_user.oauth_for_site_token(:runkeeper).blank?
+          - @earn_options_shown += 1
+          %li 
+            %a{:href => url_for(:controller => :oauth, :action => :runkeeper, :redirect_to => '/profile/settings'), :class => :noajax} 
+              Connect to RunKeeper
+        - else
+          %li{'data-icon' => 'check'}
+            %a{:href => url_for(:controller => :oauth, :action => :runkeeper, :redirect_to => '/profile/settings'), :class => :noajax} 
+              Connected to Runkeeper
+
+      - if  @earn_options_shown < 4 and !TrackedAction.user_has_token(current_user, :verified_unit_prefs)
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :unit_prefs, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Miles or kms? Pounds or kgs? 
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :unit_prefs, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Miles or kms? Pounds or kgs? 
+
+      - if  @earn_options_shown < 4 and !TrackedAction.user_has_token(current_user, :verified_time_zone)
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :time_zone, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Add your time zone
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :time_zone, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Edit your time zone
+
+      - if  @earn_options_shown < 4 and !TrackedAction.user_has_token(current_user, :verified_gender)
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :gender, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Add your gender
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :gender, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Edit your gender
+
+      - if  @earn_options_shown < 4 and !TrackedAction.user_has_token(current_user, :verified_birthday)
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :birthday, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Add your birthday
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :birthday, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Edit your birthday
+
+      - if  @earn_options_shown < 4 and !TrackedAction.user_has_token(current_user, :added_credit_card)
+        - @earn_options_shown += 1
+        %li 
+          %a{:href => url_for(:protocol => 'https://', :host => SECURE_DOMAIN, :controller => :store, :action => :pay, :enter_new_card => 1, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Add your payment method
+
+      - else
+        %li{'data-icon' => 'check'}
+          %a{:href => url_for(:protocol => 'https://', :host => SECURE_DOMAIN, :controller => :store, :action => :pay, :enter_new_card => 1, :redirect_to => '/profile/settings'), :class => :noajax} 
+            Edit your payment method
+          
+
+      %li 
+        %a{:href => url_for(:controller => :profile, :action => :user_info, :id => :close_account, :redirect_to => '/profile/settings'), :class => :noajax, :style => 'color: #933;'} 
+          Close your account
+
+      - if @earn_options_shown == 0
+        %li{:style => 'font-size: 16px; color: #999; font-weight: normal;'} Your profile is 100% complete!
+        
+      
+    %br{:clear => :all}
+
+  = render :partial => 'home/mobile_footer'

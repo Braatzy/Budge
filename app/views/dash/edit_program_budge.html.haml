@@ -1,0 +1,3 @@
+%h3 #{link_to @program.name, :controller => :dash, :action => :edit_program, :id => @program.id}: Edit #{@program_budge.budge_level}
+
+.program_budge_form=render :partial => 'program_budge_form', :locals => {:program_budge => @program_budge, :program => @program}

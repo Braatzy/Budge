@@ -1,0 +1,14 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Be your own coach"}
+  %div{'data-role' => :content, :class => :content}
+    %div{:id => :coaches}
+      %ul{'data-role' => :listview, :class => 'unlinked_coach_rows'}
+        %li{:class => :coach_row, 'data-icon' => 'false'}= render :partial => 'coach_row', :locals => {:self_coach => current_user, :program_player => @program_player}
+    %br{:clear => :all}
+      %h3 Your self-coaching stats and stuff here.
+
+    %div{:class => 'ui-grid-a'}
+      %div{:class => 'ui-block-a'}= button "Back", '#coaches', {'data-rel' => 'back'}
+      %div{:class => 'ui-block-b'}      
+      
+  = render :partial => 'home/mobile_footer'

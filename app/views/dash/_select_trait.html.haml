@@ -1,0 +1,10 @@
+- @program_action_template ||= ProgramActionTemplate.new
+- program ||= nil
+%table{:width => '100%'}
+  %tr
+    - if trait.do_name.present?
+      %td{:width => '50%'}
+        = render :partial => 'save_trait_as_action_template_form', :locals => {:do_or_dont => :do, :trait => trait, :program => program}
+    - if trait.dont_name.present?
+      %td{:width => '50%'}
+        = render :partial => 'save_trait_as_action_template_form', :locals => {:do_or_dont => :dont, :trait => trait, :program => program}

@@ -1,0 +1,22 @@
+.page-header
+  %h1 Programs
+  .btn=link_to "Create new program", '/dash/edit_program'
+
+.official.page-header
+  %h2 Official Programs
+  %ul
+    - @programs.each do |program|
+      %li
+        =link_to (program.name.present? ? program.name : "Untitled"), "/dash/program/#{program.id}" 
+        &mdash;
+        =link_to "edit", "/dash/edit_program/#{program.id}"
+
+.inprogress.page-header
+  %h2 In-Progress Programs
+  - if @archived_programs.present?
+    %ul
+      - @archived_programs.each do |program|
+        %li
+          =program.name.present? ? program.name : "Untitled"
+          &mdash;
+          =link_to "edit", "/dash/edit_program/#{program.id}"

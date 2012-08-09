@@ -1,0 +1,15 @@
+%h1.handwriting You're more likely to succeed with a coach
+%p Sometimes all it takes to really make a change is to know that someone is out there who has your back. Hire a dedicated coach, or find a willing friend or family member to coach you!
+
+- if program.program_coaches.present?
+  - program.program_coaches.each do |program_coach|
+    - next if !program_coach.available_for_coaching? and program_player.program_coach_id != program_coach.id
+    = render :partial => 'coach_row', :locals => {:program_coach => program_coach, :program_player => program_player}
+    
+- if program_player.supporters.present?
+  - program_player.supporters.each do |supporter|
+    = render :partial => 'supporter_row', :locals => {:supporter => supporter, :program_player => program_player}
+
+- elsif program_player.num_supporter_invites > 0
+  = render :partial => 'supporter_row', :locals => {:supporter => nil, :program_player => program_player}
+

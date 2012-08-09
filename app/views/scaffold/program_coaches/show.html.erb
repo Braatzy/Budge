@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Program:</b>
+  <%= @program_coach.program.name %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @program_coach.user.name %>
+</p>
+
+<p>
+  <b>Primary Oauth Token id:</b>
+  <%= @program_coach.primary_oauth_token.present? ? @program_coach.primary_oauth_token.remote_username : nil %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%= @program_coach.price %>
+</p>
+
+<p>
+  <b>Message:</b>
+  <%= raw textilize @program_coach.message %>
+</p>
+
+
+<%= link_to 'Edit', edit_scaffold_program_coach_path(@program_coach) %> |
+<%= link_to 'Back', {:controller => :dash, :action => :edit_program, :id => @program_coach.program_id} %>

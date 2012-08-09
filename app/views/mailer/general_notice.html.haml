@@ -1,0 +1,36 @@
+- @notification_url_text ||= @notification_url
+%html
+  %body{:style => 'background-color: #fff; font-size: 14px;'}
+
+    .colored-bar{:style => 'text-align: center;'}
+      %div{:style => 'background-color: #555; border-bottom: 2px solid #ffb802; font-size: 12px; font-weight: bold; color: #fff; padding: 5px;'}
+        =link_to image_tag('budge-logo-white-transparent-30x.png'), (@notification_url.present? ? @notification_url : {:host => DOMAIN, :protocol => 'http://', :controller => :play, :action => :index})
+    
+    .text-box{:style => 'padding: 0 10px;'}
+      %p Hey, #{@to_name}!
+      - if @pre_message.present?
+        = raw textilize @pre_message
+        
+      - if @message.present? 
+        - if @message.length < 160
+          %h2= raw textilize @message
+        - elsif @message.length < 300
+          %div{:style => 'font-size: 20px;'}= raw textilize @message
+        - else
+          = raw textilize @message
+          
+    - if @render_partial.present?
+      = render :partial => @render_partial, :locals => {:message_data => @message_data, :notification_url => @notification_url}
+
+    .text-box{:style => 'padding: 0 10px;'}
+      - if @notification_url_text.present? and @notification_url.present? and !@suppress_notification_url
+        %h3= link_to @notification_url_text, @notification_url, {:style => 'color: #555;'}
+      - if @message_data[:diverted_from_user].present?
+        %p{:style => 'color: #ccc;'} (Intended for #{@message_data[:diverted_from_user]}. Sent to admins since this is not production.)
+      - if @message_data[:diverted_from_method].present?
+        %p{:style => 'color: #ccc;'} (Diverted from #{@message_data[:diverted_from_method]}. Sent via email since this is not production.)
+      
+    %div{:style => 'color: #ccc; font-size: 80%; text-align: center; border-top: 2px solid #ffb802; padding: 10px 10px 20px 10px;'} 
+      PS. Team 
+      = link_to 'Habit Labs' , 'http://habitlabs.com', {:style=>'color:  #ccc;'}
+      enjoys feedback. Reply to this email on the slightest whim!

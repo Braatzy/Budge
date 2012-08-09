@@ -1,0 +1,147 @@
+!!!
+-title=@head_title ? (@head_title+" - Budge") : "Budge"
+
+%html{:lang => 'en'}
+  %head{:prefix => (@facebook_object.present? ? "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# #{OPEN_GRAPH_NS}: http://ogp.me/ns/#{OPEN_GRAPH_NS}#" : '')}
+    %title=title
+    - if @facebook_object.present?
+      -# How you post an action for this object
+      -# https://graph.facebook.com/me/YOUR_NAMESPACE:cook(action)?recipe(object)=OBJECT_URL&access_token=ACCESS_TOKEN
+      %meta{:property => 'fb:app_id', :content => @facebook_object[:app_id]}
+      %meta{:property => 'og:type', :content => @facebook_object[:type]}
+      %meta{:property => 'og:url', :content => @facebook_object[:url]}
+      %meta{:property => 'og:title', :content => @facebook_object[:title]}
+      %meta{:property => 'og:description', :content => @facebook_object[:description]}
+      %meta{:property => 'og:image', :content => @facebook_object[:image]}
+      %meta{:property => 'og:locale', :content => 'en_US'}
+      
+    %meta{:charset => 'utf-8'}
+    %meta{:name => "google-site-verification", :content => "Nb9KPDJqBPhz0Az5DEfbVaqnV0D3EHXpFv3VDXufv9E"}
+    %meta{:name => "bitly-verification", :content => "ea29b6eeaa7f"}
+    %meta{:name => 'viewport', :content => 'width=320, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'}
+    %meta{:name => 'apple-mobile-web-app-capable', :content => 'yes'}
+    %meta{:name => 'apple-mobile-web-app-status-bar-style', :content => 'black'}
+    
+    %link{:rel => 'apple-touch-icon', :sizes => "72x72", :href => "#{image_path('budge-snail-72.png')}"}
+    %link{:rel => 'apple-touch-icon', :sizes => "114x114", :href => "#{image_path('budge-snail-114.png')}"}
+    %link{:rel => 'apple-touch-startup-image', :href => "#{image_path('start-screen-320x460.png')}"}
+    %link{:rel => 'icon shortcut', :href => "#{image_path('favicon.ico')}", :type => 'image/png'} 
+    %link{:rel => 'stylesheet', :href => "http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css"}    
+    = stylesheet_link_tag 'application'
+    
+    = javascript_include_tag 'application', "#{request.protocol}maps.google.com/maps/api/js?sensor=true", "#{request.protocol}ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js", '/jquery/jquery.dst.js'
+
+    -# Overriding JQ Mobile defaults
+    :javascript
+      $(document).bind('mobileinit',function(){
+          $.extend($.mobile, {
+              loadingMessage: "Loading...",
+              pageLoadErrorMessage: 'Fail Snail :('
+          })
+      })   
+    
+    = javascript_include_tag "http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"
+
+    - if Rails.env.production?
+      %script{:type => "text/javascript"} var _sf_startpt=(new Date()).getTime()
+    
+    // Hack for redirecting from Facebook Connect
+    %script{:type => "text/javascript"} if(window.location.hash == '#_=_')window.location.hash = '';
+
+    - if @prompt_to_add_to_home_screen
+      :javascript 
+        var addToHomeConfig = {
+          animationIn: 'bubble',
+          animationOut: 'drop',
+          lifespan: 10000,
+          expire: 0,
+          touchIcon: true,
+          message: "To add Budge to your home screen, tap %icon and then Add to Home Screen."
+        };
+        if ('standalone' in navigator && !navigator.standalone && (/iphone|ipod|ipad/gi).test(navigator.platform) && (/Safari/i).test(navigator.appVersion)) {
+          document.write('<link rel="stylesheet" href="/add2home/add2home.css">');
+          document.write('<script type="application/javascript" src="/add2home/add2home.js"><\/s' + 'cript>');
+        }
+      
+    - if Rails.env.production?
+      :javascript
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24995026-1']);
+        _gaq.push(['_trackPageview']);
+      
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+        var KM_COOKIE_DOMAIN = "#{COOKIE_DOMAIN}";
+        var _kmq = _kmq || [];
+        function _kms(u){
+        setTimeout(function(){
+        var s = document.createElement('script'); var f = document.getElementsByTagName('script')[0]; s.type = 'text/javascript'; s.async = true;
+        s.src = u; f.parentNode.insertBefore(s, f);
+        }, 1);
+        }
+        _kms('//i.kissmetrics.com/i.js');_kms('//doug1izaerwt3.cloudfront.net/513bcd9de83351ce578a9717af6573dc55fa46ec.1.js');
+
+    = csrf_meta_tag
+    
+  %body{:class => (@browser_type == 'mobile' ? 'am' : 'aw')}
+    = yield
+        
+  - if @first_page_on_visit or @request_location 
+  
+    - if current_user and current_user.lat_long_updated_at.present? and current_user.lat_long_updated_at > Time.now.utc-3.hours
+      -# Use the cached lat/long
+      :javascript
+        $('#location').attr('data-lat', #{current_user.last_latitude});
+        $('#location').attr('data-lon', #{current_user.last_longitude});
+      
+    - else
+      :javascript
+        #{startj}
+        // Get location
+        if(false && navigator.geolocation) {
+          browserSupportFlag = true;
+          navigator.geolocation.getCurrentPosition(function(position) {
+            if ($('#location').length && position.coords.latitude && position.coords.longitude) {
+              $('#location').attr('data-lat', position.coords.latitude);
+              $('#location').attr('data-lon', position.coords.longitude);
+              $.ajax({
+                url: '/home/store_location',
+                  type: 'POST',
+                  dataType: 'script',
+                  data: {latitude: position.coords.latitude, 
+                         longitude: position.coords.longitude}
+              });
+            }
+          }, function() {
+            //handleNoGeolocation(browserSupportFlag);
+          });
+        }
+        #{endj}    
+  
+  - if Rails.env.production?
+    :javascript
+      var _sf_async_config={uid:3843,domain:"bud.ge"};
+      (function(){
+        function loadChartbeat() {
+          window._sf_endpt=(new Date()).getTime();
+          var e = document.createElement('script');
+          e.setAttribute('language', 'javascript');
+          e.setAttribute('type', 'text/javascript');
+          e.setAttribute('src',
+             (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+             "js/chartbeat.js");
+          document.body.appendChild(e);
+        }
+        var oldonload = window.onload;
+        window.onload = (typeof window.onload != 'function') ?
+           loadChartbeat : function() { oldonload(); loadChartbeat(); };
+      })();
+  :javascript
+    $('.submit_form').unbind('click').click(function(){
+      $('#'+$(this).attr('data-form-id')).submit();
+      return false;
+    });

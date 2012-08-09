@@ -1,0 +1,24 @@
+%h1= t '.title'
+%p
+  = link_to t('back'), scaffold_invitations_path
+  = link_to t('edit'), edit_scaffold_invitation_path(@invitation)
+
+%dl
+  %dt= Invitation.human_attribute_name :user_id
+  %dd= @invitation.user_id
+  %dt= Invitation.human_attribute_name :program_id
+  %dd= @invitation.program_id
+  %dt= Invitation.human_attribute_name :token
+  %dd= @invitation.token
+  %dt= Invitation.human_attribute_name :email
+  %dd= @invitation.email
+  %dt= Invitation.human_attribute_name :invited_user_id
+  %dd= @invitation.invited_user_id
+  %dt= Invitation.human_attribute_name :visited
+  %dd= @invitation.visited
+  %dt= Invitation.human_attribute_name :signed_up
+  %dd= @invitation.signed_up
+  %dt= Invitation.human_attribute_name :bought_program
+  %dd= @invitation.bought_program
+  %dt= Invitation.human_attribute_name :dollars_credit
+  %dd= @invitation.dollars_credit

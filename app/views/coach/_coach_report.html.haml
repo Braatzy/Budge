@@ -1,0 +1,64 @@
+- suppress_form ||= false
+- if player_buckets.present? and player_buckets['total'] > 0
+  - if player_buckets['Future'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #696;'} #{player_buckets['Future'].size} all caught up 
+    %div{:class => :small} next turn is in the future
+    %table
+      - player_buckets['Future'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+
+  - if player_buckets['0-3'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #696;'} #{player_buckets['0-3'].size} in good standing 
+    %div{:class => :small} played within last 3 days
+    %table
+      - player_buckets['0-3'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+  
+  - if player_buckets['4-7'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #c60;'} #{player_buckets['4-7'].size} potentially in danger
+    %div{:class => :small} played within last week
+    %table
+      - player_buckets['4-7'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_2} &nbsp;
+
+  - if player_buckets['8-14'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #c00;'} #{player_buckets['8-14'].size} in danger
+    %div{:class => :small} played 1-2 weeks ago
+    %table
+      - player_buckets['8-14'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+
+  - if player_buckets['15+'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #f00;'} #{player_buckets['15+'].size} possibly lost
+    %div{:class => :small} played over 2 weeks ago
+    %table
+      - player_buckets['15+'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+
+  - if player_buckets['New'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #f00;'} #{player_buckets['New'].size} newbies
+    %div{:class => :small} still need to onboard
+    %table
+      - player_buckets['New'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+
+  - if player_buckets['Danger'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #f00;'} #{player_buckets['Danger'].size} flagged as In Danger
+    %div{:class => :small} might need to be dropped from coaching
+    %table
+      - player_buckets['Danger'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}
+    %div{:class => :horiz_line_1} &nbsp;
+
+  - if player_buckets['Lost'].size > 0
+    %h2{:style => 'margin-bottom: 0; color: #f00;'} #{player_buckets['Lost'].size} flagged as Lost
+    %div{:class => :small} passed off to the Budge team (no longer your responsibility)
+    %table
+      - player_buckets['Lost'].each do |program_player|
+        = render :partial => 'coach/player_bucket_for_coach', :locals => {:program_player => program_player, :suppress_form => suppress_form}

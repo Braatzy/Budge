@@ -1,0 +1,38 @@
+%h1 Share Messages
+
+%p to-do: add clicks and signups (for shared) 
+
+%div{:style=>'margin-top: 20px'}=paginate @entries
+
+%table#sharing
+  %thead
+    %tr
+      %th Date
+      %th User
+      %th Checkin
+      %th Share message
+      %th Tw
+      %th Fb
+      / %th Clicks
+  %tbody
+    - @entries.each do |entry|
+      -the_label=entry.message_type == 'secret' ? 'My secret ingredient is:' : 'My nemesis is:'
+      -the_color=entry.message_type == 'secret' ? '#9b3' : '#b36'
+      - if ['secret','nemesis'].include?(entry.message_type) and entry.original_message.present?
+        %tr
+          %td.date_column=basic_datestamp entry.created_at
+          %td.twitter_column=link_to "@#{entry.user.twitter_username}","/dash/user/#{entry.user_id}"
+          %td.checkin{:style=>'color: lightgray;'}=entry.metadata[:checkins].map{|c,h|h[:statement]}.join(' & ')
+          %td.share_message{:style => "color: #{the_color};"}= entry.original_message
+          %td.twitter=entry.post_to_twitter ? '[tw]' : ''
+          %td.fb=   entry.post_to_facebook ? '[fb]' : ''
+          / %td=entry.get_clicks
+
+%div{:style=>'margin-top: 20px'}=paginate @entries
+:javascript
+  $(document).ready(function() {
+    $('#sharing').dataTable({"bPaginate": false,
+    "aaSorting": [[ 0, "desc" ]]
+    });   
+  });
+

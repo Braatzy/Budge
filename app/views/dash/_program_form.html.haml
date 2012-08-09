@@ -1,0 +1,165 @@
+- @program ||= Program.new
+= form_for(@program, :url => {:controller => :dash, :action => :save_program, :id => (@program.new_record? ? nil : @program.id)}, :html => {:id => 'edit_program_form', :multipart => true}) do |f|
+  - if @program and @program.errors.any?
+    %div{:id => "error_explanation"}
+      %h2 #{pluralize(@program.errors.count, "error")} prohibited this program from being saved:
+      %ul
+        - @program.errors.full_messages.each do |msg|
+          %li= msg
+
+  %div{:class => :field}
+    = f.label :name, "Program name"
+    %br
+    = f.text_field :name, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label "Program icon"
+    - if @program and @program.photo?
+      %p= image_tag @program.photo(:small)
+      %div Replace this icon
+    %div= f.file_field :photo
+
+  %div{:class => :field}
+    = f.label :onboarding_task, "Short goal name (What is this program's goal? ie: Do lots of pushups, Sleep like a cat, Meditate every day)"
+    %br
+    = f.text_field :onboarding_task, {:class => 'textfield'}
+    
+  %div{:class => :field}
+    = f.label :welcome_message, "Welcome/thank you message (for when someone first purchases this)"
+    %br
+    = f.text_area :welcome_message, {:class => 'textarea'}
+  %div{:class => :field}
+    = f.label :introduction_message, "Intro message (in app when they complete onboarding)"
+    %br
+    = f.text_area :introduction_message, {:class => 'textarea'}
+  %div{:class => :field}
+    = f.label :description, "Program description"
+    %br
+    = f.text_area :description, {:class => 'textarea'}
+  %div{:class => :field}
+    = f.label :requirements, "Program requirements"
+    %br
+    = f.text_area :requirements, {:class => 'textarea'}
+  %div{:class => :field}
+    = f.label :price, "Price (don't include dollar sign $)"
+    %br
+    = f.text_field :price, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :token, "Program url token (alphanumeric and dashes only, please)"
+    %br
+    = f.text_field :token, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :company_name
+    %br
+    = f.text_field :company_name, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :company_url
+    %br
+    = f.text_field :company_url, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :first_published_on
+    %br
+    = f.date_select :first_published_on, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :last_published_on
+    %br
+    = f.date_select :last_published_on, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :program_version
+    %br
+    = f.text_field :program_version, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :maturity_rating
+    %br
+    = f.text_field :maturity_rating, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :adapted_from_name
+    %br
+    = f.text_field :adapted_from_name, {:class => 'textfield'}
+  %div{:class => :field}
+    = f.label :adapted_from_url
+    %br
+    = f.text_field :adapted_from_url, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label :required_question_1, "Program-specific question #1 (optional)"
+    %br
+    = f.text_field :required_question_1, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label :required_question_2, "Program-specific question #2 (optional)"
+    %br
+    = f.text_field :required_question_2, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label :optional_question_1, "Program-specific question #3 (optional)"
+    %br
+    = f.text_field :optional_question_1, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label :optional_question_2, "Program-specific question #4 (optional)"
+    %br
+    = f.text_field :optional_question_2, {:class => 'textfield'}
+
+  %div{:class => :field}
+    = f.label :completion_message, "Completion message (when the finish the last level)"
+    %br
+    = f.text_area :completion_message, {:class => 'textarea'}
+
+  %div{:class => :field}
+    = f.label :leaderboard_trait_id, "Primary trait (used for leaderboard)"
+    %br
+    = select :program, :leaderboard_trait_id, Trait.options_for_web_select(current_user), {:include_blank => true}, {:class => 'trait_dropdown chosen', :style => "width: 300px;"}
+    %br
+    Leaders sorted by
+    = select :program, :leaderboard_trait_direction, [['Highest total',0],['Highest frequency',1],['Highest average',2],['Lowest total',3], ['Lowest frequency',4],['Lowest average',5]], {:include_blank => true}
+
+
+  - if false # Deprecated  
+    %div{:class => :field}
+      = f.label :victory_message, "Victory message (when they get 3 stars on every level)"
+      %br
+      = f.text_area :victory_message, {:class => 'textarea'}
+
+    %div{:class => :field}
+      = f.check_box :require_email
+      = f.label :require_email, "Require that players have valid email address"
+  
+    %div{:class => :field}
+      = f.check_box :require_phone
+      = f.label :require_phone, "Require that players have valid phone number (for US)"
+  
+    %div{:class => :field}
+      = f.check_box :require_facebook
+      = f.label :require_facebook, "Require that players connect to Facebook"
+  
+    %div{:class => :field}
+      = f.check_box :require_foursquare
+      = f.label :require_foursquare, "Require that players connect to Foursquare"
+  
+    %div{:class => :field}
+      = f.check_box :require_fitbit
+      = f.label :require_facebook, "Require that players connect to Fitbit"
+  
+    %div{:class => :field}
+      = f.check_box :require_withings
+      = f.label :require_withings, "Require that players connect to Withings"
+  
+    %div{:class => :field}
+      = f.check_box :require_runkeeper
+      = f.label :require_runkeeper, "Require that players connect to RunKeeper"
+
+  %div{:class => :field}
+    = f.check_box :featured
+    = f.label :featured, "Feature this program on Budge homepage"
+
+  - if true
+    = f.hidden_field :system_program, :value => true
+  - else
+    %div{:class => :field}
+      = f.check_box :system_program
+      = f.label :system_program, "This program is coached by Habit Labs (@budge)"
+
+  %div{:class => :actions}
+    = f.submit
+

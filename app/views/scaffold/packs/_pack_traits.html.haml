@@ -1,0 +1,37 @@
+- pack.traits.sort_by{|b|b.level || b.position}.each do |trait|
+  %li{:id => "pack_#{pack.id}_trait_#{trait.id}"}
+    = link_to trait.do_name, scaffold_trait_path(trait)
+    / 
+    = trait.dont_name
+    (#{link_to "x", {:controller => 'scaffold/packs', :action => :remove_trait_from_pack, :id => pack.id, :trait_id => trait.id}, {:id => "remove_trait_#{trait.id}_pack_#{pack.id}"}})
+    :javascript 
+      #{jquery_start}
+      $('#remove_trait_#{trait.id}_pack_#{pack.id}').click(function(){
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'POST',
+          dataType: 'script'
+        });
+        return false;
+      });
+      #{jquery_end}
+
+%p
+  %div
+    = select "pack_level", "#{pack.id}", [['Level 1','1'],['Level 2','2'],['Level 3','3'],['Level 4','4'],['Level 5','5']]
+    = select_tag "traits", options_from_collection_for_select(Trait.find(:all), "id", "do_name"), {:id => "pack_#{pack.id}"}
+    = link_to "Add", {:controller => :packs, :action => :add_trait_to_pack, :id => pack.id}, {:id => "add_trait_to_pack_#{pack.id}", 'data-pack-id' => pack.id}
+    
+:javascript
+  #{jquery_start}
+  $('#add_trait_to_pack_#{pack.id}').click(function(){
+    $.ajax({
+      url: $(this).attr('href'),
+        type: 'POST',
+        dataType: 'script',
+        data: {trait_id: $('#pack_'+$(this).attr('data-pack-id')).val(), 
+               level: $('#pack_level_'+$(this).attr('data-pack-id')).val()}
+    });
+    return false;
+  });
+  #{jquery_end}

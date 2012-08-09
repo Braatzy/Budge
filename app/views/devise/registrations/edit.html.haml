@@ -1,0 +1,26 @@
+%div{'data-role' => :page, :class=>'no_gradient'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Log in', :current=>'login'}
+  %div{'data-role' => :content, :class => :content, :style => 'padding-top: 10px;'}
+
+    %h2 Change your password
+
+    = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => {:method => :put, :id => :edit_password_form, 'data-ajax' => 'false' }) do |f|
+      %div= devise_error_messages!
+      = f.hidden_field :email
+
+      %p
+        %div= f.label :current_password, "Your current password"
+        %div= f.password_field :current_password
+
+      %p 
+        %div= f.label :password, "New password"
+        %div= f.password_field :password
+    
+      %p
+        %div= f.label :password_confirmation
+        %div= f.password_field :password_confirmation
+    
+      %p
+        %div= button "Update", {}, {:class => :submit_form, 'data-form-id' => :edit_password_form}
+
+  = render :partial => 'home/mobile_footer'

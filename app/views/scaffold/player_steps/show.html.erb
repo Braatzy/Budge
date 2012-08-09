@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Program player:</b>
+  <%= @player_step.program_player_id %>
+</p>
+
+<p>
+  <b>Program step:</b>
+  <%= @player_step.program_step_id %>
+</p>
+
+<p>
+  <b>Outcome token:</b>
+  <%= @player_step.response_token %>
+</p>
+
+<p>
+  <b>Response token:</b>
+  <%= @player_step.response_token %>
+</p>
+
+<p>
+  <b>Response:</b>
+  <%= @player_step.response_id %>
+</p>
+
+<p>
+  <b>Response sorted by:</b>
+  <%= @player_step.response_sorted_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_player_step_path(@player_step) %> |
+<%= link_to 'Back', player_steps_path %>

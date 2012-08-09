@@ -1,0 +1,89 @@
+%div{'data-role' => :page,:id => 'program_get_started'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Checking In to Budge', :current=>'about'}
+  %div{'data-role' => :content, :class => :content}
+    %h2 How can I check in? 
+    
+    %div.rounded{:style => 'border: 1px dashed #666; margin-bottom: 1em;'}
+      %h3 Option 1: Visit #{link_to "bud.ge", :controller => :home} in a browser
+      %p That's where you are now! Simply click on any of your programs, or buy new ones in the #{link_to "Store", {:controller => :store, :action => :index, :host => SECURE_DOMAIN, :protocol => "https://"}}.
+    
+    %div.rounded{:style => 'border: 1px dashed #666; margin-bottom: 1em;'}
+      %h3 Option 2: Send an SMS to 206-257-2324
+      %p
+        %strong Example:
+        I did 10 pushups
+      %p Add the number above to your phone's contact list, and send us an SMS at any time using one of the approved syntaxes <strong>listed below</strong>.
+
+    %div.rounded{:style => 'border: 1px dashed #666; margin-bottom: 1em;'}
+      %h3 Option 3: Send a DM (via Twitter) to @budge
+      %p
+        %strong Example:
+        dm budge I did 10 pushups
+      %p DMs are "direct messages" on Twitter that allow you to communicate directly with us without adding a new tweet to your timeline.  Send @budge a DM at any time using one of the approved syntaxes <strong>listed below</strong>.
+
+    %div.rounded{:style => 'border: 1px dashed #666;'}
+      %h3 Option 4: Add #budge to a public tweet
+      %p
+        %strong Example:
+        I did 10 pushups #budge
+      %p Add "#budge" to the end of a tweet that follows one of the approved syntaxes <strong>listed below</strong>, and we'll check every 10 minutes or so and check you in!
+
+    
+    %h2{:name => 'syntax', :style => 'border-top: 1px solid #000; padding-top: 1em;'} What syntax works in SMS and via Twitter?
+
+    %div.light_box.rounded{:style => 'border: 1px dashed #666; margin-bottom: 1em;'}
+      %p All of the following phrases are supported.  The <strong>bold</strong> parts are required, and the non-bold parts you can change to whatever it is you actually did.
+      %div.syntax
+        I 
+        %strong did 
+        10 pushups
+      %div.syntax 
+        I 
+        %strong did 
+        4 pullups
+      %div.syntax
+        I 
+        %strong did 
+        20 situps
+      %div.syntax
+        I 
+        %strong meditated 
+        for 3 minutes
+      %div.syntax
+        I 
+        %strong ate 
+        a hamburger and fries
+      %div.syntax
+        I 
+        %strong flossed
+      %div.syntax
+        I 
+        %strong weigh
+        171 pounds
+      %div.syntax
+        I 
+        %strong walked 
+        2.5 
+        %strong miles 
+        to work
+      %div.syntax
+        I 
+        %strong walked 
+        35 
+        %strong minutes
+      %div.syntax
+        I 
+        %strong walked 
+        10,000 
+        %strong steps
+      %div.syntax
+        I 
+        %strong ran 
+        3.1 
+        %strong kilometers 
+      %div.syntax
+        I 
+        %strong ran
+        for  
+        13 
+        %strong minutes

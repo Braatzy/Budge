@@ -1,0 +1,65 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @location_context.user_id %>
+</p>
+
+<p>
+  <b>Context about:</b>
+  <%= @location_context.context_about %>
+</p>
+
+<p>
+  <b>Context:</b>
+  <%= @location_context.context_id %>
+</p>
+
+<p>
+  <b>Latitude:</b>
+  <%= @location_context.latitude %>
+</p>
+
+<p>
+  <b>Longitude:</b>
+  <%= @location_context.longitude %>
+</p>
+
+<p>
+  <b>Population density:</b>
+  <%= @location_context.population_density %>
+</p>
+
+<p>
+  <b>Temperature f:</b>
+  <%= @location_context.temperature_f %>
+</p>
+
+<p>
+  <b>Weather conditions:</b>
+  <%= @location_context.weather_conditions %>
+</p>
+
+<p>
+  <b>Simplegeo context:</b>
+  <%= @location_context.simplegeo_context %>
+</p>
+
+<p>
+  <b>Foursquare place:</b>
+  <%= @location_context.foursquare_place_id %>
+</p>
+
+<p>
+  <b>Foursquare category:</b>
+  <%= @location_context.foursquare_category_id %>
+</p>
+
+<p>
+  <b>Foursquare checkin:</b>
+  <%= @location_context.foursquare_checkin_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_location_context_path(@location_context) %> |
+<%= link_to 'Back', location_contexts_path %>

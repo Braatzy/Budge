@@ -1,0 +1,29 @@
+%h1 Listing user_nag_modes
+
+%table
+  %tr
+    %th User
+    %th Nag mode
+    %th Start date
+    %th End date
+    %th Program
+    %th Program player
+    %th
+    %th
+    %th
+
+  - @user_nag_modes.each do |user_nag_mode|
+    %tr
+      %td= user_nag_mode.user_id
+      %td= user_nag_mode.nag_mode_id
+      %td= user_nag_mode.start_date
+      %td= user_nag_mode.end_date
+      %td= user_nag_mode.program_id
+      %td= user_nag_mode.program_player_id
+      %td= link_to 'Show', [:scaffold, user_nag_mode]
+      %td= link_to 'Edit', edit_scaffold_user_nag_mode_path(user_nag_mode)
+      %td= link_to 'Destroy', [:scaffold, user_nag_mode], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New User nag mode', new_scaffold_user_nag_mode_path

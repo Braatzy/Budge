@@ -1,0 +1,22 @@
+%div#location{'data-lat' => '', 'data-lon' => ''}
+%div#footer
+  - if false
+    = link_to "Contest: Invent our next program!", {:host => DOMAIN, :protocol => 'http://', :controller => :build, :action => :index}, {:style => 'color: green;', :class => :noajax}
+    &ndash; or &ndash; 
+  %a{:href => 'http://support.bud.ge', :class => :noajax} Send us feedback
+
+  
+-# Kissmetrics logging
+= render :partial => 'home/track_metrics'
+
+:javascript
+  #{startj}
+  $('a.noajax').click(function(e) {
+    var target = $(e.target).closest('a');
+    if(target) {
+      e.preventDefault();
+      window.location = target.attr('href');
+      return false;
+    }
+  });
+  #{endj}

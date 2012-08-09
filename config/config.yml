@@ -1,0 +1,100 @@
+test:
+  general:
+    domain: beta.getbudged.com
+    cookie_domain: .getbudged.com
+    contact_recipient: busterbenson@gmail.com
+  email:
+    server: localhost
+    port: 25
+    domain: beta.getbudged.com
+    authentication: :login
+    username: buster@beta.getbudged.com
+    password: 3nj0y
+    contact_recipient: buster@beta.getbudged.com
+development:
+  general:
+    domain: beta.getbudged.com
+    secure_domain: beta.getbudged.com
+    cookie_domain: .getbudged.com
+    contact_recipient: busterbenson@gmail.com
+  email:
+    server: localhost
+    port: 25
+    domain: beta.getbudged.com
+    authentication: :login
+    username: buster@beta.getbudged.com
+    password: 3nj0y
+    contact_recipient: buster@beta.getbudged.com
+  braintree:
+    environment: :sandbox
+    merchant_id: djn4c3b4pyfwtr68
+    public_key: k6dqxw73nbj3f6m8
+    private_key: ccvvrtxmzmsyqv9k
+production:
+  general:
+    domain: bud.ge
+    secure_domain: s.bud.ge
+    cookie_domain: .bud.ge
+    contact_recipient: support@bud.ge
+  braintree:
+    environment: :production
+    merchant_id: ws7b24qwnz49cm54
+    public_key: 7yy9zm57gtwhf3xy
+    private_key: h94h5sykf3w54dpk
+alex_local:
+  general:
+    domain: localhost
+    secure_domain: localhost
+    cookie_domain: localhost
+    contact_recipient: busterbenson@gmail.com
+  email:
+    server: localhost
+    port: 25
+    domain: budge.dev
+    authentication: :login
+    username: buster@beta.getbudged.com
+    password: 3nj0y
+    contact_recipient: buster@beta.getbudged.com
+  braintree:
+    environment: :sandbox
+    merchant_id: djn4c3b4pyfwtr68
+    public_key: k6dqxw73nbj3f6m8
+    private_key: ccvvrtxmzmsyqv9k
+adam_local:
+  general:
+    domain: localhost:3000
+    secure_domain: localhost:3000
+    cookie_domain: 
+    contact_recipient: adamgreenhall@gmail.com
+  email:
+    server: localhost
+    port: 25
+    domain: beta.getbudged.com
+    authentication: :login
+    username: buster@beta.getbudged.com
+    password: 3nj0y
+    contact_recipient: buster@beta.getbudged.com
+  braintree:
+    environment: :sandbox
+    merchant_id: djn4c3b4pyfwtr68
+    public_key: k6dqxw73nbj3f6m8
+    private_key: ccvvrtxmzmsyqv9k
+staging:
+  general:
+    domain: budge-dev.heroku.com 
+    secure_domain: budge-dev.heroku.com
+    cookie_domain: budge-dev.heroku.com 
+    contact_recipient: busterbenson@gmail.com
+  email:
+    server: localhost
+    port: 25
+    domain: budge-staging.heroku.com
+    authentication: :login
+    username: buster@beta.getbudged.com
+    password: 3nj0y
+    contact_recipient: buster@beta.getbudged.com
+  braintree:
+    environment: :sandbox
+    merchant_id: djn4c3b4pyfwtr68
+    public_key: k6dqxw73nbj3f6m8
+    private_key: ccvvrtxmzmsyqv9k

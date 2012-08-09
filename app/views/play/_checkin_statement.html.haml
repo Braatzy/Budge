@@ -1,0 +1,12 @@
+- suppress_delete_link ||= false
+- date ||= nil
+%p{:style => 'color: #666; padding-left: 5px;', :id => "checkin_#{checkin.id}"} 
+  #{raw Trait.statement(checkin.user, :past, checkin.trait, checkin.amount_decimal, checkin, prefer_details = true)}
+  - if date.present? and date != checkin.date
+    on #{checkin.date.strftime('%a')}
+  - else
+    today
+  - if checkin.stars_total > 0 and !suppress_delete_link and false
+    (#{checkin.stars_for_participation} + #{checkin.stars_for_mastery} + #{checkin.stars_for_commenting} = #{checkin.stars_total})
+  - unless suppress_delete_link or true
+    = link_to "x", {:controller => 'play', :action => 'delete_checkin', :id => checkin.id}, {:class => 'delete_checkin', 'data-index' => index}

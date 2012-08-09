@@ -1,0 +1,11 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+  %div{'data-role' => 'content'}
+    = render :partial => 'home/mobile_header'
+    %div{:class => "body_width_for_#{@browser_type}"}
+      %h2 Our privacy policy
+      
+      %h3 Your information is safe with us!
+      
+      %p Your name, profile page, program information, and messages to and from budgers and other members of the site are all public. However, we won't be giving away, renting, or selling your information in any way. Whatever information created by you on the site is owned by you, and will only be used with your permission in marketing materials, blog posts, etc.
+
+  = render :partial => 'home/footer'

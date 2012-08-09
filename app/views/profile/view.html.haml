@@ -1,0 +1,50 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @user.name}
+  %div{'data-role' => :content, :class => :content}
+    - if @browser_type == 'web'
+      %h1.handwriting{:style => 'margin: 0;'}= @user.name
+    %table{:width => '100%'}
+      %tr
+        %td{:width => '33%'}= image_tag @user.photo(:small), {:style => "width: #{@browser_type == 'web' ? 125 : 90}px; height: #{@browser_type == 'web' ? 125 : 90}px", :class => 'rounded-img'}
+        %td{:width => '1%'} &nbsp;
+        %td.rounded{:width => '33%', :style => 'background-color: #eee; text-align: center;'} 
+          %h1{:style => 'margin: 5px; font-size: 30px;'}= @num_followers
+          %div.subtle followers
+          
+        %td{:width => '1%'} &nbsp;
+        %td.rounded{:width => '33%', :style => 'background-color: #eee; text-align: center;'} 
+          %h1{:style => 'margin: 5px;font-size: 30px;'}= @num_following
+          %div.subtle following
+
+    - if @user.twitter_username.present?
+      = button "@#{@user.twitter_username}", "https://twitter.com/#!/#{@user.twitter_username}", {:target => '_new'}
+
+    - if current_user and current_user != @user
+      %div{:id => "follow_button_#{@user.id}", :style => 'text-align: right;'}
+        = render :partial => 'follow_button', :locals => {:follow_user => @user, :relationship => @relationship, :reverse_relationship => @reverse_relationship}
+  
+    - if @entries.present?
+      %div{:id => "stream_index_list_#{@user.id}", :class => :stream_index_list, :style => 'margin-top: 2em;'}
+        - @entries.each do |entry|
+          = render :partial => 'stream/stream_item', :locals => {:entry => entry}
+      - if @entries.total_entries > @entries.size
+        %div{:id => "stream_index_more_#{@user.id}", :class => "stream_index_more stream_list", 'data-next-page' => 2}      
+          %div{:id => "more_entries_#{@user.id}", 'data-icon' => 'false', :style => 'text-align: center;'}
+            = link_to raw("Load more&hellip;"), {:controller => :profile, :action => :more_entries}, {:id => "more_link_#{@user.id}"}
+        
+      :javascript
+        #{startj}
+        $("#more_entries_#{@user.id} a").unbind('click').click(function(){
+          $("#more_link_#{@user.id}").html("Loading more&hellip;");
+          $.ajax({
+            url: $(this).attr('href'),
+            type: 'POST',
+            dataType: 'script',
+            data: {user_id: #{@user.id}, 
+                   page: $("#stream_index_more_#{@user.id}").attr('data-next-page')}
+          });
+          return false;
+        });
+        #{endj}
+    
+  = render :partial => 'home/mobile_footer'

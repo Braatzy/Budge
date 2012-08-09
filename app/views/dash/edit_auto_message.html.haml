@@ -1,0 +1,4 @@
+%h1 #{@program.name} &middot; #{@program_budge.name} &middot; Edit prompt
+%div{:class => :field}
+  %div{:class => 'rounded', :style => 'background-color: #ffe; margin-top: 10px;'}
+    = render :partial => 'auto_message_form', :locals => {:program => @program, :program_budge => @program_budge}

@@ -1,0 +1,10 @@
+%table
+  %thead
+    %th Status
+    %th Description
+  %tbody
+    -@status_desc.each do |status,desc|
+      %tr
+        %td=status
+        %td=desc
+  

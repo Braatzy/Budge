@@ -1,0 +1,55 @@
+%div{'data-role' => :page, :id => :interview}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Quick question"}
+  %div{'data-role' => :content, :class => :content}
+    %h1.handwriting Tell us a bit about yourself
+
+    %form{:method => :post, :action => url_for(:controller => :play, :action => :save_interview, :id => @program.id), :id => 'survey_form'}
+      - if @program.required_question_1.present?
+        %p 
+          %h3.thin= @program.required_question_1
+          = text_area :program_player, :required_answer_1, {:class => 'stylized_input', :placeholder => "(Required)"}
+
+      - if @program.required_question_2.present?
+        %p 
+          %h3.thin= @program.required_question_2
+          = text_area :program_player, :required_answer_2, {:class => 'stylized_input', :placeholder => "(Required)"}
+      
+      - if @program.optional_question_1.present?
+        %p 
+          %h3.thin #{@program.optional_question_1}
+          = text_area :program_player, :optional_answer_1, {:class => 'stylized_input', :placeholder => "(Optional)"}
+      
+      - if @program.optional_question_2.present?
+        %p 
+          %h3.thin #{@program.optional_question_2}
+          = text_area :program_player, :optional_answer_2, {:class => 'stylized_input', :placeholder => "(Optional)"}
+
+      %p
+        %h3.thin What would success look like, if you were to successfully improve your habits and health with this program?
+        = text_area :program_player, :success_statement, {:class => 'stylized_input', :placeholder => "A description of your future self..."}
+
+      =button 'Continue',{},{:id => 'survey_form_button'}
+
+      :javascript
+        #{startj}
+        $('#survey_form_button').unbind('click').click(function(){
+          $.ajax({
+            url: $('#survey_form').attr('action'),
+            type: 'POST',
+            dataType: 'script',
+            data: {save_interview: 1,
+                   required_answer_1: $('#program_player_required_answer_1').val(),
+                   required_answer_2: $('#program_player_required_answer_2').val(),
+                   optional_answer_1: $('#program_player_optional_answer_1').val(),
+                   optional_answer_2: $('#program_player_optional_answer_2').val(),
+                   success_statement: $('#program_player_success_statement').val(),                          
+                   latitude: $('#location').attr('data-lat'),
+                   longitude: $('#location').attr('data-lon')}
+          });            
+          $.mobile.changePage("#{url_for :controller => :play, :action => :next, :id => @player_budge.id, :program_player_id => @program_player.id}");
+          return false;
+        });
+        #{endj}
+
+          
+  = render :partial => 'home/mobile_footer'

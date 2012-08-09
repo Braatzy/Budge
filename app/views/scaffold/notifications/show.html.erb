@@ -1,0 +1,159 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Short ID:</b>
+  <%= @notification.short_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @notification.user_id %>
+</p>
+
+<p>
+  <b>Remote user ID:</b>
+  <%= @notification.remote_user_id %>
+</p>
+
+<p>
+  <b>Remote site token:</b>
+  <%= @notification.remote_site_token %>
+</p>
+
+<p>
+  <b>Remote post ID:</b>
+  <%= @notification.remote_post_id %>
+</p>
+
+<p>
+  <b>Notification number:</b>
+  <%= @notification.notification_number %>
+</p>
+
+<p>
+  <b>Delivered at:</b>
+  <%= @notification.delivered_at %>
+</p>
+
+<p>
+  <b>Delivered hour of day:</b>
+  <%= @notification.delivered_hour_of_day %>
+</p>
+
+<p>
+  <b>Delivered day of week:</b>
+  <%= @notification.delivered_day_of_week %>
+</p>
+
+<p>
+  <b>Delivered week of year:</b>
+  <%= @notification.delivered_week_of_year %>
+</p>
+
+<p>
+  <b>Responded at:</b>
+  <%= @notification.responded_at %>
+</p>
+
+<p>
+  <b>Responded hour of day:</b>
+  <%= @notification.responded_hour_of_day %>
+</p>
+
+<p>
+  <b>Responded day of week:</b>
+  <%= @notification.responded_day_of_week %>
+</p>
+
+<p>
+  <b>Responded week of year:</b>
+  <%= @notification.responded_week_of_year %>
+</p>
+
+<p>
+  <b>Delivered via:</b>
+  <%= @notification.delivered_via %>
+</p>
+
+<p>
+  <b>Message style token:</b>
+  <%= @notification.message_style_token %>
+</p>
+
+<p>
+  <b>Streak:</b>
+  <%= @notification.streak %>
+</p>
+
+<p>
+  <b>Responded minutes:</b>
+  <%= @notification.responded_minutes %>
+</p>
+
+<p>
+  <b>Total clicks:</b>
+  <%= @notification.total_clicks %>
+</p>
+
+<p>
+  <b>Responded:</b>
+  <%= @notification.responded %>
+</p>
+
+<p>
+  <b>Completed response:</b>
+  <%= @notification.completed_response %>
+</p>
+
+<p>
+  <b>Method of response:</b>
+  <%= @notification.method_of_response %>
+</p>
+
+<p>
+  <b>Shared results:</b>
+  <%= @notification.shared_results %>
+</p>
+
+<p>
+  <b>Delivered immediately:</b>
+  <%= @notification.delivered_immediately? %>
+</p>
+
+<p>
+  <b>Num signups:</b>
+  <%= @notification.num_signups %>
+</p>
+
+<p>
+  <b>Shared results:</b>
+  <%= @notification.shared_results %>
+</p>
+
+<p>
+  <b>For:</b>
+  <%= @notification.for %>
+</p>
+
+<p>
+  <b>For ID:</b>
+  <%= @notification.for_id %>
+</p>
+
+<p>
+  <b>From system:</b>
+  <%= @notification.from_system %>
+</p>
+
+<p>
+  <b>From user ID:</b>
+  <%= @notification.from_user_id %>
+</p>
+
+<p>
+  <b>Delivered off hours:</b>
+  <%= @notification.delivered_off_hours %>
+</p>
+
+<%= link_to 'Edit', edit_notification_path(@notification) %> |
+<%= link_to 'Back', notifications_path %>

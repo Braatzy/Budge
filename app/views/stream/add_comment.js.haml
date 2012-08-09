@@ -1,0 +1,4 @@
+$("#comments_#{@entry.id}").append("#{escape_javascript(render :partial => 'stream/entry_comment', :locals => {:comment => @comment})}");
+if (!$("#comments_#{@entry.id}").hasClass('has_comments')) {
+$("#comments_#{@entry.id}").addClass('has_comments');
+}

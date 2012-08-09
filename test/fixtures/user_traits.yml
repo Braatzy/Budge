@@ -1,0 +1,55 @@
+# == Schema Information
+#
+# Table name: user_traits
+#
+#  id                :integer(4)      not null, primary key
+#  user_id           :integer(4)      not null
+#  trait_id          :integer(4)      not null
+#  level             :integer(4)      default(0)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  do_points         :integer(4)      default(0)
+#  dont_points       :integer(4)      default(0)
+#  coach_do_points   :integer(4)      default(0)
+#  coach_dont_points :integer(4)      default(0)
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  trait_id: 1
+  streak: 1
+  level: 0
+  visible_to_user: false
+  num_notifications: 1
+  num_checkins: 1
+  desired_notification_frequency: 1
+  last_notification_datetime: 2011-04-14 15:05:24
+  num_notifications: 1
+  num_checkins: 0
+  num_budges_received: 0
+  num_budges_given: 0
+  num_budges_completed: 0
+  num_budges_ignored: 0
+  response_rate: nil
+  avg_response_time: nil
+
+two:
+  user_id: 1
+  trait_id: 1
+  streak: 1
+  level: 0
+  visible_to_user: false
+  num_notifications: 1
+  num_checkins: 1
+  desired_notification_frequency: 1
+  last_notification_datetime: 2011-04-14 15:05:24
+  num_notifications: 1
+  num_checkins: 0
+  num_budges_received: 0
+  num_budges_given: 0
+  num_budges_completed: 0
+  num_budges_ignored: 0
+  response_rate: nil
+  avg_response_time: nil

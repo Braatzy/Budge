@@ -1,0 +1,97 @@
+- if users_from == 'budge_relationships'
+  - if users.present?
+    
+    - users.each do |relationship|
+      - next unless relationship
+      %input{:type => :checkbox, :name => :budge_user, :id => "budge_user_id_#{relationship.followed_user_id}", :class => 'choose', 'data-id' => relationship.followed_user_id, 'data-group' => users_from, 'data-name' => relationship.followed_user.name}
+      %label{:for => "budge_user_id_#{relationship.followed_user_id}"}= relationship.followed_user.name
+
+    :javascript
+      $('#budge_list input').checkboxradio();
+      $('#budge_list').controlgroup('refresh');
+
+  - elsif search
+    %p No matches for #{params[:q]}.  Try again?  
+  - else
+    %p No budge friends yet&hellip; Try a search!
+    
+- elsif users_from == 'budge_users'
+  - if users.present?
+    - users.each do |user|
+      %input{:type => :checkbox, :name => :budge_user, :id => "budge_user_id_#{user.id}", :class => 'choose', 'data-id' => user.id, 'data-group' => users_from, 'data-name' => user.name}
+      %label{:for => "budge_user_id_#{user.id}"}= user.name
+    
+    :javascript
+      $('#budge_list input').checkboxradio();
+      $('#budge_list').controlgroup('refresh');
+
+  - elsif search
+    %p No matches for "#{params[:q]}".  Try again?  
+  - else
+    %p No budge friends yet&hellip; Try a search!
+
+- elsif users_from == 'facebook_users'
+  - if users.present?
+    - users.each do |user|
+      %input{:type => :checkbox, :name => :facebook_user, :id => "facebook_uid_#{user[:id]}", :class => 'choose', 'data-id' => user[:id], 'data-group' => users_from, 'data-name' => "#{user[:name]}", 'data-via' => 'facebook'}
+      %label{:for => "facebook_uid_#{user[:id]}"}= user[:name]
+    
+    :javascript
+      $('#facebook_list input').checkboxradio();
+      $('#facebook_list').controlgroup('refresh');
+
+  - elsif search
+    %p No Facebook matches for "#{params[:q]}".  Try again?  
+  - else
+    %p No Facebook friends yet&hellip; Try a search!
+
+- elsif users_from == 'twitter_users'
+  - if users.present?
+    - users.each do |user|
+      %input{:type => :checkbox, :name => :twitter_user, :id => "twitter_uid_#{user[:name]}", :class => 'choose', 'data-id' => user[:name], 'data-group' => users_from, 'data-name' => "@#{user[:name]}", 'data-via' => 'twitter'}
+      %label{:for => "twitter_uid_#{user[:name]}"} @#{user[:name]}
+    
+    :javascript
+      $('#twitter_list input').checkboxradio();
+      $('#twitter_list').controlgroup('refresh');
+
+  - elsif search
+    %p No Twitter matches for "#{params[:q]}".  Try again?  
+  - else
+    %p No Twitter friends yet&hellip; Try a search!
+    
+    
+:javascript
+  $('.choose').change(function(){
+    var stored_element_id = 'stored_'+$(this).attr('data-group')+':'+$(this).attr('data-id');
+    if ($(this).attr('data-name')) {
+      if ($('ul#sending_to li#'+stored_element_id+'_list').length) {
+        if (!$(this).is(':checked')) {
+          // REMOVE THIS PERSON
+          $('ul#sending_to li').remove(":contains('"+$(this).attr('data-name')+"')");
+        }
+      } else {
+        if ($(this).is(':checked') && !$('ul#sending_to li#'+stored_element_id+'_list').length) {
+          // ADD THIS PERSON
+          $('ul#sending_to li').remove(":contains('"+$(this).attr('data-name')+"')");
+          $('ul#sending_to').append('<li id="'+stored_element_id+'_list" data-name="'+$(this).attr('data-name')+'" data-via="'+$(this).attr('data-via')+'">'+$(this).attr('data-name')+' (<a href="" class="x via_'+$(this).attr('data-via')+'" id="x_'+stored_element_id+'">x</a>)</li>');
+        }
+      }
+      calculate_num_left_to_budge();
+      $('.x').click(function(){
+        if ($(this).parent().length) {
+          $(this).closest('li').remove();
+          calculate_num_left_to_budge();
+        }
+      });
+    }
+  });
+  function calculate_num_left_to_budge() {
+    num_left = parseInt($('#num_remaining').attr('data-max')) - $('ul#sending_to li').length
+    num_over = $('ul#sending_to li').length - parseInt($('#num_remaining').attr('data-max'))
+    if (num_left >= 0) {
+      $('#num_remaining').html('You can budge <span>'+num_left+'</span> more people today.');      
+    } else {
+      $('#num_remaining').html('You are '+num_over+' over your #{current_user.max_sent_budges_per_day} person limit.');
+    }  
+  }

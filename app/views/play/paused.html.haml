@@ -1,0 +1,29 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  %div{'data-role' => :content, :class => :content}
+    %h3
+      = @player_budge.program_budge.budge_name_and_level
+      - if @player_budge.day_starts_date == Time.zone.today+1.day
+        &ndash; starting tomorrow!
+      - else
+        &ndash; starting in #{time_ago_in_words Time.zone.parse(@player_budge.day_starts_date.to_s)}
+    .rounded.light_box
+      - if @player_budge.program_budge.present?
+        = raw textilize @player_budge.program_budge.coach_message
+      - if @player_budge.program_budge.program_action_templates.size > 0
+        %ul.action_wording{:style => 'list-style-type: disc;'}
+          - @player_budge.program_budge.action_templates_for_day_number(@player_budge.day_of_budge).each do |program_action_template|
+            %li= program_action_template.action_wording
+
+    %div{:style => 'margin-top: 1em;'}
+      - if @program_player.scheduled?
+        %div=button 'Unpause this',{:controller => :play, :action => :unpause_player_budge, :id => @player_budge.id}
+      - else
+        %div=button 'Re-schedule it',{:controller => :play, :action => :schedule_player_budge, :id => @player_budge.id}
+  
+      - if @program_player.max_level.present? and @program_player.max_level > 1
+        %div=button 'Pick another level',{:controller => :play, :action => :map, :id => @program.id}
+        
+      =button 'Done',{:controller => :play, :action => :done, :id => @program.id},{:class=>'button_important'}
+      
+  = render :partial => 'home/mobile_footer'

@@ -1,0 +1,8 @@
+%h1 #{@total} Emails on list
+%table
+  -@email_list.each do |user|
+    %tr
+      %td=user['timestamp']
+      %td=user['email']
+
+    

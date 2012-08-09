@@ -1,0 +1,19 @@
+%p{:style => 'font-size: 20px;'}
+  - if program_player.program.last_level > 0
+    - 1.upto(program_player.program.last_level+1) do |level|
+      - if program_player.level == level
+        %span{:style => 'color: #ade;'} &bull;                      
+      - elsif program_player.max_level >= level
+        %span{:style => 'color: #ade;'} &bull;
+      - elsif level == program_player.program.last_level+1
+        - # star:  &#9733;
+        - if program_player.victorious?
+          %span{:style => 'color: #fc3;'} &bull;                            
+        - elsif program_player.completed?
+          %span{:style => 'color: #ade'} &bull;                               
+        - else
+          %span{:style => 'color: #eee;'} &bull;
+      - else
+        %span{:style => 'color: #eee'} &bull;
+  - else
+    &nbsp;

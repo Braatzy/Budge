@@ -1,0 +1,27 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  program_id: 1
+  program_step_id: 1
+  position: 1
+  trait_id: 1
+  name: MyString
+  alignment: 1
+  do: false
+  duration: MyString
+  completion_requirement_type: MyString
+  completion_requirement_number: MyString
+  custom_text: MyString
+
+two:
+  program_id: 1
+  program_step_id: 1
+  position: 1
+  trait_id: 1
+  name: MyString
+  alignment: 1
+  do: false
+  duration: MyString
+  completion_requirement_type: MyString
+  completion_requirement_number: MyString
+  custom_text: MyString

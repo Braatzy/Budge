@@ -1,0 +1,3 @@
+= @csv_lib.generate_line ['ID', 'Date', 'Trait', 'Amount Decimal', 'Amount Text', 'Statement', 'Raw']
+- @checkins.each do |checkin|
+  = raw @csv_lib.generate_line [ checkin.id, checkin.checkin_datetime, checkin.trait.token, checkin.amount_decimal || checkin.amount_integer, checkin.amount_text, checkin.statement, checkin.raw_text ]

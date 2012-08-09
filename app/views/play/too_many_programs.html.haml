@@ -1,0 +1,7 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Too many!"}
+  %div{:id => :too_many_programs, 'data-role' => :content, :class => :content}
+    %h1.handwriting We're currently limiting the number of programs you can play at once to 3.
+    %p If you're interested in starting a new program, just declare victory or defeat on one of these below.
+    - @active_program_players.each do |program_player|
+      %p= link_to program_player.program.name, {:controller => :play, :action => :end, :id => program_player.program.id, :back => request.fullpath}

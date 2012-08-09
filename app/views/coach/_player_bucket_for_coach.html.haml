@@ -1,0 +1,30 @@
+- suppress_form ||= false
+%tr{:valign => :top}
+  %td= image_tag program_player.user.photo(:tiny)
+  %td
+    %h3{:style => 'margin: 0;'}= link_to program_player.user.name, {:controller => :play, :action => :coach_stream, :id => program_player.id, :host => DOMAIN}, {:class => :noajax}
+
+    %div 
+      %strong #{program_player.program.name}
+    - if program_player.player_budge.present? and program_player.player_budge.program_budge.present?
+      %div #{program_player.player_budge.program_budge.budge_name_and_level}
+      %div Next step: #{program_player.status_for_player}
+
+    - unless suppress_form
+      %div{:id => "coach_flag_#{program_player.id}"}
+      = select(:program_player, :coach_flag, ProgramPlayer.flags_for_coach, {:selected => program_player.coach_flag}, {'data-role' => :none, :id => "select_coach_flag_#{program_player.id}", 'data-program_player_id' => program_player.id, :style => 'border: 1px solid #ccc;'})
+      
+      :javascript
+        #{startj}
+        $("#select_coach_flag_#{program_player.id}").change(function(){
+          var coach_flag_id = $(this).val();
+          $.ajax({
+            url: "#{url_for :controller => :coach, :action => :save_coach_flag, :id => program_player.id, :host => DOMAIN}",
+            type: 'POST',
+            dataType: 'script',
+            data: {coach_flag: coach_flag_id}
+          });
+          return false;
+        });
+        #{endj}
+

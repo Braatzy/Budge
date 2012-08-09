@@ -1,0 +1,32 @@
+# == Schema Information
+#
+# Table name: visit_stats
+#
+#  id                 :integer(4)      not null, primary key
+#  constrained_by     :string(255)
+#  constrained_by_id1 :string(255)
+#  constrained_by_id2 :string(255)
+#  constrained_by_id3 :string(255)
+#  num_visits         :integer(4)      default(0)
+#  percent_visits     :decimal(5, 2)   default(0.0)
+#  created_at         :datetime
+#  updated_at         :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  constrained_by: MyString
+  constrained_by_id: MyString
+  constrained_by_id2: MyString
+  num_visits: 1
+  total_visits: 1
+  percent_visits: 9.99
+
+two:
+  constrained_by: MyString
+  constrained_by_id: MyString
+  constrained_by_id2: MyString
+  num_visits: 1
+  total_visits: 1
+  percent_visits: 9.99

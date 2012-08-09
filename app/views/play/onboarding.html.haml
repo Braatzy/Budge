@@ -1,0 +1,197 @@
+%div{'data-role' => :page, :id => :onboarding}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Welcome"}
+  %div{'data-role' => :content, :class => :content}
+    %h1.handwriting Welcome to the #{@program.name} program
+    - if @program.description.present?
+      %div.rounded.light_box= raw textilize @program.description
+
+    %h3 A few questions to help get to know you
+    
+    %form{:method => :post, :action => url_for(:controller => :play, :action => :save_interview, :id => @program.id), :id => 'apply_form'}
+      - if true or (@program.require_email? and (current_user.email.blank?))
+        %p 
+          %div{:style => 'font-size: 16px;'} Your email address
+          = text_field :user, :email, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => 'Email address', :autocapitalize => 'off', :class => :stylized_input}
+      
+      - if true or (@program.require_phone? and (current_user.phone.blank? or !current_user.phone_verified?))
+        %p 
+          %div{:style => 'font-size: 16px;'} Your phone number (enter 0 if outside the US, or uninterested in text reminders)
+          = text_field :user, :phone, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => 'Phone number', :class => :stylized_input}
+          %div.small{:style => 'color: #666; margin-bottom: 1em;'} A lot of Budge is about sending you timely reminders. We won't give your number to anyone, and you will have the ability to turn this off later if you want to.
+
+      - if @program.required_question_1.present?
+        %p 
+          %div{:style => 'font-size: 16px;'}= @program.required_question_1
+          = text_area :program_player, :required_answer_1, {:class => 'stylized_input', :placeholder => "(Required)"}
+
+      - if @program.required_question_2.present?
+        %p 
+          %div{:style => 'font-size: 16px;'}= @program.required_question_2
+          = text_area :program_player, :required_answer_2, {:class => 'stylized_input', :placeholder => "(Required)"}
+      
+      - if @program.optional_question_1.present?
+        %p 
+          %div{:style => 'font-size: 16px;'} #{@program.optional_question_1}
+          = text_area :program_player, :optional_answer_1, {:class => 'stylized_input', :placeholder => "(Optional)"}
+      
+      - if @program.optional_question_2.present?
+        %p 
+          %div{:style => 'font-size: 16px;'} #{@program.optional_question_2}
+          = text_area :program_player, :optional_answer_2, {:class => 'stylized_input', :placeholder => "(Optional)"}
+
+      %p
+        %div{:style => 'font-size: 16px;'} What would success look like?
+        = text_area :program_player, :success_statement, {:class => 'stylized_input', :placeholder => "ie. I am no longer craving soda in the afternoons."}
+
+      %p 
+        %div{:style => 'font-size: 16px;'} Which time zone are you in?
+        = time_zone_select :user, :time_zone, ActiveSupport::TimeZone.us_zones, {:include_blank => true}
+                
+
+      %div= button 'Continue', '#coaches'
+
+
+      - if @program_player.supporters.present? or @program_player.program_coach.present? 
+        :javascript
+          #{startj}
+          $.mobile.changePage('#resources');
+          #{endj}
+      - elsif @program_player.success_statement.present?      
+        :javascript
+          #{startj}
+          $.mobile.changePage('#coaches');
+          #{endj}
+
+      :javascript
+        #{startj}
+        $('#interview_button').unbind('click').click(function(){
+          $('#apply_form').submit();
+          return false;
+        });
+        $('#apply_form').submit(function(){
+          var okay_to_submit = true;
+          
+          if ($('#user_email').length && !$('#user_email').val().length) {
+            okay_to_submit = false;
+            alert("This program requires your email address.");
+            return false;
+          }
+
+          if ($('#user_phone').length && !$('#user_phone').val().length) {
+            okay_to_submit = false;
+            alert("This program requires a phone number.");
+            return false;
+          }
+
+          if (okay_to_submit == true) {
+            $.ajax({
+              url: $(this).attr('action'),
+              type: 'POST',
+              dataType: 'script',
+              data: {required_answer_1: $('#program_player_required_answer_1').val(),
+                     required_answer_2: $('#program_player_required_answer_2').val(),
+                     optional_answer_1: $('#program_player_optional_answer_1').val(),
+                     optional_answer_2: $('#program_player_optional_answer_2').val(),
+                     email: $('#user_email').val(),
+                     phone: $('#user_phone').val(),
+                     time_zone: $('#user_time_zone').val(),
+                     success_statement: $('#program_player_success_statement').val(),                          
+                     latitude: $('#location').attr('data-lat'),
+                     longitude: $('#location').attr('data-lon'),
+                     coach_user_id: $('#program_player_coach_user_id').val()}
+            });            
+          }
+          $.mobile.changePage('#coaches');
+          return false;
+        });
+        #{endj}
+
+          
+  = render :partial => 'home/mobile_footer'
+  
+
+%div{'data-role' => :page, :id => :coaches}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Pick your coach"}
+  %div{'data-role' => :content, :class => :content}
+    = render :partial => 'coach_list', :locals => {:program => @program, :program_player => @program_player}
+    =button "Skip for now", {"#resources"}
+
+  = render :partial => 'home/mobile_footer'
+
+-# Deprecated
+- if false
+  %div{'data-role' => :page, :id => :connect}
+    = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+    %div{'data-role' => :content, :class => :content}
+      %h1 Connect your accounts
+  
+      %ul{'data-role' => :listview, :style => 'margin-top: 1em; margin-bottom: 1em;'}
+        - if @program.require_facebook? 
+          - if current_user.oauth_for_site_token(:facebook).blank? 
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :facebook, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Connect to Facebook
+          - else
+            %li
+              %a{:href => url_for(:controller => :oauth, :action => :facebook, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Facebook is connected!
+        - if @program.require_foursquare? 
+          - if current_user.oauth_for_site_token(:foursquare).blank?
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :foursquare, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Connect to Foursquare
+          - else
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :foursquare, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Foursquare is connected!
+        - if @program.require_fitbit? 
+          - if current_user.oauth_for_site_token(:fitbit).blank?
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :fitbit, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Connect to Fitbit
+          - else
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :fitbit, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Fitbit is connected!
+        - if @program.require_withings? 
+          - if current_user.withings_user_id.blank?
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :withings, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Connect to Withings
+          - else
+            %li 
+              %a{:href => url_for(:controller => :oauth, :action => :withings, :redirect_to => "https://#{SECURE_DOMAIN}/play/onboarding/#{@program.id}#connect"), :class => :noajax} 
+                Withings is connected!
+  
+      :javascript
+        #{startj}
+        $('.buy_program_coach_button').unbind('click').click(function(e){
+          $.mobile.changePage("/store/pay/"+$(this).attr('data-coach-id')+"/program_coach", 'slideup');
+          return false;
+        });
+        #{endj}
+  
+  
+      %div{:class => 'ui-grid-a'}
+        %div{:class => 'ui-block-a'}
+        %div{:class => 'ui-block-b'}= button "Next", "#resources"
+  
+    = render :partial => 'home/mobile_footer'
+
+%div{'data-role' => :page, :id => :resources}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  %div{'data-role' => :content, :class => :content}
+    %h1 Program resources
+    - if @program.program_link_resources.present?
+      %p These are things we think go well with this program. Don't worry about remembering them now, we've also sent you an email with this information.
+      %ul{'data-role' => :listview, :style => 'margin-top: 1em; margin-bottom: 1em;'}
+        - @program.program_link_resources.each do |program_link_resource|
+          %li{:class => :program_link_resource_row, 'data-icon' => 'false'}= render :partial => 'program_link_resource_row', :locals => {:program_link_resource => program_link_resource, :program => @program}
+    - else
+      %p Nothing here yet.
+      
+    %div{:class => 'ui-grid-a'}
+      %div{:class => 'ui-block-a'}
+      %div{:class => 'ui-block-b'}= button "Next", {:protocol => 'http://', :host => DOMAIN, :controller => :play, :action => :onboarding_complete, :id => @program.id}, {:class => 'noajax'}
+
+  = render :partial => 'home/mobile_footer'

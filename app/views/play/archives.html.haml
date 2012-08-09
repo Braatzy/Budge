@@ -1,0 +1,13 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Archives"}
+  %div{'data-role' => :content, :class => :content, :style => 'width: 320px; padding: 15px 5;'}
+    %div#my_program_grid
+      - if @program_players.present?
+        - @program_players.each_with_index do |program_player, index|
+          %div.my_program_grid_item{:id => "program_player_#{program_player.program.token}"}
+            
+            = link_to image_tag(program_player.program.photo(:small), {:class => 'rounded-img'}), {:controller => :play, :action => :program, :id => program_player.program_id}, {:class => :noajax}
+            %div.program_grid_name
+              = program_player.program.name      
+              
+  = render :partial => 'home/mobile_footer'

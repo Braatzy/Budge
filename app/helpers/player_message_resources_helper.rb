@@ -1,0 +1,2 @@
+module PlayerMessageResourcesHelper
+end

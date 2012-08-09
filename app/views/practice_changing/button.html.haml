@@ -1,0 +1,18 @@
+.row
+  .span12{:style => 'text-align: center;'}
+    #habitbutton
+      %a{:href => '', :class => 'rounded'} 
+        = render :partial => 'button_text', :locals => {:stats_hash => @stats_hash}
+    #habitbutton_stats
+
+    :javascript
+      $('#habitbutton a').click(function(){
+        $.ajax({
+          url: '/practice_changing/hit_button',
+            type: 'POST',
+            dataType: 'script',
+            data: {latitude: $('#location').attr('data-lat'), 
+                   longitude: $('#location').attr('data-lon')}
+        });      
+        return false;
+      });

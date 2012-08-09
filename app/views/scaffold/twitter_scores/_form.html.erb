@@ -1,0 +1,73 @@
+<%= form_for(@twitter_score) do |f| %>
+  <% if @twitter_score.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@twitter_score.errors.count, "error") %> prohibited this twitter_score from being saved:</h2>
+
+      <ul>
+      <% @twitter_score.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :twitter_id %><br />
+    <%= f.text_field :twitter_id %>
+  </div>
+  <div class="field">
+    <%= f.label :twitter_screen_name %><br />
+    <%= f.text_field :twitter_screen_name %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_score %><br />
+    <%= f.text_field :klout_score %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_slope %><br />
+    <%= f.text_field :klout_slope %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_class_id %><br />
+    <%= f.text_field :klout_class_id %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_class_name %><br />
+    <%= f.text_field :klout_class_name %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_network_score %><br />
+    <%= f.text_field :klout_network_score %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_amplification_score %><br />
+    <%= f.text_field :klout_amplification_score %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_true_reach %><br />
+    <%= f.text_field :klout_true_reach %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_delta_1day %><br />
+    <%= f.text_field :klout_delta_1day %>
+  </div>
+  <div class="field">
+    <%= f.label :klout_delta_5day %><br />
+    <%= f.text_field :klout_delta_5day %>
+  </div>
+  <div class="field">
+    <%= f.label :num_followers %><br />
+    <%= f.text_field :num_followers %>
+  </div>
+  <div class="field">
+    <%= f.label :num_following %><br />
+    <%= f.text_field :num_following %>
+  </div>
+  <div class="field">
+    <%= f.label :num_tweets %><br />
+    <%= f.text_field :num_tweets %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

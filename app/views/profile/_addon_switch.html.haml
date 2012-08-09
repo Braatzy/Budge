@@ -1,0 +1,18 @@
+%div{:class => 'rounded', :style => 'background-color: #fff;'} 
+  Currently:
+  - if @user_addon.activated?
+    %strong{:style => 'color: green;'} On 
+    (#{link_to "turn off", {:controller => :profile, :action => :toggle_addon, :id => @addon.id}, {:class => 'toggle_addon', :style => 'color: #666;'}})
+  - else
+    %strong{:style => 'color: red;'} Off
+    (#{link_to "turn on", {:controller => :profile, :action => :toggle_addon, :id => @addon.id}, {:class => 'toggle_addon', :style => 'color: #666;'}})
+  :javascript
+    #{startj}
+    $('.toggle_addon').unbind('click').click(function(){
+      $.ajax({
+        url: $(this).attr('href'),
+        type: 'POST',
+        dataType: 'script'});
+      return false;
+    });        
+    #{endj}

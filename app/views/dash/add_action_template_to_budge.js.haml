@@ -1,0 +1,9 @@
+if ($('#saved_user_actions').length) {
+$('#saved_user_actions').html("#{escape_javascript(render :partial => 'dash/program_budge_action_templates', :locals => {:program_budge => @program_budge, :program_action_templates => @program_budge.program_action_templates.reload})}");
+$(".delete_action_template").unbind('click').click(function(){
+$.ajax({type: "POST", url: $(this).attr('href')});  
+return false;
+});
+} else {
+window.location = "/dash/edit_program_budge/#{@program_action_template.program_budge_id}";
+}

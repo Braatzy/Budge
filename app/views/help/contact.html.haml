@@ -1,0 +1,20 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+  %div{'data-role' => 'content'}
+    = render :partial => 'home/mobile_header'
+    %div{:class => "body_width_for_#{@browser_type}"}
+      %h2 Contact us
+      %h3 Say hello!
+
+      %p You can send us love letters, hate mail, and flowers a this address:
+
+      %p 
+        2101 9th Ave #205
+        %br Seattle, WA 98121
+
+      %p 
+        If you want to call Buster, or send him jokes via text, here's his number:
+        %br 206-355-9718
+
+      %p For bugs, feedback, ideas, and everything else Health Month related, email us at team@habitlabs.com.
+      
+  = render :partial => 'home/footer'

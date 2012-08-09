@@ -1,0 +1,67 @@
+%div{'data-role' => 'page', :id => 'stream', 'data-url' => "stream"}
+  %div{'data-role' => 'header', 'data-theme' => 'd', 'data-backbtn' => 'false'} 
+    %div{:style => 'padding: 15px; margin-bottom: 1em;'}
+      = user_image current_user, :tiny, {:tabindex => 0, :align => 'left', :style => 'padding-right: 5px; outline: none;'}
+      %div Hello, #{link_to current_user.name, :controller => :profile, :action => :id, :id => current_user.id}!
+      %div{:style => 'font-size: 11px; color: #333;'} #{current_user.get_streak} day streak
+  %div{'data-role' => 'content'}
+    %fieldset{:class => 'ui-grid-a', 'data-theme' => 'a', 'data-type' => 'horizontal', :style => 'font-size: 14px; text-align: center;'}
+      %div{:class => 'ui-block-a'}
+        %a{:href => url_for(:controller => :home, :action => :ask), 
+           'data-role' => 'button', 'data-ajax' => 'false'} Get
+      %div{:class => 'ui-block-b'}
+        %a{:href => url_for(:controller => :home, :action => :build_budge), 
+           'data-role' => 'button', 'data-ajax' => 'false'} Give
+    - if @open_budges.present?
+      %div{:class => 'rounded', :style => 'background-color: #ffe; margin-top: 10px;'} You have #{pluralize @open_budges.size, 'budge'} that need your attention, but I'm not telling you which ones they are yet... coming soon! (hint: #{@open_budges.map{|b|"#{b.name}"}.join(', ')})
+    - if @stream_items.present?
+      %div{:style => 'margin-top: 1em;', :id => :the_stream, 'data-stream-count' => @stream_items.size, 'data-last-id' => @stream_items.last.id}
+        = render :partial => "stream/stream_item_in_list", :collection => @stream_items, :as => :stream_item
+      - if @stream_items.size == @per_page
+        %div{:class => 'rounded more_stream_button', :style => 'background-color: #666; text-align: center; font-weight: bold; color: #ccc; cursor: pointer;'}
+          %strong See more&hellip;
+  = render :partial => 'home/footer'
+
+  :javascript
+    #{startj}
+    var allow_stream_detail_clicks = false
+    $('.more_stream_button').unbind('click').click(function(){
+      $(this).css('background-color', '#fff');
+      $.ajax({
+        url: "#{url_for :controller => :stream, :action => :load_more_stream_items}",
+        type: 'POST',
+        dataType: 'script',
+        data: {last_stream_item_id: $('#the_stream').attr('data-last-id'), 
+               stream_count: $('#the_stream').attr('data-stream-count')},
+        success: function(){
+          click_on_stream_items();
+        }
+      
+      })
+    });
+
+    $('div').live('pageshow',function(event, ui){
+      allow_stream_detail_clicks = true;
+    });
+    
+    function click_on_stream_items() {
+      $('a').click(function(){
+        allow_stream_detail_clicks = false;
+      });
+      $('.stream_item_in_list').click(function(){
+        if (allow_stream_detail_clicks) {
+          $.mobile.changePage("/s/"+$(this).attr('data-stream-item-id'));
+        }
+      });
+      $('.heart').unbind('click').click(function(){
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'POST',
+          dataType: 'script'      
+        })
+        allow_stream_detail_clicks = true;
+        return false;
+      });
+    }
+    click_on_stream_items();
+    #{endj}

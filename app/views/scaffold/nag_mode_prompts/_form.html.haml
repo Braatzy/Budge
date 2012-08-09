@@ -1,0 +1,66 @@
+= form_for [:scaffold, @nag_mode_prompt] do |f|
+  -if @nag_mode_prompt.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@nag_mode_prompt.errors.count, "error")} prohibited this nag_mode_prompt from being saved:"
+      %ul
+        - @nag_mode_prompt.errors.full_messages.each do |msg|
+          %li= msg
+
+  - if @nag_mode_prompt.nag_mode_id.present?
+    = f.hidden_field :nag_mode_id
+  - else
+    .field
+      = f.label :nag_mode_id
+      = f.text_field :nag_mode_id
+
+  .field
+    = f.label :message, "#{@nag_mode_prompt.new_record? ? 'New' : ''} Prompt"
+    %br
+    = f.text_area :message, {:style => 'height: 3em;'}
+    %div{:id => 'secret_char_count', :class => 'char_count', :style => 'text-align: right; width: 300px;'} 139
+  
+    :javascript
+      $('#nag_mode_prompt_message').unbind('keyup').keyup(function(){
+        $('#secret_char_count').html(139-parseInt($('#nag_mode_prompt_message').val().length));
+      });
+
+  %p Choose one trigger for this prompt
+  .field
+    - if @nag_mode_prompt.at_hour.present?
+      = check_box :at, :hour, {:checked => true}
+    - else
+      = check_box :at, :hour
+    At a specific hour of the day
+  #hour_options{:style => "#{@nag_mode_prompt.at_hour.blank? ? 'display: none;' : ''}"}
+    .field
+      = f.label :at_hour, "Hour"
+      = f.select :at_hour, [['-',nil],['midnight',0],['1am',1],['2am',2],['3am',3],['4am',4],['5am',5],['6am',6],['7am',7],['8am',8],['9am',9],['10am',10],['11am',11],
+                            ['noon',12],['1pm',13],['2pm',14],['3apm',15],['4pm',16],['5pm',17],['6pm',18],['7pm',19],['8pm',20],['9pm',21],['10pm',22],['11pm',23]]
+  :javascript
+    $('#at_hour').change(function(){
+      if ($("#at_hour:checked").length == 0) {
+        $('#hour_options').slideUp();
+      } else {
+        $('#hour_options').slideDown();
+      }
+    });
+  
+  .field
+    = f.check_box :at_wakeup_time
+    = f.label :at_wakeup_time, 'When they wake up'
+  .field
+    = f.check_box :at_bedtime
+    = f.label :at_bedtime, 'When they go to bed'
+
+
+  %div{:style => 'margin-top: 1em;'} Send it on the Xth day of nag mode (leave blank for reminder to be sent on all days)
+  .field
+    = f.label :day_number, 'Day #'
+    = f.text_field :day_number
+
+  .field
+    = f.label :via
+    = f.text_field :via
+
+  .actions
+    = f.submit 'Save'

@@ -1,0 +1,20 @@
+-stylesheet=@browser_type=='mobile'? 'visualization_mobile' : 'visualization_web'
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Budge Weight Chart'}
+  #chart{'data-role' => :content}
+  .content{'data-role' => :content}
+    -unless @todays_true_weight.nil?
+      .info_container
+        #true_weight
+          .weight=@todays_true_weight
+          .description
+            10 day average
+        #direction=@todays_direction
+          
+  =stylesheet_link_tag stylesheet
+
+  = render :partial => 'home/mobile_footer'
+  
+  :javascript
+    make_weight_chart(#{@weights.to_json}, #{@lines.to_json}, #{@browser_type=='mobile'? 290 : 500}, #{@browser_type=='mobile'? 265 : 300}, #{@range_time.to_json},#{@range_weight.to_json} );
+    // (weights, true_weight_line_segments, chart_width, chart_height, range_time, range_weight)

@@ -1,0 +1,46 @@
+<%= form_for([:scaffold, @program_coach]) do |f| %>
+  <% if @program_coach.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@program_coach.errors.count, "error") %> prohibited this program_player from being saved:</h2>
+
+      <ul>
+      <% @program_coach.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :program_id %><br />
+    <%= f.text_field :program_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :level %><br />
+    <%= f.text_field :level %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br />
+    <%= f.text_field :price %>
+  </div>
+  <div class="field">
+    <%= f.label :max_active_and_unflagged %><br />
+    <%= f.text_field :max_active_and_unflagged %>
+  </div>
+  <div class="field">
+    <%= f.label :coaching_style %><br />
+    <%= f.text_field :coaching_style %>
+  </div>
+  <div class="field">
+    <%= f.label :message %><br />
+    <%= f.text_area :message %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

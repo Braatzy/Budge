@@ -1,0 +1,7 @@
+-text_yes ||= 'Accept &amp; continue'
+-text_no ||= 'No thanks'
+
+- if start_date.present? and start_date <= Time.zone.today
+  = button raw(text_yes), {:controller => :play, :action => :program, :id => program_id, :skip => :next}, {:class=>'button_important', :id=>'accept_current_budge','data_current_start_date' => start_date}
+- else
+  = button raw(text_yes), {:controller => :stream, :action => :index},{:class=>'button_important', :id=>'accept_current_budge','data_current_start_date' => start_date}

@@ -1,0 +1,49 @@
+<h1>Listing player_messages</h1>
+
+<table>
+  <tr>
+    <th>From user</th>
+    <th>From remote user</th>
+    <th>To user</th>
+    <th>To remote user</th>
+    <th>Content</th>
+    <th>Program player</th>
+    <th>Player step</th>
+    <th>Delivered via</th>
+    <th>Remote post</th>
+    <th>Message data</th>
+    <th>Delivered</th>
+    <th>Deliver at</th>
+    <th>From coach</th>
+    <th>To coach</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @player_messages.each do |player_message| %>
+  <tr>
+    <td><%= player_message.from_user_id %></td>
+    <td><%= player_message.from_remote_user %></td>
+    <td><%= player_message.to_user_id %></td>
+    <td><%= player_message.to_remote_user %></td>
+    <td><%= player_message.content %></td>
+    <td><%= player_message.program_player_id %></td>
+    <td><%= player_message.player_step_id %></td>
+    <td><%= player_message.delivered_via %></td>
+    <td><%= player_message.remote_post_id %></td>
+    <td><%= player_message.message_data %></td>
+    <td><%= player_message.delivered %></td>
+    <td><%= player_message.deliver_at %></td>
+    <td><%= player_message.from_coach %></td>
+    <td><%= player_message.to_coach %></td>
+    <td><%= link_to 'Show', player_message %></td>
+    <td><%= link_to 'Edit', edit_player_message_path(player_message) %></td>
+    <td><%= link_to 'Destroy', player_message, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Player message', new_player_message_path %>

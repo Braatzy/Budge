@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Nag mode:
+  = @nag_mode_prompt.nag_mode_id
+%p
+  %b Day number:
+  = @nag_mode_prompt.day_number
+%p
+  %b At hour:
+  = @nag_mode_prompt.at_hour
+%p
+  %b At wakeup time:
+  = @nag_mode_prompt.at_wakeup_time
+%p
+  %b At bedtime:
+  = @nag_mode_prompt.at_bedtime
+%p
+  %b Via:
+  = @nag_mode_prompt.via
+%p
+  %b Message:
+  = @nag_mode_prompt.message
+
+= link_to 'Edit', edit_scaffold_nag_mode_prompt_path(@nag_mode_prompt)
+\|
+= link_to 'Back', scaffold_nag_mode_prompts_path

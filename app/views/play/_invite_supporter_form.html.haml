@@ -1,0 +1,10 @@
+- program_player ||= nil
+
+- form_for(:supporter, :url => {:controller => :play, :action => :create_invite, :id => program_player.id}, :html => {:id => :create_invite_form}) do |f|
+
+  %h3{:style => 'margin-bottom: 5px;'} Invite by Twitter username
+  %p
+    %span{:style => 'font-size: 20px;'} @
+    #{text_field :supporter, :user_twitter_username, :class => :stylized_input, :style => 'width: 200px; display: inline;', :autocapitalize => 'off'}
+  %p= submit_tag "Continue", {:id => :create_invite_button, 'data-role' => :none}
+    

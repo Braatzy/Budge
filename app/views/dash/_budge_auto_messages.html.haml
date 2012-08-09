@@ -1,0 +1,31 @@
+- if auto_messages.present?
+  - auto_messages.sort_by{|am|am.sort_by}.each do |auto_message|
+    %div{:id => "auto_message_#{auto_message.id}", :class => 'rounded', :style => 'background-color: #'+(auto_message.status_live? ? 'cfc' : 'eee')+'; margin-bottom: 5px;'}
+      %div{:class => :small, :style => 'margin-bottom: 0;'}
+        %em
+          Send: 
+          - if auto_message.deliver_trigger == AutoMessage::TRIGGER_DAY_NUMBER
+            Day #{auto_message.day_number} at #{auto_message.human_hour}
+            - if auto_message.delivery_window > 0
+              (#{auto_message.delivery_window_name})
+          - elsif auto_message.deliver_trigger == AutoMessage::TRIGGER_TRAIT
+            When #{auto_message.trigger_trait.article} #{auto_message.trigger_trait.noun} is checked in to
+          - else
+            = auto_message.send_timing
+
+      - if auto_message.content_formatted?
+        = raw textilize(auto_message.content+(auto_message.include_link? ? " \n\nhttp://#{DOMAIN}/link-to-program" : ""))
+      - else
+        %p= auto_message.content+(auto_message.include_link? ? " http://#{DOMAIN}/link-to-program" : "")
+    
+      %div{:class => :small, :style => 'margin-bottom: 0;'}
+        %strong= auto_message.auto_message_type_name
+        &middot;
+
+        %strong= auto_message.deliver_via_name
+        &middot;
+
+        %strong= auto_message.status_name
+        &middot;
+        
+        = link_to "edit", :controller => :dash, :action => :edit_auto_message, :id => auto_message.id

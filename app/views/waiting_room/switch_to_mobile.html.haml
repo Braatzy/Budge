@@ -1,0 +1,47 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+  %div{'data-role' => 'header', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+    %h1 Open Budge on your phone
+  %div{'data-role' => 'content'}
+    = render :partial => 'home/mobile_header'
+    %div{:class => "body_width_for_#{@browser_type}"}
+      - if current_user and current_user.in_beta?
+        %strong Budge is mobile-only at the moment.
+        - if @text_sent
+          - if current_user.phone_verified?
+            %p We just sent you a text message to #{number_to_phone current_user.phone}. Click the link!
+          - else
+            %p We just sent you a text message to #{number_to_phone current_user.phone}. Respond to it to verify your phone number, and we'll send you a link to Budge.        
+          %p= link_to "Resend the link, please.", {:controller => :waiting_room, :action => :switch_to_mobile, :resend => 1, :redirect_to => params[:redirect_to]}, {:rel => :external}
+        - elsif @ask_to_send_text
+          %p Visit http://bud.ge on your phone's web browser, or click here to have a link texted to you directly:
+          %p= link_to "Text me the link, please.", {:controller => :waiting_room, :action => :switch_to_mobile, :resend => 1, :redirect_to => params[:redirect_to]}, {:rel => :external}
+        - else
+          %p Enter your phone number here and we'll send you a link that you can click (US-only. If outside of the US, just visit http://bud.ge on your phone's web browser).
+          - form_tag url_for(:controller => :waiting_room, :action => :switch_to_mobile) do
+            %label{:for => 'user_phone'} Your phone number: 
+            = text_field :user, :phone, {:style => 'text_field'}
+            = submit_tag "Send me a link"
+          %p{:style => 'font-size: 15px;'}
+            Already in the beta? If you really want to access this via the web, 
+            #{link_to "you can log in via Twitter here", {:controller => :oauth, :action => :twitter, :redirect_to => "/play"}, {:rel => :external, :style => 'color: #9c3;'}}.
+            
+      
+      - else
+        - if @text_sent
+          %strong Budge is in a closed private beta at the moment. 
+          %p To join the beta, you'll need a phone with a good browser, and a Twitter account.
+          %p Have an invite code? Enter your phone number here.
+          - form_tag url_for(:controller => :waiting_room, :action => :switch_to_mobile) do
+            %label{:for => 'user_phone'} Your phone number: 
+            = text_field :user, :phone, {:style => 'text_field'}
+            = submit_tag "Send me a link"
+        - else
+          %h3 Thanks.  Look for a text message from us. 
+          %p 
+            If you really want to access this via the web, 
+            = link_to "you can log in via Twitter here", {:controller => :oauth, :action => :twitter, :redirect_to => "/play"}, {:rel => :external, :style => 'color: #9c3;'}
+            (but it isn't yet optimized).
+          %p Have questions?  #{mail_to 'support@bud.ge', 'support@bud.ge', :encode => :javascript, :style => 'color: #9c3;'}
+        
+        
+  = render :partial => 'home/footer'

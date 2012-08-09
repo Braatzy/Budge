@@ -1,0 +1,27 @@
+- budge_request ||= nil
+- user ||= nil
+- if current_user
+  %div{'data-role' => 'fieldcontain', :style => 'padding-top: 0; border: 0; padding-bottom: 5px;'}
+    %select{:name => :choose_budge_dropdown, :id => "choose_budge_dropdown#{budge_request ? "_#{budge_request.id}" : ''}#{user ? "_user_#{user.id}" : ''}"}
+      %option{'data-placeholder' => 'true', :value => ''} Choose a budge:
+      - current_user.available_budge_packs.each do |pack|
+        %option{:value => "pack_#{pack.token}"}= pack.pack_name
+  %div{:id => 'selected_trait_display'}      
+    %div{:id => 'selected_trait_type'}
+    %h3{:id => 'selected_trait_name'}
+
+  %div{:id => 'budge_trait_data', :style => 'display: none;'}
+    %div{:id => 'trait_id', :name => 'trait_id'}
+    %div{:id => 'trait_do', :name => 'trait_do'}
+    %div{:id => 'trait_alignment', :name => 'trait_alignment'}
+    %div{:id => 'trait_name', :name => 'trait_name'}
+    %div{:id => 'trait_duration', :name => 'trait_duration', :value => 'day'}
+    %div{:id => 'trait_quantity', :name => 'trait_quality', :value => '1'}
+
+  :javascript
+    #{startj}
+    $("#choose_budge_dropdown#{budge_request ? "_#{budge_request.id}" : ''}#{user ? "_user_#{user.id}" : ''}").unbind('change').change(function(){
+      $.mobile.changePage("#{url_for :controller => :home, :action => :view_budge_pack}?token="+$(this).val()+"&budge_request_id=#{budge_request ? budge_request.id : ''}&user_id=#{user ? user.id : ''}");        
+    });
+    #{endj}
+

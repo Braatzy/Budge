@@ -1,0 +1,8 @@
+if ($("#stream_item_#{@stream_item.id}").length) {
+$("#stream_item_#{@stream_item.id}").html("#{escape_javascript render(:partial => "stream/item_type_#{@stream_item.item_type}", :locals => {:stream_item => @stream_item, :full_view => false})}");
+}
+
+if ($("#stream_item_#{@stream_item.id}_full_view_container").length) {
+$("#stream_item_#{@stream_item.id}_full_view_container").html("#{escape_javascript render(:partial => "stream/stream_item_in_list", :locals => {:stream_item => @stream_item, :full_view => true})}");
+$('#stream_item_#{@stream_item.id}_full_view').page();
+}

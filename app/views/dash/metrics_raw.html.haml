@@ -1,0 +1,21 @@
+%table#metric
+  %thead
+    %th date
+    %th metric
+    %th number
+    %th cohort
+  %tbody
+    -@metrics.each do |m|
+      %tr
+        %td=basic_datestamp m.date
+        %td=m.status_key
+        %td=m.number
+        %td=m.cohort
+      
+:javascript
+  $(document).ready(function() {
+    tbl=$("#metric").dataTable( {
+      "bPaginate": false,
+      "aaSorting": [[ 0, "desc" ]]
+       });   
+  } );

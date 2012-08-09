@@ -1,0 +1,48 @@
+<h1>Traits</h1>
+<%= render :partial => 'scaffold/packs/pack_and_traits_nav' %>
+
+<%= form_tag url_for({:controller => "/scaffold/traits", :action => :import_traits, :id => 1}), :method => :post, :multipart => true do -%>
+<input type="file" name="file" /> <input type="submit" value="Upload">
+<% end %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Token</th>
+    <th>Primary pack token</th>
+    <th>Verb</th>
+    <th>Parent trait</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @traits.each do |trait| %>
+  <tr>
+    <td><%= trait.trait_name %></td>
+    <td><%= trait.token %></td>
+    <td><%= trait.primary_pack_token %></td>
+    <td><%= trait.verb %></td>
+    <td><%= trait.parent_trait_id %></td>
+    <td><%= link_to 'Show', [:scaffold, trait] %></td>
+    <td><%= link_to 'Edit', edit_scaffold_trait_path(trait) %></td>
+    <td><%= link_to 'Destroy', [:scaffold, trait], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Trait', new_scaffold_trait_path %>
+
+
+<% if @trait_action_object_hash.present? %>
+  <% @trait_action_object_hash.sort_by{|a,oh|a.downcase}.each do |action, object_hash| %>
+    <h3><%= action %></h3>
+    <ul>
+      <% object_hash.sort_by{|o,c|c}.reverse.each do |object, count| %>
+        <li><%= object %>: <%= count %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

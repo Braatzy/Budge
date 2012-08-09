@@ -1,0 +1,33 @@
+<h1>Listing foursquare_categories</h1>
+
+<table>
+  <tr>
+    <th>Icon</th>
+    <th>Name</th>
+    <th>Trait</th>
+    <th>Parent</th>
+    <th>Num children</th>
+    <th>Level deep</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @foursquare_categories.sort_by{|f|f.name}.each do |foursquare_category| %>
+  <tr>
+    <td><%= image_tag foursquare_category.icon %></td>
+    <td><%= foursquare_category.name %></td>
+    <td><%= foursquare_category.trait_token? ? raw("<strong>#{foursquare_category.trait.do_name}</strong>") : "(not set)" %></td>
+    <td><%= foursquare_category.parent.present? ? foursquare_category.parent.name : "TOP" %></td>
+    <td><%= foursquare_category.num_children %></td>
+    <td><%= foursquare_category.level_deep %></td>
+    <td><%= link_to 'Show', [:scaffold, foursquare_category] %></td>
+    <td><%= link_to 'Edit', edit_scaffold_foursquare_category_path(foursquare_category) %></td>
+    <td><%= link_to 'Destroy', [:scaffold, foursquare_category], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Foursquare category', new_scaffold_foursquare_category_path %>

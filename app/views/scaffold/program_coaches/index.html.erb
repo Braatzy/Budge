@@ -1,0 +1,31 @@
+<h1>Listing program_coaches</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Program</th>
+    <th>Primary token</th>
+    <th>Price</th>
+    <th>Head coach</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @program_coaches.each do |program_coach| %>
+  <tr>
+    <td><%= program_coach.user.name %></td>
+    <td><%= program_coach.program.name %></td>
+    <td><%= program_coach.primary_oauth_token_id %></td>
+    <td><%= program_coach.price %></td>
+    <td><%= program_coach.head_coach? %></td>
+    <td><%= link_to 'Show', [:scaffold, program_coach] %></td>
+    <td><%= link_to 'Edit', edit_scaffold_program_coach_path(program_coach) %></td>
+    <td><%= link_to 'Destroy', [:scaffold, program_coach], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Program coach', new_scaffold_program_coach_path %>

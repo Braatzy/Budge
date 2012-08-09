@@ -1,0 +1,124 @@
+- message_type ||= 'unknown'
+- placeholder_text ||= "Add a comment"
+- program_player ||= nil
+- player_budge ||= nil
+- entry ||= nil
+- share_url ||= url_for :controller => :play, :action => :share_message
+- skip_url ||= url_for :controller => :play, :action => :done, :id => program.id, :token => :caught_up
+- redirect_to ||= "/play/program/#{@program.id}"
+%p
+  %div
+    %textarea{:id => :share_message, :placeholder => placeholder_text, :class => 'stylized_input'}
+  
+  %div{:style => 'font-size: 12px; text-align: right;'}
+    %span{:id => 'char_count', :style => 'padding-right: 5px; color: #666; font-size: 11px;'} 120
+  
+  - # Share with your coach, if you have one
+  - if entry.blank?
+    - if program_player.present? and program_player.program_coach.present? and current_user == program_player.user
+      %input{:type => :checkbox, :name => :share_twitter, :id => :share_coach, :class => 'check'} 
+      %label{:for => :share_coach} 
+        = image_tag program_player.program_coach.user.photo(:small), {:class => :coach, :align => :absmiddle, :width => 35, :height => 35, :style => 'padding-right: 5px;'}
+        #{program_player.program_coach.user.name}    
+    - elsif program_player.present? and program_player.supporters.where(:active => true).present?
+      %input{:type => :checkbox, :name => :share_twitter, :id => :share_coach, :class => 'check'} 
+      %label{:for => :share_coach} 
+        = image_tag program_player.supporters.where(:active => true).first.user.photo(:small), {:class => :coach, :align => :absmiddle, :width => 35, :height => 35, :style => 'padding-right: 5px;'}
+        #{program_player.supporters.where(:active => true).first.user.name}    
+    
+    - # Share on Twitter
+    - if current_user.oauth_for_site_token('twitter').present?
+      %input{:type => :checkbox, :name => :share_twitter, :id => :share_twitter, :class => 'check'} 
+      %label{:for => :share_twitter} 
+        = image_tag 'mobile-web/1/icon_twitter_sm.png', {:align => 'absmiddle', :style => 'width: 35px; padding-right: 5px;'}
+        On Twitter
+    - else
+      %input{:type => :checkbox, :name => :connect_to_twitter, :id => :connect_to_twitter, :class => 'connect'}
+      %label{:for => :connect_to_twitter} Connect to Twitter
+  
+    - # Share with Facebook  
+    - if current_user.oauth_for_site_token('facebook').present?
+      %input{:type => :checkbox, :name => :share_facebook, :id => :share_facebook, :class => 'check'}
+      %label{:for => :share_facebook} 
+        = image_tag 'mobile-web/1/icon_fb_sm.png', {:align => 'absmiddle', :style => 'width: 35px; padding-right: 5px;'}
+        On Facebook
+    - else
+      %input{:type => :checkbox, :name => :share_facebook, :id => :connect_to_facebook, :class => 'connect'} 
+      %label{:for => :connect_to_facebook} Connect to Facebook
+    
+  - if entry.present?
+    %p
+      =render :partial=>'button', :locals=>{:text=>'Add comment', :id => 'share_button'}
+  - else
+    =render :partial=>'button', :locals=>{:text=>'Share', :id => 'share_button'}
+    =render :partial=>'button', :locals=>{:text=>'Continue without sharing', :id => 'skip_button'}  
+    
+%br{:clear => :all}
+
+
+:javascript
+  #{startj}
+  $('#share_message').unbind('keyup').keyup(function(){
+    $('#char_count').html(120-parseInt($('#share_message').val().length));
+  });
+
+  var share_coach_on = $.DSt.get('share_coach');
+  var share_twitter_on = $.DSt.get('share_twitter');
+  var share_facebook_on = $.DSt.get('share_facebook');
+  
+  if ($('#share_coach').length > 0 && share_coach_on == 'on') {
+    $('#share_coach').attr('checked','checked').checkboxradio("refresh");
+  }
+  if ($('#share_twitter').length > 0 && share_twitter_on == 'on') {
+    $('#share_twitter').attr('checked','checked').checkboxradio("refresh");
+  }
+  if ($('#share_facebook').length > 0 && share_facebook_on == 'on') {
+    $('#share_facebook').attr('checked','checked').checkboxradio("refresh")
+  }
+  $('.check').unbind('change').change(function(){
+    if ($(this).is(':checked')) {
+      $.DSt.set($(this).attr('id'), 'on');
+    } else {
+      $.DSt.set($(this).attr('id'), 'off');
+    }
+  });
+  $('.connect').unbind('change').change(function(){
+    $.mobile.showPageLoadingMsg();
+    if ($(this).attr('id') == 'connect_to_twitter') {
+      $.DSt.set('share_twitter', 'on');
+      window.location = '/oauth/twitter?redirect_to=#{redirect_to}';
+      return false;
+    } else if ($(this).attr('id') == 'connect_to_facebook') {
+      $.DSt.set('share_facebook', 'on');
+      window.location = '/oauth/facebook/?redirect_to=#{redirect_to}';
+      return false;
+    }
+  });
+  $('#share_button').unbind('click').click(function(){
+    if (parseInt($('#share_message').val().length) > -1) {
+      $.mobile.showPageLoadingMsg();
+      $.ajax({
+        url: "#{share_url}",
+        type: 'POST',
+        dataType: 'script',
+        data: {program_id: "#{program_player.present? ? program_player.program_id : ''}",
+               program_player_id: "#{program_player.present? ? program_player.id : ''}",
+               player_budge_id: "#{player_budge.present? ? player_budge.id : ''}",
+               entry_id: "#{entry.present? ? entry.id : ''}",
+               message: $('#share_message').val(),
+               message_type: "#{message_type}",
+               post_to_coach: $('#share_coach').is(':checked'),
+               post_to_facebook: $('#share_facebook').is(':checked'),
+               post_to_twitter: $('#share_twitter').is(':checked'),
+               latitude: $('#location').attr('data-lat'),
+               longitude: $('#location').attr('data-lon')}
+      });
+    } else {
+      alert("Too many characters. Try trimming a few off.");
+    }
+  });
+  $('#skip_button').unbind('click').click(function(){
+    window.location = "#{skip_url}";
+  });
+  #{endj}
+  

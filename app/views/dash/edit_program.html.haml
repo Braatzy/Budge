@@ -1,0 +1,69 @@
+%h1 
+  Edit #{@program.name}
+  -unless @program.new_record?
+    &middot;
+    =link_to "view", "/dash/program/#{@program.id}"
+#program_form.rounded{:style => 'background-color: #eee; padding: 10px'}
+  %h3#program_form_header &dArr; Program overview
+  #program_form_body{:style=>"display: #{'none' unless @program.new_record?}"}= render :partial => 'program_form'
+
+-unless @program.new_record?
+  #link_resources.rounded{:style => 'background-color: #d0dbe2; padding: 10px'}
+    %h3#link_resources_header &dArr; Link Resources
+    #link_resources_body{:style=>"display: #{'none' unless @program.new_record?}"}
+      %ul
+        - if @program.program_link_resources.present?
+          - @program.program_link_resources.each do |program_link_resource|
+            %li 
+              #{program_link_resource.link_resource.name}
+              (#{link_to "edit", :controller => :dash, :action => :link_resource, :id => program_link_resource.link_resource_id} &middot; #{link_to "delete", :controller => :dash, :action => :delete_program_link_resource, :id => @program.id, :program_link_resource_id => program_link_resource.id})
+              - if program_link_resource.link_resource.photo?
+                %div= image_tag program_link_resource.link_resource.photo(:small)
+      - form_for :program_link_resource, :url => url_for(:controller => :dash, :action => :add_program_link_resource, :id => @program.id) do |f|
+        %label{:for => 'program_link_resource_url'} URL to this resource
+        %div
+          = f.text_field :url
+          = f.select :importance, ProgramLinkResource.importance_select_options
+          = f.submit "Add new resource"
+
+
+- if @program_budges.present?
+  %ul#program_budges{:style => 'list-style: none; padding: 0;'}
+    = render :partial => 'program_budge_show', :collection => @program_budges.sort_by{|ps|ps.sort_by}, :as => :program_budge, :locals => {:program => @program}
+    
+#program_budge_form.rounded{:style=>'border: 1px dashed lightgray; padding: 10px; margin-top: 10px'}
+  = render :partial => 'program_budge_form', :locals => {:program_budge => @new_program_budge, :program => @program}
+
+
+:javascript
+  $('#program_budges').sortable({
+    axis: 'y',
+    dropOnEmpty: false,
+    handle: '.handle',
+    cursor: 'crosshair',
+    items: 'li',
+    opacity: 0.4,
+    scroll: true,
+    update: function(){
+      $.ajax({
+        type: 'post',
+        data: $('#program_budges').sortable('serialize'),
+        dataType: 'script',
+        complete: function(request){
+          window.location = "#{url_for :controller => :dash, :action => :edit_program, :id => @program.id, :anchor => "program_budges"}";
+        },
+        url: "#{url_for :controller => :dash, :action => :reorder_budges, :id => @program.id}"})
+    }
+  });
+
+:javascript
+  $(document).ready(function(){
+    $('#program_form_header').toggle(
+      function(){$('#program_form_body').slideDown();},
+      function(){ $('#program_form_body').slideUp();}
+      );
+    $('#link_resources_header').toggle(
+      function(){$('#link_resources_body').slideDown();},
+      function(){ $('#link_resources_body').slideUp();}
+      );
+  });

@@ -1,0 +1,39 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program_coach.user.name}
+  %div{'data-role' => :content, :class => :content}
+    %div{:id => :coaches}
+      %ul{'data-role' => :listview, :class => 'unlinked_coach_rows'}
+        %li{:class => :coach_row, 'data-icon' => 'false'}= render :partial => 'coach_row', :locals => {:program_coach => @program_coach, :program_player => @program_player}
+    %br{:clear => :all}
+      %h3 Coach stats
+      - if @program_coach.present? and @program_coach.total_players > 0 and @program_coach.avg_rating.present? and @program_coach.avg_rating > 0
+        %p
+          %strong Average rating: #{(@program_coach.avg_rating*100).to_i/100}
+        %ul
+          %li #{pluralize @program_coach.total_players, 'person'} coached
+          %li #{pluralize @program_coach.num_completed, 'person'} completed program
+      - else
+        %p Brand new coach on the loose!
+
+    %div{:class => 'ui-grid-a'}
+      %div{:class => 'ui-block-a'}= button "Back", '#coaches', {'data-rel' => 'back'}
+      %div{:class => 'ui-block-b'}      
+        - if @program_player and @program_player.coach_data.present? and @program_player.coach_data[@program_coach.id].present?
+          -# No button
+        - else
+          = link_to "#{number_to_currency(@program_coach.price)}/mo", '#', {'data-coach-id' => "#{@program_coach.id}", :class => 'buy_program_coach_button'} 
+
+    :javascript
+      #{startj}
+      var suppress_link = false;
+      $('#coaches ul.unlinked_coach_rows li a').unbind('click').click(function(e){
+        return false;
+      });
+      $('.buy_program_coach_button').unbind('click').click(function(e){
+        $.mobile.changePage("https://#{SECURE_DOMAIN}/store/pay/"+$(this).attr('data-coach-id')+"/program_coach", 'slideup');
+        return false;
+      });
+      #{endj}
+    
+  = render :partial => 'home/mobile_footer'
+  

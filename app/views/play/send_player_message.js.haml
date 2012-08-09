@@ -1,0 +1,1 @@
+$("#conversation_history_messages_#{@program_player.id}").prepend("#{escape_javascript(render :partial => 'play/player_message_tr', :locals => {:player_message => @player_message})}");

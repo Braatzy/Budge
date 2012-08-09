@@ -1,0 +1,29 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Invite!"}
+  %div{'data-role' => :content, :class => :content}
+    %div.invite_to_program
+      = render :partial => 'invite_program_stats', :locals => {:program_player => @program_player}
+
+    - if @program_player.num_invites_available > 0
+      %h2.handwriting{:style => 'font-weight: normal;'} 
+        Invite 
+        - if @program_player.num_invites_available == 1
+          %strong your favorite person           
+        - else
+          your
+          %strong #{pluralize @program_player.num_invites_available, 'favorite person'} 
+        
+      = form_for :invitation, :url => url_for(:controller => :invite, :action => :send_invitations, :id => @program.id), :html => {:id => "invite_to_#{@program.id}", 'data-ajax' => 'false', 'data-transition' => 'none'} do |f|
+        - 1.upto((@program_player.num_invites_available > 10 ? 10 : @program_player.num_invites_available)) do |num|
+          = email_field :invite, "email_#{num}", {:style => 'margin-top: 5px;', :class => :stylized_input, :placeholder => "email address #{num}", :autocapitalize => 'off'}
+        %h3.thin Include an optional review of this program
+        = text_area :program_player, :testimonial, {:class => :stylized_input, :placeholder => "#{@program.name} changed my life!"}
+        =button 'Send invites!', {},{:id=>"invite_to_#{@program.id}_button", :class=>'button_important',:style => 'margin-top: 10px;'}
+      
+      :javascript
+        $("#invite_to_#{@program.id}_button").unbind('click').click(function(){
+          $.mobile.showPageLoadingMsg();
+          $("#invite_to_#{@program.id}").submit();
+        });
+    - else
+      %h3 You're an invitation machine! Keep playing #{@program.name} - you'll get more invites whenever you finish a level.

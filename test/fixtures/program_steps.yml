@@ -1,0 +1,59 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  program_id: MyString
+  coach_message: MyText
+  priority: 1
+  duration: MyString
+  num_budge_templates: 1
+  total_players: 1
+  num_active: 1
+  num_incomplete: 1
+  num_lost: 1
+  num_dropped_out: 1
+  num_failed: 1
+  num_partial: 1
+  num_victory: 1
+  incomplete_token: MyString
+  incomplete_id: 1
+  lost_token: MyString
+  lost_id: 1
+  dropped_out_token: MyString
+  dropped_out_id: 1
+  failed_token: MyString
+  failed_id: 1
+  partial_token: MyString
+  partial_id: 1
+  victory_token: MyString
+  victory_id: 1
+  trigger_token: MyString
+  trigger_data: MyText
+
+two:
+  program_id: MyString
+  coach_message: MyText
+  priority: 1
+  duration: MyString
+  num_budge_templates: 1
+  total_players: 1
+  num_active: 1
+  num_incomplete: 1
+  num_lost: 1
+  num_dropped_out: 1
+  num_failed: 1
+  num_partial: 1
+  num_victory: 1
+  incomplete_token: MyString
+  incomplete_id: 1
+  lost_token: MyString
+  lost_id: 1
+  dropped_out_token: MyString
+  dropped_out_id: 1
+  failed_token: MyString
+  failed_id: 1
+  partial_token: MyString
+  partial_id: 1
+  victory_token: MyString
+  victory_id: 1
+  trigger_token: MyString
+  trigger_data: MyText

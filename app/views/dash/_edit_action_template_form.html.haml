@@ -1,0 +1,8 @@
+= form_for(:program_action_template, :url => {:controller => :dash, :action => :save_program_action_template, :id => program_action_template.id}, :html => {:id => 'save_action_template_form'}) do |f|
+
+  - if program_action_template.do?
+    %div{:width => '50%'}
+      = render :partial => 'save_trait_as_action_template_form', :locals => {:do_or_dont => :do, :trait => program_action_template.trait, :program => program_action_template.program,:program_action_template=>program_action_template}
+  - elsif program_action_template.dont?
+    %div{:width => '50%'}
+      = render :partial => 'save_trait_as_action_template_form', :locals => {:do_or_dont => :dont, :trait => program_action_template.trait, :program => program_action_template.program,:program_action_template=>program_action_template}

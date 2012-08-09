@@ -1,0 +1,68 @@
+%div{'data-role' => :page, :id => :contact_info}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "When should we bug you?"}
+
+  %div{'data-role' => :content, :class => :content}
+    %form{:method => :post, :action => url_for(:controller => :play, :action => :save_interview, :id => @program.id), :id => 'contact_info_form', 'data-ajax' => 'false'}
+      - if @browser_type == 'web'
+        %h2.handwriting When should we bug you?
+      %div.light_box.rounded 
+        %h3.thin 
+          - if current_user.time_zone.present? and current_user.phone.present? and current_user.email.present?
+            A big part of Budge's magic is about sending you timely reminders. Budge learns from your successes and failures and tries to nudge you at the best time FOR YOU. That said, if you just want to be reminded at the same time everyday&hellip;          
+          - else
+            A big part of Budge's magic comes from learning from your behavior and reminding you at the best possible times. Your contact information is kept  private, and if we get a little overzealous you can change your preferences at any time.
+
+      %p 
+        %div{:style => 'font-size: 16px;'} 
+          Send me 
+          %strong #{@program.name} reminders 
+          at
+        = select :program_player, :hardcoded_reminder_hour, [["Best time based on my behavior (recommended)", nil],['5am',5],['6am',6],['7am',7],['8am',8],['9am',9],['10am',10],['11am',11],['Noon',12],['1pm',13],['2pm',14],['3pm',15],['4pm',16],['5pm',17],['6pm',18],['7pm',19],['8pm',20],['9pm',21],['10pm',22],['11pm',23],['Midnight',0],['1am',1],['2am',2],['3am',3],['4am',4]], {}, {'data-role' => :none}
+        -#%div We have a smart system that tries to remind you at the best possible times during the day, but if you'd like to override that and get them at the same time every day, you can also set reminders to a specific time
+
+      - if current_user.time_zone.blank?
+        %p 
+          %div{:style => 'font-size: 16px;'} In this fabulous time zone
+          = time_zone_select :user, :time_zone, ActiveSupport::TimeZone.us_zones, {:include_blank => true}, {'data-role' => :none}
+
+      - if !current_user.phone_verified?
+        %p 
+          %div{:style => 'font-size: 16px;'} 
+            Text my reminders to this number
+          = text_field :user, :phone, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => 'ie. XXX-XXX-XXXX', :class => :stylized_input}
+
+      - if current_user.email.blank?
+        %p 
+          %div{:style => 'font-size: 16px;'} Emails go here
+          = text_field :user, :email, {:style => 'width: 95%; font-size: 14px;', 'data-theme' => 'c', :placeholder => 'Email address', :autocapitalize => 'off', :class => :stylized_input}
+
+      - if !current_user.phone_verified? or current_user.email.blank?
+        %p
+          %div{:style => 'font-size: 16px;'} My true feelings about email and SMS
+          %div I #{select :user, :contact_by_sms_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting text messages.
+          %div I #{select :user, :contact_by_email_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting emails.
+            
+      =button 'Continue', {}, {:class => :submit_form, :id=>'contact_info_form_button'}
+      :javascript
+        #{startj}
+        $('#contact_info_form_button').unbind('click').click(function(){  
+          $.ajax({
+            url: $('#contact_info_form').attr('action'),
+            type: 'POST',
+            dataType: 'script',
+            data: {email: $('#user_email').val(),
+                   phone: $('#user_phone').val(),
+                   time_zone: $('#user_time_zone').val(),
+                   contact_by_email_pref: $('#user_contact_by_email_pref').val(),
+                   contact_by_sms_pref: $('#user_contact_by_sms_pref').val(),
+                   save_hardcoded_hour: true,
+                   hardcoded_reminder_hour: $('#program_player_hardcoded_reminder_hour').val()},
+            success: function() {
+              $.mobile.changePage("#{url_for :controller => :play, :action => :program, :id => @program_player.program_id}");        
+            }
+          });            
+          return false;
+        });
+        #{endj}
+  
+  = render :partial => 'home/mobile_footer'

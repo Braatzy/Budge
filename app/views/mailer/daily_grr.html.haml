@@ -1,0 +1,154 @@
+%h1 The Daily GRR
+%table
+  %tr
+    %td New Signups
+    %td= @daily_grr.signups
+  %tr
+    %td Total Users
+    %td= @daily_grr.total_users
+  %tr
+    %td Logins (24 hours)
+    %td= @daily_grr.logins_1day
+  %tr
+    %td Logins (7 days)
+    %td= @daily_grr.logins_7day
+  %tr
+    %td Revenue
+    %td= number_to_currency @daily_grr.revenue
+  %tr
+    %td Invitations Sent
+    %td= @daily_grr.invitations_sent
+  %tr
+    %td Invitations Redeemed
+    %td
+      = @daily_grr.invitations_redeemed
+      - if @daily_grr.invitations_sent > 0
+        (#{number_to_percentage (@daily_grr.invitations_redeemed.to_f/@daily_grr.invitations_sent*100.0), :precision => 0})
+  %tr
+    %td Notifications Sent
+    %td= @daily_grr.notifications_sent
+  %tr
+    %td Notifications Clicked
+    %td
+      = @daily_grr.notifications_clicked
+      - if @daily_grr.notifications_sent > 0
+        (#{number_to_percentage (@daily_grr.notifications_clicked.to_f/@daily_grr.notifications_sent*100.0), :precision => 0})
+
+- if @last_14.size > 1
+  %h1 Last Week's GRR
+
+  %table
+    %tr
+      %td Date
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.date.strftime('%a %d')
+    %tr
+      %td New Signups
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.signups
+    %tr
+      %td Total Users
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.total_users
+    %tr
+      %td Logins (24h)
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.logins_1day
+            
+    %tr
+      %td Logins (7d)
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.logins_7day
+            
+    %tr
+      %td Revenue
+      - @last_14[0..6].each do |daily_grr|
+        %td= number_to_currency daily_grr.revenue
+    %tr
+      %td Invitations Sent
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.invitations_sent
+    %tr
+      %td Invitations Redeemed
+      - @last_14[0..6].each do |daily_grr|
+        %td
+          = daily_grr.invitations_redeemed
+          - if daily_grr.invitations_sent > 0
+            (#{number_to_percentage (daily_grr.invitations_redeemed.to_f/daily_grr.invitations_sent*100.0), :precision => 0})
+    %tr
+      %td Notifications Sent
+      - @last_14[0..6].each do |daily_grr|
+        %td= daily_grr.notifications_sent
+    %tr
+      %td Notifications Clicked
+      - @last_14[0..6].each do |daily_grr|
+        %td
+          = daily_grr.notifications_clicked
+          - if daily_grr.notifications_sent > 0
+            (#{number_to_percentage (daily_grr.notifications_clicked.to_f/daily_grr.notifications_sent*100.0), :precision => 0})
+            
+          
+- if @last_14.size > 7
+  %h1 2 Weeks Ago GRR
+
+  %table
+    %tr
+      %td Date
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.date.strftime('%a %d')
+    %tr
+      %td New Signups
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.signups
+    %tr
+      %td Total Users
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.total_users
+    %tr
+      %td Logins (24h)
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.logins_1day
+            
+    %tr
+      %td Logins (7d)
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.logins_7day
+            
+    %tr
+      %td Revenue
+      - @last_14[7..13].each do |daily_grr|
+        %td= number_to_currency daily_grr.revenue
+    %tr
+      %td Invitations Sennt
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.invitations_sent
+    %tr
+      %td Invitations Redeemed
+      - @last_14[7..13].each do |daily_grr|
+        %td
+          = daily_grr.invitations_redeemed
+          - if daily_grr.invitations_sent > 0
+            (#{number_to_percentage (daily_grr.invitations_redeemed.to_f/daily_grr.invitations_sent*100.0), :precision => 0})
+    %tr
+      %td Notifications Sent
+      - @last_14[7..13].each do |daily_grr|
+        %td= daily_grr.notifications_sent
+    %tr
+      %td Notifications Clicked
+      - @last_14[7..13].each do |daily_grr|
+        %td
+          = daily_grr.notifications_clicked
+          - if daily_grr.notifications_sent > 0
+            (#{number_to_percentage (daily_grr.notifications_clicked.to_f/daily_grr.notifications_sent*100.0), :precision => 0})
+
+            
+- if @top_25_users.present?
+  %h1 Most engaged users
+  %table
+    - @top_25_users.each do |user|
+      %tr
+        %td
+          %img{:src => user.photo(:tiny)}
+        %td
+          %a{:href => url_for(:controller => :dash, :action => :user, :id => user.id, :host => DOMAIN, :protocol => 'http://')}= user.name
+        %td #{pluralize user.visit_streak, 'day'} in a row

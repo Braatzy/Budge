@@ -1,0 +1,74 @@
+-# LAPSED PROGRAMS
+- if @message_data[:data][:program_players].present?
+  .colored-bar{:style => ''}
+    %div{:style => 'background-color: #eee; border-top: 2px solid #777; font-size: 12px; font-weight: bold; color: #666; padding: 8px;'}
+      %h3{:style => 'margin: 0; padding: 0;'} Revive a habit
+  
+  .text-box{:style => 'padding: 0 10px;'}
+    - @message_data[:data][:program_players].each do |program_player|
+      %div{:style => 'width: 100px; float: left; height: 110px; text-align: center; padding: 10px; font-size: 12px;'}
+        = link_to image_tag(program_player.program.photo.url(:medium), {:style => 'width: 80px; border: 1px solid #ccc;'}), {:host => DOMAIN, :protocol => 'http://', :controller => :play, :action => :program, :id => program_player.program_id}
+        %div= link_to program_player.program.name, {:host => DOMAIN, :protocol => 'http://', :controller => :play, :action => :program, :id => program_player.program_id}, {:style => 'color: #777; font-weight: bold;'}
+    %br{:clear => :all}
+        
+
+-# NEW PROGRAMS TO BUY
+- if @message_data[:data][:new_programs].present? 
+  .colored-bar{:style => ''}
+    %div{:style => 'background-color: #eee; border-top: 2px solid #777; font-size: 12px; font-weight: bold; color: #666; padding: 8px;'}
+      %h3{:style => 'margin: 0; padding: 0;'} New habits to try
+  
+  .text-box{:style => 'padding: 0 10px;'}
+    %table
+      - @message_data[:data][:new_programs].each do |program|
+        %tr{:valign => :top}
+          %td{:style => 'width:100px; padding-left: 20px; padding-top: 10px;'}= link_to image_tag(program.photo.url(:medium), {:style => 'width: 80px; border: 1px solid #ccc;'}), {:host => SECURE_DOMAIN, :protocol => 'https://', :controller => :store, :action => :program, :id => program.token}
+          %td
+            %h3{:style => 'padding-top: 10px; margin-top: 0;'}
+              = link_to program.name, {:host => SECURE_DOMAIN, :protocol => 'https://', :controller => :store, :action => :program, :id => program.token}, {:style => 'color: #777; font-weight: bold;'}
+              %span{:style => 'color: #c60; font-weight: bold;'} NEW!
+            %p= raw textilize program.description
+    %br
+
+-# NEW FRIENDS
+- if @message_data[:data][:new_friends].present?
+  .colored-bar{:style => ''}
+    %div{:style => 'background-color: #eee; border-top: 2px solid #777; font-size: 12px; font-weight: bold; color: #666; padding: 8px;'}
+      %h3{:style => 'margin: 0; padding: 0;'} New friends
+  
+  .text-box{:style => 'padding: 0 10px;'}
+    %table
+      - @message_data[:data][:new_friends].each do |user|
+        %tr{:valign => :top}
+          %td{:style => 'width:100px; padding-left: 20px; padding-top: 10px;'}= link_to image_tag(user.photo.url(:small), {:style => 'width: 80px; border: 1px solid #ccc;'}), {:host => DOMAIN, :protocol => 'http://', :controller => :profile, :action => :id, :id => user.id}
+          %td
+            %h3{:style => 'padding-top: 10px; margin: 0;'}
+              = link_to user.name, {:host => DOMAIN, :protocol => 'http://', :controller => :profile, :action => :id, :id => user.id}, {:style => 'color: #777; font-weight: bold;'}
+            - pp = user.valid_program_players.sort_by{|pp|pp.last_visited_at}.reverse.first
+            - if pp.present?
+              %div 
+                is playing 
+                %strong #{pp.program.name}
+            - else
+              %div Just joined... get them to start a new program with you!
+    %br
+    
+-# PEOPLE DECLARING VICTORY
+- if @message_data[:data][:program_victories].present?
+  .colored-bar{:style => ''}
+    %div{:style => 'background-color: #eee; border-top: 2px solid #777; font-size: 12px; font-weight: bold; color: #666; padding: 8px;'}
+      %h3{:style => 'margin: 0; padding: 0;'} People declaring victory 
+  
+  .text-box{:style => 'padding: 0 10px;'}
+    %table
+      - @message_data[:data][:program_victories].each do |entry|
+        %tr{:valign => :top}
+          %td{:style => 'width:100px; padding: 10px 10px 10px 20px;'}= link_to image_tag(entry.user.photo.url(:small), {:style => 'width: 80px; border: 1px solid #ccc;'}), {:host => DOMAIN, :protocol => 'http://', :controller => :profile, :action => :id, :id => entry.user.id}
+          %td{:style => 'font-size: 30px; line-height: 100px; color: #777; text-align: center;'} +
+          %td{:style => 'width:100px; padding: 10px;'}= link_to image_tag(entry.program.photo.url(:medium), {:style => 'width: 80px; border: 1px solid #ccc;'}), {:host => SECURE_DOMAIN, :protocol => 'https://', :controller => :store, :action => :program, :id => entry.program.token}
+          %td{:style => 'font-size: 30px; line-height: 100px; color: #777; text-align: center;'} =
+          %td{:style => 'font-size: 30px; line-height: 100px; color: #777;'}= link_to "Victory!", {:host => DOMAIN, :protocol => 'http://', :controller => :stream, :action => :view, :id => entry.id}, {:style => 'color: #777; font-weight: normal;'}
+    %br
+    
+.text-box{:style => 'padding: 0 10px;'}
+  There's no hurry to get started again if you're not ready. Take your time, and step forward with gusto when the moment is right. If that moment is now&hellip;

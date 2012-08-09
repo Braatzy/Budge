@@ -1,0 +1,8 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  %div{'data-role' => :content, :class => :content}
+    %h2 #{@player_budge.program_budge.budge_name_and_level}
+    %h3 Choose a date to start this
+    %p= render :partial => 'schedule_form', :locals => {:player_budge => @player_budge}
+    
+  = render :partial => 'home/mobile_footer'

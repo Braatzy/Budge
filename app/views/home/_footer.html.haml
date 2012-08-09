@@ -1,0 +1,16 @@
+%div{:id => :footer, :style => 'padding: 15px 0; text-align: center; border: 0; margin-top: 3em;'}
+  %div{:style => 'font-size: 12px;'}= image_tag "budge-snail-transparent-50w.png"
+  %p{:style => 'font-size: 12px;'} A store for health-improvement programs.
+  %p
+    %span{:style => 'padding: 5px;'} #{link_to "Home", {:controller => :waiting_room, :action => :index}, {'data-ajax' => 'false'}} 
+    &middot;
+    %span{:style => 'padding: 5px;'} #{link_to "Contact", {:controller => :help, :action => :contact}, {'data-ajax' => 'false'}} 
+    &middot;
+    %span{:style => 'padding: 5px;'}= link_to "Privacy", {:controller => :help, :action => :privacy}, {'data-ajax' => 'false'}
+    - if current_user
+      &middot;
+      %span{:style => 'padding: 5px;'}= link_to raw("Log&nbsp;out"), {:controller => :home, :action => :logout}, {'data-ajax' => 'false'}
+  
+      - if current_user.admin?
+        %p{:style => 'margin-top: 2em; font-size: 14px; text-align: center;'} 
+          #{link_to "Admin dash", {:controller => :dash}, {'data-ajax' => false}}

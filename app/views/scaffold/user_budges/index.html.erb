@@ -1,0 +1,28 @@
+<h1>Listing user_budges</h1>
+
+<table>
+  <tr>
+    <th>Budger</th>
+    <th>Budgee</th>
+    <th>Num supporters</th>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @user_budges.each do |user_budge| %>
+  <tr>
+    <td><%= user_budge.budger ? user_budge.budger.name : '' %></td>
+    <td><%= user_budge.budgee ? user_budge.budgee.name : '' %></td>
+    <td><%= link_to user_budge.name, :controller => :stream, :action => :view_user_budge, :id => user_budge.id %></td>
+    <td><%= link_to 'Show', user_budge %></td>
+    <td><%= link_to 'Edit', edit_user_budge_path(user_budge) %></td>
+    <td><%= link_to 'Destroy', user_budge, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New User budge', new_user_budge_path %>

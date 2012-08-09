@@ -1,0 +1,27 @@
+- @head_title = "You have new budges!"
+%div{'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header'} 
+    %h1 New budges!
+  %div{'data-role' => 'content'}
+    - @new_budges.each_with_index do |user_budge, index|
+      %div{:class => 'new_budge', :id => "new_budge_#{index}", :style => "#{index > 0 ? 'display: none;' : ''}"}
+        %h2{:class => 'rounded frame'}= user_budge.species_name
+        - if index+1 == @new_budges.size
+          %a{:href => url_for(:controller => :home, :action => :mark_budge_read, :all => 1), 
+             'data-ajax' => 'false', 'data-role' => 'button', :id => 'choose_a_pack'} Continue
+        - else
+          %a{:class => 'view_next_budge', 'data-index' => index, 'data-role' => 'button', 
+             'data-href' => url_for(:controller => :home, :action => :mark_budge_read, :id => user_budge.id), :id => 'choose_a_pack'} Next
+
+:javascript
+  #{startj}
+  $('.view_next_budge').click(function(){
+    $('#new_budge_'+$(this).attr('data-index')).hide();
+    $('#new_budge_'+parseInt($(this).attr('data-index'))+1).show();
+    $.ajax({
+        url: $(this).attr('data-href'),
+        type: 'POST',
+        dataType: 'script'
+    });
+  });
+  #{endj}

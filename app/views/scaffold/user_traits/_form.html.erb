@@ -1,0 +1,77 @@
+<%= form_for(@user_trait) do |f| %>
+  <% if @user_trait.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_trait.errors.count, "error") %> prohibited this user_trait from being saved:</h2>
+
+      <ul>
+      <% @user_trait.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trait_id %><br />
+    <%= f.text_field :trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :visible_to_user %><br />
+    <%= f.check_box :visible_to_user %>
+  </div>
+  <div class="field">
+    <%= f.label :num_notifications %><br />
+    <%= f.text_field :num_notifications %>
+  </div>
+  <div class="field">
+    <%= f.label :num_checkins %><br />
+    <%= f.text_field :num_checkins %>
+  </div>
+  <div class="field">
+    <%= f.label :desired_notification_frequency %><br />
+    <%= f.text_field :desired_notification_frequency %>
+  </div>
+  <div class="field">
+    <%= f.label :level %><br />
+    <%= f.text_field :level %>
+  </div>
+  <div class="field">
+    <%= f.label :last_notification_datetime %><br />
+    <%= f.datetime_select :last_notification_datetime %>
+  </div>
+  <div class="field">
+    <%= f.label :num_budges_received %><br />
+    <%= f.text_field :num_budges_received %>
+  </div>
+  <div class="field">
+    <%= f.label :num_budges_given %><br />
+    <%= f.text_field :num_budges_given %>
+  </div>
+  <div class="field">
+    <%= f.label :num_budges_completed %><br />
+    <%= f.text_field :num_budges_completed %>
+  </div>
+  <div class="field">
+    <%= f.label :num_budges_ignored %><br />
+    <%= f.text_field :num_budges_ignored %>
+  </div>
+  <div class="field">
+    <%= f.label :response_rate %><br />
+    <%= f.text_field :response_rate %>
+  </div>
+  <div class="field">
+    <%= f.label :avg_response_time %><br />
+    <%= f.text_field :avg_response_time %>
+  </div>
+  <div class="field">
+    <%= f.label :streak %><br />
+    <%= f.text_field :streak %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

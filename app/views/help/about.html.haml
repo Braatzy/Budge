@@ -1,0 +1,248 @@
+%div{'data-role' => :page,:id => 'program_get_started'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Welcome to Budge!', :current=>'about'}
+  %div{'data-role' => :content, :class => :content}
+
+    %h1.handwriting Getting Started
+    #gettingstarted.accordion
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#whatis"}
+            What is Budge? 
+        #whatis.accordion-body.collapse.in
+          .accordion-inner
+            Budge is a place where you can start habits. Budge is also the name of the snail mascot, who texts you what to do, and reminds you to take small steps every day. If you fall off the wagon, Budge will help you get back on. It happens. Budge doesn't give up on you.
+            %div= button "Take the tour", {:host => DOMAIN, :protocol => 'http://', :controller => :home, :action => :tour}, {:class => :noajax}
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#how_start"}
+            How do I get started? 
+        #how_start.accordion-body.collapse
+          .accordion-inner
+            Choose a program and maybe 
+            =link_to 'review how to check in','http://bud.ge/help/checkin?back=%2Fhelp%2Fabout'
+            so you're ready. We'll also ask you your phone number and time zone, so we can send you a timely reminder text messages. That's it. You'll get your first assignment tomorrow. 
+    
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#phone"}
+            Why do you want my phone number?
+        #phone.accordion-body.collapse
+          .accordion-inner
+            %p 
+              %strong So we can bug you with text messages! To do stuff!
+            %p
+              Turns texts are pretty good at getting people to do things right away. Maybe they're just annoying enough that you pay attention to them.
+            
+            %p 
+              You'll also get texts when someone likes what you've done, or leaves a comment on your post or a conversation you're in. And if you tell Budge
+              =link_to 'how and when to talk to you','http://bud.ge/profile/user_info/communication_pref?redirect_to=%2Fprofile%2Fsettings'
+              all the stuff that happens while you're asleep will redirect to email. Budge knows that getting woken up at 1am with a text is no fun (one of our early-early beta testers told us)!  
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#phone_usa"}
+            Can I get text reminders if I'm outside the US or Canada?
+        #phone_usa.accordion-body.collapse
+          .accordion-inner
+            Not yet. (But Twilio seems to be making progress!) You can still get emails, DMs, or tweets at you to tell you what to do. 
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#reminders"}
+            How can I customize my reminders?
+        #reminders.accordion-body.collapse
+          .accordion-inner
+            %p
+              When you start a program, you have a chance to pick a custom time to get reminders for that habit (ie, get texted to brush your teeth at 7am every morning). Otherwise, Budge will try to pick the best time for you based on your behavior. 
+            %p  
+              Tell Budge 
+              =link_to 'how and when to talk to you','http://bud.ge/profile/user_info/communication_pref?redirect_to=%2Fprofile%2Fsettings'
+              (so that you don't get reminders when you're asleep). You can also edit your phone number for getting texts, set your timezone, and a bunch of other stuff in the 
+              =link_to 'settings.','http://bud.ge/profile/user_info/communication_pref?redirect_to=%2Fprofile%2Fsettings'
+            %p
+              =link_to image_tag('http://farm8.staticflickr.com/7247/6878313908_6350bd1b9f_z.jpg'),'http://bud.ge/settings'
+            
+    
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#gettingstarted", "data-toggle" => "collapse", :href => "#checkin"}
+            I did something! How do I tell Budge? 
+        #checkin.accordion-body.collapse
+          .accordion-inner
+            Budge wants to tell you just the right thing to do 
+            %em for you 
+            today.  We need to know what you've done in the past and what you've been doing lately, so that we don't tell you to do 44 pushups today, if really you should be doing 8.  
+            %p
+              We tried to make it as easy as possible, though. You can check in at 
+              =link_to'bud.ge','http://bud.ge'
+              in from any browser (web or mobile). Just click on the program icon.
+            %p  
+              You can also SMS, tweet to @budge, post a tweet with #budge in it, or DM @budge to check in, but you'd better read up on the special 
+              =link_to 'syntax over here.','http://bud.ge/help/checkin?back=%2Fhelp%2Fabout'
+              Budge understands "I flossed" and "I did 8 pushups" but not "hey, budge, I did 8 pushups and also flossed, thanks a ton for reminding me!" (It's just not that smart yet.)    
+            %p Finally, if you have a Withings scale, you can connect it in the settings, and it will automatically check in your weight for you.   
+    
+            
+    %h1 Twitter Accounts
+    #twitterq.accordion
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#twitterq", "data-toggle" => "collapse", :href => "#badtweets"}
+            Are you going to tweet without my permission? 
+        #badtweets.accordion-body.collapse
+          .accordion-inner
+            %p Nope.
+            
+            %p 
+              When you do something and check in using the app, you'll have the option to publish it to Twitter or Facebook too - just click on the grey icons to make them light up blue. You can also click the lock icon to keep your checkin totally private, and it won't even show up to other people on Budge. 
+              If you checkin by any of the other methods (by texting or DMing budge) it defaults to not sharing over social networks. 
+              
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#twitterq", "data-toggle" => "collapse", :href => "#notwitter"}
+            I don't have Twitter, can I still play Budge?
+        #notwitter.accordion-body.collapse
+          .accordion-inner
+            We're working on a non-Twitter login, which will be ready in the beginning of April. Until then, you have two options. Continue life as is, or grab a Twitter account and join in on the awesomeness. We're just using Twitter as a way to login, and find people you may know. There will be no tweeting without your permission, promise!
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#twitterq", "data-toggle" => "collapse", :href => "#diffhandle"}
+            How can I change the twitter account I use on budge?
+        #diffhandle.accordion-body.collapse
+          .accordion-inner
+            We're creating a non-twitter login, which will be ready by early April. Until then, hold your horses. If you *really* can't wait (oh wild horses!), shoot us an email at 
+            %a{:href => 'support@bud.ge'} support@bud.ge
+            and we'll switch it over manually. In the email send us the old twitter username, the new one, and permission to delete any data under the new account (if there is any.) It's a bit of a pain, but we'll do it for you. :)
+    
+    %h1 What else? 
+    #whatelse.accordion       
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#whatelse", "data-toggle" => "collapse", :href => "#prog_length"}
+            After I buy a program, how long can I play it? 
+        #prog_length.accordion-body.collapse
+          .accordion-inner
+            Program buying is a one-time thing. Once you've bought it, it's yours. If you quit a program by declaring victory or defeat, you still own the program. Think of it then as an old board game you can dust off again later.  
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#whatelse", "data-toggle" => "collapse", :href => "#friends"}
+            How do I add my friends to the friends stream?
+        #friends.accordion-body.collapse
+          .accordion-inner
+            Your friends on Twitter (and Facebook and Foursquare, if you've connected those accounts) should automatically be added to your friends stream. If they're not, you can find their profile at http://bud.ge/@theirtwitterusername and click on the follow button there. You can also follow interesting people you see in the stream of everyone on budge to get inspired! 
+    
+       
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#whatelse", "data-toggle" => "collapse", :href => "#pings"}
+            What is "Turn Pings On"?
+        #pings.accordion-body.collapse
+          .accordion-inner
+            That means that when that person checks in, you'll get an sms (or an email) so you can cheer them on. 
+        
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#whatelse", "data-toggle" => "collapse", :href => "#android"}
+            Why do you suggest iOS apps to try when I have an Android device?
+        #android.accordion-body.collapse
+          .accordion-inner
+            We're a small team and none of us use Android devices, so we feel weird about making recommendations for things we haven't tried out ourselves, or heard rave reviews for. 
+            In the cases we do suggest apps (like for Meditation Buddy), feel free to try something similar on Android.
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#whatelse", "data-toggle" => "collapse", :href => "#collapseTwo"}
+            How can I suggest new programs? 
+        #collapseTwo.accordion-body.collapse
+          .accordion-inner
+            Email us at support@bud.ge! 
+            
+    
+    %h1 Success and failure
+    
+    #successfailure.accordion        
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#successfailure", "data-toggle" => "collapse", :href => "#love_me"} 
+            Does Budge love me?
+        #love_me.accordion-body.collapse
+          .accordion-inner
+            Yes. To the moon and back. 
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#successfailure", "data-toggle" => "collapse", :href => "#takebreaks"}
+            I need a break. Can I pause the program? Is that cool?
+        #takebreaks.accordion-body.collapse
+          .accordion-inner
+            For sure! Go to the checkin page for your program and pick "Other Options" - choose "Pause" and pick how long. Use pause if you're going out of town, need to give your muscles a break from all the pushups, or just need a break from all the nagging for a few days. Go at your own pace. This is a longterm thing. 
+    
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#successfailure", "data-toggle" => "collapse", :href => "#vic_def"}
+            How can I declare Victory or Defeat with a program? What happens then?
+        #vic_def.accordion-body.collapse
+          .accordion-inner
+            Go to the checkin page and pick "Other Options" - from there, you can quit the program. That's right, push the big, red button. You can decide for yourself if you're going out victorious or defeated. If you choose, you can announce your victory/defeat in the stream, and answer some questions for self reflection. (Even if you feel defeated, you might have made more progress than you think.) Programs you've quit are still yours to play, and you can still dig them out of the archives and dust them off if you ever need them again. 
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#successfailure", "data-toggle" => "collapse", :href => "#still_love"}
+            Does Budge still love me if I declare defeat?
+        #still_love.accordion-body.collapse
+          .accordion-inner
+            Yes! 
+    
+    %h1 Habit Labs
+    
+    #habitlabs.accordion        
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#habitlabs", "data-toggle" => "collapse", :href => "#who"} 
+            Who built Budge?
+        #who.accordion-body.collapse
+          .accordion-inner
+            %p 
+              =link_to 'Habit Labs','http://habitlabs.com'
+              did! We're Buster Benson, Amelia Greenhall, and Alex Koloskov.
+            %h5 We've also built:
+            %dl
+              %dt 
+                =link_to 'Health Month', 'http://healthmonth.com' 
+              %dd A game that helps you set and keep monthly goals.
+              %dt 
+                =link_to 'Gonna Try', 'http://gonnatry.com'
+              %dd A simple web app that lets you set a date to complete a goal, and follows up with you by email to see if you've succeeded or failed.
+              %dt
+                =link_to 'How\'s My Email?', 'http://howsmyemail.com'
+              %dd Publish your unread inbox counts online.
+    
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#habitlabs", "data-toggle" => "collapse", :href => "#addressHQ"}
+            I want to send you love letters / hate mail / flowers... where to?
+        #addressHQ.accordion-body.collapse
+          .accordion-inner
+            .address
+              .strong Habit Labs <br>
+              511 Boren Ave. N <br>
+              Seattle, WA 98109 
+    
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#habitlabs", "data-toggle" => "collapse", :href => "#phonecall"}
+            I want to talk to a real person on the phone!
+        #phonecall.accordion-body.collapse
+          .accordion-inner
+            You can call our CEO Buster (or text him jokes): 206.355.9718
+            
+      .accordion-group
+        .accordion-heading
+          %a.accordion-toggle{"data-parent" => "#habitlabs", "data-toggle" => "collapse", :href => "#feedback"}
+            I have feedback / found a bug! What now?
+        #feedback.accordion-body.collapse
+          .accordion-inner
+            To tell us about a bug, give us feedback, or share a super hot idea, please email us:
+            %a{:href=>'mailto:support@bud.ge'} support@bud.ge 
+            or share some love on our Uservoice forum:
+            %a{:href=> 'http://support.bud.ge'} support.bud.ge

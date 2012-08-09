@@ -1,0 +1,80 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @user_trait.user_id %>
+</p>
+
+<p>
+  <b>Trait:</b>
+  <%= @user_trait.trait_id %>
+</p>
+
+<p>
+  <b>Visible to user:</b>
+  <%= @user_trait.visible_to_user %>
+</p>
+
+<p>
+  <b>Num notifications:</b>
+  <%= @user_trait.num_notifications %>
+</p>
+
+<p>
+  <b>Num checkins:</b>
+  <%= @user_trait.num_checkins %>
+</p>
+
+<p>
+  <b>Desired notification frequency:</b>
+  <%= @user_trait.desired_notification_frequency %>
+</p>
+
+<p>
+  <b>Level:</b>
+  <%= @user_trait.level %>
+</p>
+
+<p>
+  <b>Last notification datetime:</b>
+  <%= @user_trait.last_notification_datetime %>
+</p>
+
+<p>
+  <b>Num budges received:</b>
+  <%= @user_trait.num_budges_received %>
+</p>
+
+<p>
+  <b>Num budges given:</b>
+  <%= @user_trait.num_budges_given %>
+</p>
+
+<p>
+  <b>Num budges completed:</b>
+  <%= @user_trait.num_budges_completed %>
+</p>
+
+<p>
+  <b>Num budges ignored:</b>
+  <%= @user_trait.num_budges_ignored %>
+</p>
+
+<p>
+  <b>Response rate:</b>
+  <%= @user_trait.response_rate %>
+</p>
+
+<p>
+  <b>Avg response time:</b>
+  <%= @user_trait.avg_response_time %>
+</p>
+
+<p>
+  <b>Streak:</b>
+  <%= @user_trait.streak %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_trait_path(@user_trait) %> |
+<%= link_to 'Back', user_traits_path %>

@@ -1,0 +1,4 @@
+$("#likes_#{@entry.id}").html("#{escape_javascript(render :partial => 'stream/entry_likes', :locals => {:likes => @entry.likes})}");
+if (!$("#likes_#{@entry.id}").hasClass('has_likes')) {
+$("#likes_#{@entry.id}").addClass('has_likes');
+}

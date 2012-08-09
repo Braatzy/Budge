@@ -1,0 +1,28 @@
+%div{'data-role' => :page, :id => :build_index}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Suggestion"}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    - if @added
+      .rounded{:style => 'border: 1px solid #ccc; margin-bottom: 1em;'}
+        We added your suggestion and will let you know if you win on May 1st! 
+        %br 
+        %br
+        Want to #{link_to "add another one", {:controller => :build, :action => :index}, {:class => :noajax}}?
+    %h1.handwriting{:style => 'margin: 0;'}= @suggestion.title
+    %div= raw textilize @suggestion.description
+
+    - if current_user
+      %div{:id => "vote_counts_#{@suggestion.id}"}
+        = render :partial => 'vote_counts', :locals => {:suggestion => @suggestion}            
+    - else
+      = button "Log in to vote for this", {:controller => :oauth, :action => :twitter, :redirect_to => "#{request.fullpath}"}, {:class => :noajax} 
+      .subtle{:style => 'text-align: center;'} (It's through Twitter. Don't worry, we will not auto-tweet anything on your behalf.)    
+      
+    - if current_user and current_user.admin
+      %div{:style => 'margin-top: 5em; text-align: right; color: #ccc;'}
+        - if @suggestion.active?
+          (#{link_to "delete", {:controller => :build, :action => :delete_suggestion, :id => @suggestion.id}, {:class => :noajax, :style => 'color: #ccc;'}})
+        - else
+          (#{link_to "re-activate", {:controller => :build, :action => :delete_suggestion, :id => @suggestion.id}, {:class => :noajax, :style => 'color: #ccc;'}})
+        
+
+  = render :partial => 'home/mobile_footer'

@@ -1,0 +1,56 @@
+- from_player_url = {:controller => :dash, :action => :user, :id => player_message.from_user.id}
+- to_player_url = player_message.program_player.present? ? {:controller => :dash, :action => :program_player, :id => player_message.program_player.id} : {:controller => :dash, :action => :user, :id => player_message.to_user.id}
+- suppress_border ||= false
+
+%tr{:valign => :top, :class => 'player_message_tr'}
+  %td{:style => 'text-align: right;', :width => 45}
+    %a{:href => "#{url_for from_player_url}"}
+      %img{:src => player_message.from_user.photo.url(:small), :style => 'padding-right: 5px; width: 40px;'}
+
+  %td{:style => "#{suppress_border ? '' : "border-bottom: 1px solid #ccc;"} padding-bottom: 1em;"}
+    %div
+      %div{:style => 'font-size: 12px; margin-bottom: 5px;'}
+        - if player_message.deliver_via_pref == PlayerMessage::TWEET
+          %strong Tweet from 
+        - elsif player_message.deliver_via_pref == PlayerMessage::TWEET_DM
+          %strong DM from 
+        - elsif player_message.deliver_via_pref == PlayerMessage::SMS
+          %strong SMS from 
+        - elsif player_message.deliver_via_pref == PlayerMessage::EMAIL
+          %strong Email from 
+        - elsif player_message.deliver_via_pref == PlayerMessage::WEBSITE
+          %strong Entry from 
+        - elsif player_message.deliver_via_pref == PlayerMessage::BEST
+          %strong Best form of contact #{player_message.delivered_via.present? ? "(#{PlayerMessage::DELIVER_VIA[player_message.delivered_via][:name]})" : ''}: 
+        
+        - if player_message.from_remote_user
+          = link_to player_message.from_remote_user, from_player_url
+          &middot;
+        = player_message.from_user.name
+        - if player_message.to_user.present?
+          &rarr; 
+          = link_to player_message.to_user.name, to_player_url
+    - if player_message.delivered?
+      = raw auto_link(player_message.content)
+      %div{:style => 'font-size: 10px; color: #666;'}
+        = player_message.id
+        &middot;
+        - if player_message.deliver_via_pref == PlayerMessage::TWEET
+          %a{:href => "https://twitter.com/#!/#{player_message.from_remote_user}/status/#{player_message.remote_post_id}"} #{time_ago_in_words player_message.deliver_at} ago
+        - else
+          #{time_ago_in_words player_message.deliver_at} ago        
+    - else
+      %div{:style => 'color: #999;'}
+        = raw auto_link(player_message.content)
+      %div{:style => 'font-size: 10px; color: #666;'}
+        = player_message.id
+        &middot;
+        - if player_message.deliver_at.present?
+          - if player_message.deliver_at < Time.now.utc
+            Should have been sent #{time_ago_in_words player_message.deliver_at} ago
+          - else
+            Will be sent at #{Time.zone.parse(player_message.deliver_at.to_s + " UTC").in_time_zone(current_user.time_zone_or_default).strftime("%Y-%m-%d %H:%M")}
+        - else
+          Send when triggered
+        - if player_message.send_attempts > 0
+          &middot; #{pluralize player_message.send_attempts, 'failed attempt'}: #{player_message.error}

@@ -1,0 +1,17 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Withings"}
+  %div{'data-role' => :content}
+    %h1 Choose the account you'd like to connect
+    = form_tag({:controller => :oauth, :action => :withings}, {:id => 'withings_form_2'}) do
+      %div{'data-role' => :fieldcontain}
+        %fieldset{'data-role' => :controlgroup}
+          - @withings_accounts.each do |withings_account|
+            %input{:type => :radio, :name => 'user[withings_username]', :value => "#{withings_account['shortname']}:#{withings_account['id']}:#{withings_account['publickey']}", :id => "withings_user_#{withings_account['shortname']}", :style => 'display: none;'}
+            %label{:for => "withings_user_#{withings_account['shortname']}"} #{withings_account['firstname']} #{withings_account['lastname']}
+
+
+      %div{:class => 'ui-grid-a'}
+        %div{:class => 'ui-block-a'}
+          = link_to "Back", "#connect", {'data-rel' => 'back', 'data-role' => :button}
+        %div{:class => 'ui-block-b'}
+          = button "Save", {}, {'data-theme' => 'e', :class => :submit_form, 'data-form-id' => 'withings_form_2'}

@@ -1,0 +1,3 @@
+%h1 #{@program.name} &middot; #{@program_budge.name} &middot; Edit action
+%div{:class => :field}
+  %div{:class => 'rounded', :style => 'background-color: #ffe; margin-top: 10px;'}= render :partial => 'edit_action_template_form', :locals => {:program_action_template => @program_action_template, :program => @program, :program_budge => @program_budge}

@@ -1,0 +1,47 @@
+= form_for([:scaffold, @invitation]) do |f|
+  - if @invitation.errors.any?
+    #errorExplanation
+      %h2= "#{pluralize(@invitation.errors.count, 'error')} prohibited this user from being saved:"
+      %ul
+      - @invitation.errors.full_messages.each do |msg|
+        %li= msg
+  
+  .field
+    = f.label :user_id
+    %br
+    = f.text_field :user_id
+  .field
+    = f.label :program_id
+    %br
+    = f.text_field :program_id
+  .field
+    = f.label :token
+    %br
+    = f.text_field :token
+  .field
+    = f.label :email
+    %br
+    = f.text_field :email
+  .field
+    = f.label :invited_user_id
+    %br
+    = f.text_field :invited_user_id
+  .field
+    = f.label :visited
+    %br
+    = f.check_box :visited
+  .field
+    = f.label :signed_up
+    %br
+    = f.check_box :signed_up
+  .field
+    = f.label :bought_program
+    %br
+    = f.check_box :bought_program
+  .field
+    = f.label :dollars_credit
+    %br
+    = f.text_field :dollars_credit
+
+  .actions
+    = f.submit

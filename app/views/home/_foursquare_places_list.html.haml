@@ -1,0 +1,62 @@
+- if @foursquare_places.present?
+  - if @query.present? and @foursquare_places['places'].present?
+    %li{'data-role' => 'list-divider'} Looking for "#{@query}"
+    - @foursquare_places['places'][:items].each do |item|
+      %li 
+        %a{:class => 'chosen_place', 'data-foursquare-id' => "#{item['id']}", 'data-foursquare-category-name' => "#{item['category'].present? ? item['category']['name'] : ''}", 'data-foursquare-category-id' => "#{item['category'].present? ? item['category']['id'] : ''}"}= item['name']
+  - else
+    %li{'data-role' => 'list-divider'} General kinds of places
+    %li 
+      %a{:class => 'chosen_place', 'data-foursquare-id' => "", 'data-foursquare-category-name' => "Home", 'data-foursquare-category-id' => "4bf58dd8d48988d103941735"} Home
+    %li 
+      %a{:class => 'chosen_place', 'data-foursquare-id' => "", 'data-foursquare-category-name' => "Home, Work, Other", 'data-foursquare-category-id' => "4d4b7105d754a06375d81259"} Work
+    %li 
+      %a{:class => 'chosen_place', 'data-foursquare-id' => "", 'data-foursquare-category-name' => "School", 'data-foursquare-category-id' => "4bf58dd8d48988d13b941735"} School  
+
+  - if @foursquare_places['results'].present?
+    %li{'data-role' => 'list-divider'} Specific places
+    - @foursquare_places['results'][:items].each do |item|
+      %li 
+        %a{:class => 'chosen_place', 'data-foursquare-id' => "#{item['id']}", 'data-foursquare-category-name' => "#{item['category'].present? ? item['category']['name'] : ''}", 'data-foursquare-category-id' => "#{item['category'].present? ? item['category']['id'] : ''}"}= item['name']
+      
+  %li
+    %form{:id => :search_foursquare_form, 
+          :action => url_for(:controller => :home, :action => :load_foursquare_places), :method => :post}
+      %div{'data-role' => 'fieldcontain'}
+        - if @query.present?
+          %label{:for => :search_foursquare} Still not seeing it?
+          %input{:id => :search_foursquare, :type => :search, :name => :search_foursquare}        
+        - else
+          %label{:for => :search_foursquare} Not seeing it?
+          %input{:id => :search_foursquare, :type => :search, :name => :search_foursquare}
+ 
+
+  :javascript
+    #{startj}
+    $('#search_foursquare_form').submit(function(){  
+      latitude = $('#location').attr('data-lat');
+      longitude = $('#location').attr('data-lon');
+      $.ajax({
+        url: '/home/load_foursquare_places',
+          type: 'POST',
+          dataType: 'script',
+          data: {latitude: latitude, longitude: longitude, q: $('#search_foursquare').val()}
+      });
+      return false;
+    });
+
+    $('.chosen_place').click(function(){
+      $('#foursquare_place_id').val($(this).attr('data-foursquare-id'));
+      $('#foursquare_category_name').val($(this).attr('data-foursquare-category-name'));
+      $('#foursquare_category_id').val($(this).attr('data-foursquare-category-id'));
+      $('#foursquare_venue_name').val($(this).html());
+      $('input.checkin').attr("checked",true).checkboxradio("refresh");
+      if ($('#foursquare_venue_name').val().length) {
+        message = $('#budge_request_message').val();
+        message = message.replace(/right now/,"right now (I'm @ "+$('#foursquare_venue_name').val()+")");
+        $('#budge_request_message').val(message);
+      }
+      $('#foursquare_place_name').html("Checking you in at: "+$(this).html());
+      $.mobile.changePage('#budge_me', 'fade');
+    });
+    #{endj}

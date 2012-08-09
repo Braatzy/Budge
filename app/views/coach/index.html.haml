@@ -1,0 +1,8 @@
+%div{'data-role' => :page, :id => :coach_index}
+  = render :partial => 'home/mobile_top_nav'
+  %div{'data-role' => :content, :class => :content}
+    %h1.handwriting Hello, coach!
+
+    = render :partial => 'coach_report', :locals => {:player_buckets => @player_buckets}
+            
+  = render :partial => 'home/mobile_footer'

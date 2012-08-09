@@ -1,0 +1,29 @@
+<h1>Listing pack_traits</h1>
+
+<table>
+  <tr>
+    <th>Trait</th>
+    <th>Pack</th>
+    <th>Level</th>
+    <th>Position</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pack_traits.each do |pack_trait| %>
+  <tr>
+    <td><%= pack_trait.trait_id %></td>
+    <td><%= pack_trait.pack_id %></td>
+    <td><%= pack_trait.level %></td>
+    <td><%= pack_trait.position %></td>
+    <td><%= link_to 'Show', pack_trait %></td>
+    <td><%= link_to 'Edit', edit_pack_trait_path(pack_trait) %></td>
+    <td><%= link_to 'Destroy', pack_trait, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Pack Trait', new_pack_trait_path %>

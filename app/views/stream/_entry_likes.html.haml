@@ -1,0 +1,6 @@
+- likes ||= []
+- if likes.present?
+  .thread_item
+    .thread_icon{:style => 'color: #ccc;'} &hearts;
+    .thread_text
+      = raw likes.sort_by{|l|l.created_at}.map{|like|link_to(like.user.name, {:controller => :profile, :action => :id, :id => like.user_id, :back => request.fullpath})}.join(', ')

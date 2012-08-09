@@ -1,0 +1,12 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav'
+  %div{'data-role' => :content, :class => :content, :style => (@browser_type == 'mobile' ? 'width: 320px; padding: 15px 0;' : '')}
+    = render :partial => 'your_program_grid', :locals => {:program_players => @program_players, :has_archive => @archived_programs_players.present?, :can_invite => @can_invite_people}
+              
+  - if params[:new_program_token].present?
+    :javascript
+      #{startj}
+      $('#program_player_#{params[:new_program_token]}').fadeIn(10000);
+      #{endj}
+  
+  = render :partial => 'home/mobile_footer'

@@ -1,0 +1,35 @@
+- program_players ||= []
+- has_archive ||= false
+- can_invite ||= false
+
+%div#my_program_grid{:style => (@browser_type == 'mobile' ? 'padding: 0 12px;' : 'padding: 0; margin: 0;')}
+  - if program_players.present?
+    - program_players.each_with_index do |program_player, index|
+      %div.my_program_grid_item{:id => "program_player_#{program_player.program.token}", :style => "#{params[:new_program_token] == program_player.program.token ? 'display: none;' : ''}"}
+        - program_status = program_player.program_status
+        - if program_status == :scheduled or program_status == :caught_up
+          -# No dot
+        - elsif program_player.needs_to_play_at > (Time.now.utc-1.day)
+          %div{:class => "status_dot green_status_dot"} &nbsp;
+        - elsif program_player.needs_to_play_at > (Time.now.utc-2.days)
+          %div{:class => "status_dot yellow_status_dot"} &nbsp;            
+        - elsif program_player.needs_to_play_at < (Time.now.utc-2.days)
+          %div{:class => "status_dot red_status_dot"} &nbsp;
+        
+        = link_to image_tag(program_player.program.photo(:small), {:class => 'rounded-img'}), {:controller => :play, :action => :program, :id => program_player.program_id, :back => request.fullpath}, {:class => :noajax}
+        %div.program_grid_name
+          = program_player.program.name 
+          
+  - if has_archive
+    %div.my_program_grid_item
+      -if Rails.env.production?
+        = link_to image_tag('archived_programs.png', {:class => 'rounded-img'}), {:controller => :play, :action => :archives, :back => request.fullpath}, {:class => :noajax}
+      -else
+        = link_to image_tag('archived_programs.png', {:class => 'rounded-img'}), {:controller => :play, :action => :archives, :back => request.fullpath}, {:class => :noajax}
+      %div.program_grid_name Archives
+  
+  - if can_invite # disabled until LAUNCH
+    %div.my_program_grid_item
+      = link_to image_tag('invitation_icon.jpg', {:class => 'rounded-img'}), {:controller => :invite, :action => :index, :protocol => 'http://', :host => DOMAIN, :back => request.fullpath}, {:class => :noajax}
+      %div.program_grid_name Invite Friends
+  

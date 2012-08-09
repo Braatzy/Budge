@@ -1,0 +1,9 @@
+- budge_request ||= nil
+- if current_user
+  - current_user.available_budge_packs.each do |pack|
+    %div{'data-role' => :page, 'data-theme' => @data_theme, :id => "pack_#{pack.token}", 'data-url' => "pack_#{pack.token}"}
+      %div{'data-role' => :header}
+        %h1 #{pack.do_name}
+      %div{'data-role' => :content}
+        = render :partial => 'budge/select_traits_list', :locals => {:traits => pack.traits.select{|t|t.parent_trait_id.blank?}.sort_by{|t|t.token}, :budge_request => budge_request}        
+

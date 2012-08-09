@@ -1,0 +1,99 @@
+- program_budge ||= nil
+- if program.present? and !program.new_record?
+  %h3
+    - if program_budge.new_record?
+      Add a #{program_budge.position == 1 ? "first" : ''} budge
+    - else
+      Level #{program_budge.level}: #{program_budge.name}
+  = form_for(program_budge, :url => {:controller => :dash, :action => :save_program_budge, :id => (program_budge.new_record? ? nil : program_budge.id), :program_id => program.id}) do |f|
+    = hidden_field :program, :id
+    = hidden_field :program_budge, :id
+    - if program_budge and program_budge.errors.any?
+      %div{:id => "error_explanation"}
+        %h2 #{pluralize(@program_budge.errors.count, "error")} prohibited this budge from being saved:
+        %ul
+          - program_budge.errors.full_messages.each do |msg|
+            %li= msg
+  
+    = f.hidden_field :position, {:value => 1}
+    %div{:class => :field}
+      = f.label :level, "Level (more than one budge per level is allowed)"
+      %br
+      = f.select :level, program.select_level_options
+
+    %div{:class => :field}
+      = f.label :duration, "How long will this budge last?" 
+      %br
+      = f.select :duration, [['24 hours', 'day'], ['3 days', '3days'], ['1 week', 'week'], ['1 month', 'month']]
+
+    %div{:class => :field}
+      = f.label :name, "Budge title or clever name"
+      %br
+      = f.text_field :name, {:class => 'textfield', :style => 'width: 100%'}
+
+    %div{:class => :field}
+      = f.label :coach_message, "Describe exactly what a player needs to do to pass this budge. (300 chars or less)"
+      %br
+      = f.text_area :coach_message, {:rows => 5, :style => 'width: 100%;'}
+
+    %div{:class => 'field form-inline'}
+      = f.check_box :available_during_placement
+      = f.label :available_during_placement, "Allow players to start the program at this level"
+            
+    %div{:style=> 'margin-top: 20px'}
+      = f.submit 'Save budge', {:class=>'btn btn-primary btn-large'}
+      
+      - unless program_budge.new_record?
+        | or 
+        = link_to "delete this budge", :controller => :dash, :action => :delete_program_budge, :id => program_budge.id, :program_id => program.id        
+    
+  - unless program_budge.new_record?
+
+    -# Budge templates
+    %div{:class => :field}
+      %h3{:style => 'margin-top: 3em; border-bottom: 3px solid #000;'} Actions for this budge
+      %div{:style => 'margin-top: 1em; margin-bottom: 5px; font-size: 12px; color: #666;'} Search for traits (verb - noun - answer type)
+      = select :trait, :id, Trait.options_for_web_select(current_user), {:include_blank => true}, {:class => 'trait_dropdown chosen', :id => "traits_for_#{program_budge.new_record? ? 'new' : program_budge.id}", :style => "width: 300px;"}
+      -# Abover select dropdown opens _select_trait.html.haml in the div below
+
+    %div{:id => :user_actions, :class => :field}
+      %div{:id => :design_user_actions}
+      %div{:id => :saved_user_actions}
+        - if program_budge.program_action_templates.present?
+          = render :partial => 'program_budge_action_templates', :locals => {:program_budge => program_budge, :program_action_templates => program_budge.program_action_templates}
+        - else
+          .rounded{:style => 'background-color: #cfc; font-size: 11px; margin: 5px 0; padding: 5px;'} Add some actions for this budge! You need at least one.
+
+    :javascript
+      $("#traits_for_#{program_budge.new_record? ? 'new' : program_budge.id}").chosen();
+      $('.trait_dropdown').unbind('change').change(function(){
+        $.ajax({
+          type: "POST",
+          url: "#{url_for :controller => :dash, :action => :select_trait_for_action}",
+          data: {trait_id: $(this).val(), 
+                 program_id: $('#program_id').val(),
+                 program_budge_id: $('#program_budge_id').val()}
+        });
+      });
+
+      $(".delete_action_template").unbind('click').click(function(){
+        $.ajax({
+          type: "POST",
+          url: $(this).attr('href')
+        });  
+        return false;
+      });
+
+    -# Auto Messages
+    %a{:name => 'auto_messages'}
+    %h3{:style => 'margin-top: 3em; border-bottom: 3px solid #000;'} Automatic messages sent to the user during this budge
+    %div{:class => :field}
+      %div{:id => :saved_auto_messages}
+        - if program_budge.auto_messages.present?
+          = render :partial => 'budge_auto_messages', :locals => {:program_budge => program_budge, :auto_messages => program_budge.auto_messages}
+        - else
+          %div{:class => 'rounded', :style => 'background-color: #cfc; font-size: 11px; padding: 5px; margin: 5px 0;'} Add some auto-prompts for this budge!
+  
+      %div{:class => 'rounded', :style => 'background-color: #ffe; margin-top: 10px;'}
+        = render :partial => 'auto_message_form', :locals => {:program => program_budge.program, :program_budge => program_budge}
+              

@@ -1,0 +1,6 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => 'a'}
+  %div{'data-role' => 'header', 'data-theme' => (current_user.present? ? 'd' : 'a')}
+    %h1 Unsupported browser
+  %div{'data-role' => 'content'}
+    %h2.handwriting{:style => 'color: #fff;'} Sorry, the site looks really bad in this browser, so we're hiding it until we can fix that.
+    %p{:style => 'color: #fff;'} You can view the site from your computer, or try it from another mobile device.

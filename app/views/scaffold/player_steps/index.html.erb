@@ -1,0 +1,29 @@
+<h1>Listing player_steps</h1>
+
+<table>
+  <tr>
+    <th>Program player</th>
+    <th>Program step</th>
+    <th>Outcome token</th>
+    <th>Response token</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @player_steps.each do |player_step| %>
+  <tr>
+    <td><%= player_step.program_player_id %></td>
+    <td><%= player_step.program_step_id %></td>
+    <td><%= player_step.outcome_token %></td>
+    <td><%= player_step.response_token %></td>
+    <td><%= link_to 'Show', player_step %></td>
+    <td><%= link_to 'Edit', edit_player_step_path(player_step) %></td>
+    <td><%= link_to 'Destroy', player_step, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Player step', new_player_step_path %>

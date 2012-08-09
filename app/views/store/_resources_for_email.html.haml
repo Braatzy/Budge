@@ -1,0 +1,22 @@
+-# Send in through User.contact_them
+- message_data ||= Hash.new
+- program = message_data[:data]
+
+- if program.program_link_resources.present?
+  %p Here are a few things that we think would help you out with this program.  Check them out.
+  %table{:style => 'margin-top: 1em; margin-bottom: 1em;'}
+    - program.program_link_resources.each do |program_link_resource|
+      %tr{:valign => :top}
+        %td
+          %a{:href => program_link_resource.link_resource.bitly_url, :target => "program_link_resource"}
+            %div{:class => :program_link_resource_icon}
+              - if program_link_resource.link_resource.photo?
+                = image_tag program_link_resource.link_resource.photo(:small), {:class => 'rounded-img'}
+        %td
+          %div{:class => :program_link_resource_details}
+            %h3
+              - if program_link_resource.link_resource.present?
+                %a{:href => program_link_resource.link_resource.bitly_url, :target => "program_link_resource"}= program_link_resource.link_resource.name
+            %div
+              - if program_link_resource.short_description.present?
+                %div= program_link_resource.short_description

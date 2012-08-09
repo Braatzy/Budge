@@ -1,0 +1,24 @@
+%h1= t('.title')
+%p= link_to t('.new_daily_grr'), new_scaffold_daily_grr_path
+
+%table
+  %thead
+    %tr
+      %th= DailyGrr.human_attribute_name :date
+      %th= DailyGrr.human_attribute_name :signups
+      %th= DailyGrr.human_attribute_name :logins_1day
+      %th= DailyGrr.human_attribute_name :logins_7day
+      %th= DailyGrr.human_attribute_name :revenue
+      %th{:colspan => 3}= t 'actions'
+  
+  %tbody
+    - for daily_grr in @daily_grrs
+      %tr{ :class => cycle(:odd, :even) }
+        %td= daily_grr.date
+        %td= daily_grr.signups
+        %td= daily_grr.logins_1day
+        %td= daily_grr.logins_7day
+        %td= daily_grr.revenue
+        %td.action= link_to t('show'), [:scaffold, daily_grr]
+        %td.action= link_to t('edit'), edit_scaffold_daily_grr_path(daily_grr)
+        %td.action= link_to t('destroy'), [:scaffold, daily_grr], :confirm => t('are_you_sure'), :method => :delete

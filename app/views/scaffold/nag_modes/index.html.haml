@@ -1,0 +1,21 @@
+%h1 Listing nag_modes
+
+%table
+  %tr
+    %th Name
+    %th Description
+    %th
+    %th
+    %th
+
+  - @nag_modes.each do |nag_mode|
+    %tr
+      %td= nag_mode.name
+      %td= nag_mode.description
+      %td= link_to 'Show', [:scaffold, nag_mode]
+      %td= link_to 'Edit', edit_scaffold_nag_mode_path(nag_mode)
+      %td= link_to 'Destroy', [:scaffold, nag_mode], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Nag mode', new_scaffold_nag_mode_path

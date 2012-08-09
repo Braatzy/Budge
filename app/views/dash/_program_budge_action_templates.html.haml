@@ -1,0 +1,19 @@
+- if program_action_templates.present?
+  %div{:class => 'rounded', :style => 'background-color: #cfc; padding: 5px; margin-top: 10px;'}
+    %strong During the next #{program_budge.duration_in_words}&hellip;    
+    %ul{:style => 'margin-top: 5px;'}
+      - program_action_templates.sort_by{|a|a.sort_by}.each do |program_action_template|
+        %li{:id => "program_action_template_#{program_action_template.id}", :style => 'margin-bottom: 5px;'}
+          - if program_action_template.day_number.present? and program_action_template.day_number > 0
+            Day #{program_action_template.day_number}:
+          - else
+            Everyday: 
+          %strong
+            = program_action_template.action_wording
+            = link_to "edit", {:controller => :dash, :action => :edit_action_template, :id => program_action_template.id}, {:class => "edit_action_template"}
+            &middot;
+            = link_to "x", {:controller => :dash, :action => :delete_action_template, :id => program_action_template.id}, {:class => "delete_action_template"}
+            
+          %div Question: #{program_action_template.question}
+          
+  

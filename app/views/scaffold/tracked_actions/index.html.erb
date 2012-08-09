@@ -1,0 +1,35 @@
+<h1>Listing Tracked Actions</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Token</th>
+    <th>Num triggers</th>
+    <th>Trigger data</th>
+    <th>Tag week</th>
+    <th>Tag month</th>
+    <th>Tag year</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tracked_actions.each do |tracked_action| %>
+  <tr>
+    <td><%= tracked_action.user_id %></td>
+    <td><%= tracked_action.token %></td>
+    <td><%= tracked_action.num_triggers %></td>
+    <td><%= tracked_action.trigger_data %></td>
+    <td><%= tracked_action.tag_week %></td>
+    <td><%= tracked_action.tag_month %></td>
+    <td><%= tracked_action.tag_year %></td>
+    <td><%= link_to 'Show', tracked_action %></td>
+    <td><%= link_to 'Edit', edit_tracked_action_path(tracked_action) %></td>
+    <td><%= link_to 'Destroy', tracked_action, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New TrackedAction', new_tracked_action_path %>

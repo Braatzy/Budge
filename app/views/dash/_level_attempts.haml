@@ -1,0 +1,24 @@
+-messages||=[]
+-table_id||='level_attempts'
+%table{:id=>table_id,:style=>'margin-bottom: 20px'}
+  %thead
+    %th{:title=>'level number'} Level
+    %th{:title=>'level number'} ID
+    %th{:title=>'level nickname'} Name
+    %th Start
+    %th End
+    %th{:title=>"level status: <br> scheduled (for the future)<br> in-progress (current)<br> perfect (did everything)<br> passed (did 2/3 or more)<br> failed (did less than 2/3)<br> no-show (didn't check in )"} Status 
+    %th{:title=>'num. of actions done with desired outcome'} Done
+    %th{:title=>'num. of actions possible for level'} Possible
+  %tbody
+    -budges.each do |b|
+      -next if b.program_budge.nil?
+      %tr{:id=>"level_attempt#{b.id}"}
+        %td=b.level_number
+        %td=b.id
+        %td=b.level_name
+        %td.date_column=b.start_date
+        %td.date_column=b.finish_date
+        %td=b.get_status
+        %td.num_column=b.number_actions_victorious
+        %td.num_column=b.number_actions_possible

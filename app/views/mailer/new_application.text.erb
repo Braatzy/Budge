@@ -1,0 +1,7 @@
+Hey team!
+
+<%= @program_player.user.name %> just signed up<%= @program_player.program.present? ? " to #{@program_player.program.name}" : "" %>:
+http://<%= DOMAIN %><%= url_for :controller => :dash, :action => :program_player, :id => @program_player.id %>
+
+Sincerely,
+Budge the Snail

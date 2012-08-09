@@ -1,0 +1,21 @@
+- not_in_list ||= false
+
+- if not_in_list
+  %div.program_icon= image_tag(program_player.program.photo(:tiny), {:class => 'rounded-img', :style => 'margin-right: 10px;'})
+- else
+  %div.program_icon= image_tag(program_player.program.photo(:tiny), {:class => 'ui-li-icon rounded-img'})
+  
+%div.program_details
+  %h3= program_player.program.name
+  = render :partial => 'play/progress_dots', :locals => {:program_player => program_player}
+  
+%div.user_actions
+  %ol{:style => 'margin-top: 10px;'}
+    - if program_player.playing? and program_player.player_budge.present?
+      - program_player.player_budge.user_actions_for_checkin.each do |user_action|
+        - unless user_action.completed? or user_action.victorious?
+          %li.wrap{:style => 'margin-right: 20px;line-height: 20px;'}
+            = user_action.action_wording
+    - else
+      %li
+        %div{:style => 'line-height: 20px;'}= program_player.status_for_player

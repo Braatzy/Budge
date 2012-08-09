@@ -1,0 +1,52 @@
+= form_for [:scaffold, @nag_mode] do |f|
+  -if @nag_mode.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@nag_mode.errors.count, "error")} prohibited this nag_mode from being saved:"
+      %ul
+        - @nag_mode.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    %br
+    = f.text_field :name
+  .field
+    = f.label :price
+    %br
+    = f.text_field :price
+  .field
+    = f.label :num_days
+    %br
+    = f.text_field :num_days
+  .field
+    = f.label :description
+    %br
+    = f.text_area :description
+  .actions
+    = f.submit 'Save'
+
+- if @nag_mode_prompt.present?
+  %h3 Prompts
+  - if @nag_mode.nag_mode_prompts.present?
+    %ol
+      - @nag_mode.nag_mode_prompts.each do |nag_mode_prompt|
+        %li
+          %em= nag_mode_prompt.message
+          %div
+            - if nag_mode_prompt.day_number.present?
+              On day #{nag_mode_prompt.day_number}
+            - else
+              Every day
+            &middot;
+            - if nag_mode_prompt.at_hour.present?
+              At #{nag_mode_prompt.at_hour} o'clock
+            - elsif nag_mode_prompt.at_wakeup_time?
+              When they wake up
+            - elsif nag_mode_prompt.at_bedtime?
+              At bedtime
+            &middot;
+            = link_to 'edit', :controller => "scaffold/nag_mode_prompts", :action => :edit, :id => nag_mode_prompt.id
+            &middot;
+            = link_to 'x', [:scaffold, nag_mode_prompt], :confirm => 'Are you sure?', :method => :delete
+        
+  = render 'scaffold/nag_mode_prompts/form'

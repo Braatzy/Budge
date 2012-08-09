@@ -1,0 +1,32 @@
+- if current_user
+  - would_play = SuggestionVote.where(:suggestion_id => @suggestion.id, :user_id => current_user.id, :would_play => true).present?
+  - would_build = SuggestionVote.where(:suggestion_id => @suggestion.id, :user_id => current_user.id, :would_build => true).present?
+
+.ui-grid-a.rounded.light_box      
+  .ui-block-a{:style => 'text-align: center;'}
+    %h1{:style => 'margin-bottom: 0;'}= suggestion.num_play_votes
+    .subtle would play
+  .ui-block-b{:style => 'text-align: center;'}
+    %h1{:style => 'margin-bottom: 0;'}= suggestion.num_build_votes
+    .subtle would write
+
+- if current_user
+  .ui-grid-a
+    .ui-block-a
+      = button "I'd play", {:controller => :build, :action => :vote_play, :id => @suggestion.id}, {:class => "vote_suggestion #{would_play ? 'button_important' : ''}", :style => 'font-size: 10px; padding: 0;'}
+    .ui-block-b   
+      = button "I'd write", {:controller => :build, :action => :vote_build, :id => @suggestion.id}, {:class => "vote_suggestion #{would_build ? 'button_important' : ''}", :style => 'font-size: 10px; padding: 0;'}
+
+  :javascript
+    $('.vote_suggestion').each(function(){
+      $(this).button();
+    });
+    
+    $('.vote_suggestion').unbind('click').click(function(){
+      $.ajax({
+        url: $(this).attr('href'),
+        type: 'POST',
+        dataType: 'script'
+      });
+      return false;            
+    });

@@ -1,0 +1,63 @@
+<h1><%= @pack.pack_name %></h1>
+<%= render :partial => 'scaffold/packs/pack_and_traits_nav' %>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @pack.name %>
+</p>
+<p>
+  <b>Do name:</b>
+  <%= @pack.do_name %>
+</p>
+<p>
+  <b>Don't name:</b>
+  <%= @pack.dont_name %>
+</p>
+<p>
+  <b>Num traits:</b>
+  <%= @pack.num_traits %>
+</p>
+
+<p>
+  <b>Launched:</b>
+  <%= @pack.launched %>
+</p>
+
+<p>
+  <b>Public:</b>
+  <%= @pack.public %>
+</p>
+
+<p>
+  <b>Requires unlocking:</b>
+  <%= @pack.requires_unlocking %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @pack.description %>
+</p>
+
+<p>
+  <b>Token:</b>
+  <%= @pack.token %>
+</p>
+
+
+<%= link_to 'Edit', edit_scaffold_pack_path(@pack) %> |
+<%= link_to 'Back', scaffold_packs_path %>
+
+<p>
+<% if @pack.traits.present? %>
+<h3>Behaviors:</h3>
+<ul>
+<% @pack.traits.each do |trait| %>
+    <li><%= link_to trait.do_name, scaffold_trait_path(trait) %></li>
+<% end %>
+</ul>
+<% else %>
+<h3>No traits yet.</h3>
+<% end %>
+</p>

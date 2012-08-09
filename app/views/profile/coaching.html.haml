@@ -1,0 +1,24 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Coaching #{@program.name}"}
+  %div{'data-role' => :content, :class => :content, :style => 'padding: 10px 5px;'}
+    %div#my_program_grid
+      - if @program_coach.present?
+        - if @program_coach.program_players.present?
+          - @program_coach.program_players.sort_by{|p|(Time.now.utc - p.needs_to_play_at).abs}.each do |program_player|
+            %div.my_program_grid_item{:id => "program_coach_#{program_player.program.token}"}
+              - if !program_player.needs_to_play_at or program_player.needs_to_play_at > Time.now.utc
+                %div{:class => "status_dot green_status_dot"} &nbsp;
+              - elsif program_player.needs_to_play_at > (Time.now.utc-2.days)
+                %div{:class => "status_dot yellow_status_dot"} &nbsp;            
+              - else
+                %div{:class => "status_dot red_status_dot"} &nbsp;
+              = link_to image_tag(program_player.user.photo(:small), {:class => 'rounded-img'}), {:controller => :play, :action => :coach_stream, :id => program_player.id}, {:class => :noajax}
+              %div.program_grid_name
+                = program_player.user.name
+
+        - else
+          Not coaching anyone on #{@program.name} at the moment.
+      - else
+        You aren't coaching this program.
+        
+  = render :partial => 'home/mobile_footer'

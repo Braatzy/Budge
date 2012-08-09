@@ -1,0 +1,25 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Invite!"}
+  %div{'data-role' => :content, :class => :content}
+    - if @program_players.blank?
+      %h1 Invite your friends and family!      
+      %p 
+        You earn invites to give out when you play programs and pass levels. Check out the 
+        =link_to "Store", {:controller => :store, :action => :index}, {:class => :noajax}
+        to get started!
+    - else
+
+      - if @referred.present?
+        %h3 
+          You've referred 
+          %span{:style => 'font-weight: bold;'}= pluralize @referred.size, 'person'
+          to Budge. Thank you!
+      - @program_players.each do |program_player|
+        %div.invite_to_program{:style => 'margin-bottom: 3em;'}
+          = render :partial => 'invite_program_stats', :locals => {:program_player => program_player}
+          - if program_player.num_invites_available > 0
+            = button "Invite up to #{pluralize program_player.num_invites_available, 'person'}", {:controller => :invite, :action => :program, :id => program_player.program_id}, {:style => 'font-size: 12px !important;'}
+          - else
+            %div.rounded{:style => 'text-align: center;'} 
+              %strong You're all out! 
+              Earn more by #{link_to "passing new levels", {:controller => :play, :action => :program, :id => program_player.program.id}, {:class => :noajax}}!               

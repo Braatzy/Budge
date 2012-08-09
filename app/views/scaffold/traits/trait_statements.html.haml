@@ -1,0 +1,13 @@
+%div{'data-role' => :page}
+  %div{'data-role' => :content, :style => 'font-family: helvetica;'}
+    %h1 Trait Statement Testing
+    
+    %p #{Trait::TENSES.sort.map{|verb,tenses|verb}.join(', ')}
+    
+    %ul
+      - @traits.sort_by{|t|t.verb || t.noun}.each do |trait|
+        %li
+          %strong #{trait.do_name}: #{trait.verb}, #{trait.noun}, #{trait.answer_type}
+          %ul
+            %li= Trait.statement(current_user, :past, trait, 1)
+            %li= Trait.statement(current_user, :past, trait, rand(10)+2)

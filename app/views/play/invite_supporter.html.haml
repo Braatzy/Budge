@@ -1,0 +1,7 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Invite a friend"}
+  %div{'data-role' => :content, :class => :content}
+    %h1.handwriting Invite a friend to coach you!
+    = render :partial => 'play/invite_supporter_form', :locals => {:program_player => @program_player}
+
+  = render :partial => 'home/mobile_footer'

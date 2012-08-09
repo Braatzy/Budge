@@ -1,0 +1,11 @@
+%h1 
+  Editing nag mode prompt
+  - if @nag_mode_prompt.nag_mode.present?
+    for 
+    = link_to @nag_mode_prompt.nag_mode.name, [:scaffold, @nag_mode_prompt.nag_mode]
+
+= render 'form'
+
+= link_to 'Show', [:scaffold, @nag_mode_prompt]
+\|
+= link_to 'Back', scaffold_nag_mode_prompts_path

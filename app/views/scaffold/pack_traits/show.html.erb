@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Trait:</b>
+  <%= @pack_trait.trait_id %>
+</p>
+
+<p>
+  <b>Pack:</b>
+  <%= @pack_trait.pack_id %>
+</p>
+
+<p>
+  <b>Level:</b>
+  <%= @pack_trait.level %>
+</p>
+
+<p>
+  <b>Position:</b>
+  <%= @pack_trait.position %>
+</p>
+
+
+<%= link_to 'Edit', edit_pack_trait_path(@pack_trait) %> |
+<%= link_to 'Back', pack_traits_path %>

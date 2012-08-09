@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: player_notes
+#
+#  id                :integer(4)      not null, primary key
+#  program_player_id :integer(4)
+#  about_user_id     :integer(4)
+#  note_about        :string(255)
+#  text              :text
+#  created_at        :datetime
+#  updated_at        :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  program_player_id: 1
+  about_user_id: 1
+  note_about: MyString
+  text: MyText
+
+two:
+  program_player_id: 1
+  about_user_id: 1
+  note_about: MyString
+  text: MyText

@@ -1,0 +1,35 @@
+<h1>Listing addons</h1>
+
+<table>
+  <tr>
+    <th>Token</th>
+    <th>Name</th>
+    <th>Parent ID</th>
+    <th>Visible at level</th>
+    <th>Auto unlocked</th>
+    <th>Level credit cost</th>
+    <th>Dollar cost</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @addons.each do |addon| %>
+  <tr>
+    <td><%= addon.token %></td>
+    <td><%= addon.name %></td>
+    <td><%= addon.parent_id %></td>
+    <td><%= addon.visible_at_level %></td>
+    <td><%= addon.auto_unlocked %></td>
+    <td><%= addon.level_credit_cost %></td>
+    <td><%= addon.dollar_cost %></td>
+    <td><%= link_to 'Show', addon %></td>
+    <td><%= link_to 'Edit', edit_addon_path(addon) %></td>
+    <td><%= link_to 'Destroy', addon, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Addon', new_addon_path %>

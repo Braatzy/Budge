@@ -1,0 +1,2 @@
+%div{:id => "suggestion_#{suggestion.id}", :class => :suggestion_item}
+  %h3= link_to suggestion.title, {:controller => :build, :action => :suggestion, :id => suggestion.id}

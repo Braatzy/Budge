@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @tracked_action.user_id %>
+</p>
+
+<p>
+  <b>Token:</b>
+  <%= @tracked_action.token %>
+</p>
+
+<p>
+  <b>Num triggers:</b>
+  <%= @tracked_action.num_triggers %>
+</p>
+
+<p>
+  <b>Trigger data:</b>
+  <%= @tracked_action.trigger_data %>
+</p>
+
+<p>
+  <b>Tag week:</b>
+  <%= @tracked_action.tag_week %>
+</p>
+
+<p>
+  <b>Tag month:</b>
+  <%= @tracked_action.tag_month %>
+</p>
+
+<p>
+  <b>Tag year:</b>
+  <%= @tracked_action.tag_year %>
+</p>
+
+
+<%= link_to 'Edit', edit_tracked_action_path(@tracked_action) %> |
+<%= link_to 'Back', tracked_actions_path %>

@@ -1,0 +1,14 @@
+%div{:id => 'budge_me', 'data-role' => 'page', 'data-theme' => (@program_player.present? ? 'e' : 'a')}
+  %div{'data-role' => 'content'}
+    %h1{:style => 'text-align: center; border-radius: 10px; padding: 10px; background-color: #fff;'}
+      = image_tag 'budge-logo-300.png', {:style => 'width: 270px;'}
+    %div{:style => 'text-align: left; width: 280px; margin: 0 auto; font-size: 20px; line-height: 28px;'}
+      - if current_user
+        - if @program_player.present?
+          %p The bat phone is ringing. Help is on the way!
+          %p= link_to "Back", {:controller => :waiting_room, :action => :index}, {'data-rel' => 'back'}
+          
+      %p{:style => 'margin-top: 5em; font-size: 14px;'} 
+        - if current_user.admin?
+          #{link_to "Admin dash", {:controller => :dash}, {'data-ajax' => false}} &middot;
+        #{link_to "Log out", :controller => :home, :action => :logout}

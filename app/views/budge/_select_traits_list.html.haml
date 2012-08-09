@@ -1,0 +1,42 @@
+- limit ||= nil
+%ul{'data-role' => :listview}
+  - if limit and (limit == :do or limit == :dont)
+    %li{'data-role' => 'list-divider'} Or, be more specific
+    - traits.each do |trait|
+      - if limit == :do
+        %li{:class => 'do_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => (alignment == :virtuous ? 1 : -1), :do => true, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:do)
+      - elsif limit == :dont
+        %li{:class => 'dont_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => (alignment == :virtuous ? 1 : -1), :do => false, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:dont)
+  
+  - else
+    %li{'data-role' => 'list-divider'} Virtuous influences 
+    - traits.each do |trait|
+      - if trait.do_charge == 0
+        %li{:class => 'do_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => 1, :do => true, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:do)
+        %li{:class => 'dont_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => 1, :do => false, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:dont)
+      - elsif trait.do_charge == 1
+        %li{:class => 'do_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => 1, :do => true, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:do)
+      - elsif trait.do_charge == -1
+        %li{:class => 'dont_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => 1, :do => false, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:dont)
+          
+    %li{'data-role' => 'list-divider'} Viceful influences
+    - traits.each do |trait|
+      - if trait.do_charge == 0
+        %li{:class => 'do_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => -1, :do => true, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:do)
+        %li{:class => 'dont_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => -1, :do => false, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:dont)
+      - elsif trait.do_charge == -1
+        %li{:class => 'do_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => -1, :do => true, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:do)
+      - elsif trait.do_charge == 1
+        %li{:class => 'dont_trait_listing trait_list_item'}
+          %a{:href => url_for(:controller => :budge, :action => :select_trait, :id => trait.id, :charge => -1, :do => false, :budge_request_id => (@budge_request.present? ? @budge_request.id : nil), :user_id => (@user.present? ? @user.id : nil))}= raw trait.name_with_formatting(:dont)
+    
+    

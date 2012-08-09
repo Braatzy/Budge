@@ -1,0 +1,34 @@
+%div{'data-role' => :page, :id => :map}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "#{@program.name} levels"}
+  %div{'data-role' => :content, :class => :content, :style => "#{@browser_type == 'mobile' ? 'margin: 0; padding: 0; width: 320px;' : ''}"}
+    - @program_budges.sort_by{|p|p.sort_by}.each do |program_budge|
+      = render :partial => 'program_budge_map_row', :locals => {:program => @program, :program_budge => program_budge, :program_budge_to_state => @program_budge_to_state, :player_budge => @player_budge}
+
+  :javascript 
+    #{startj}
+    $('.level a').unbind('click').click(function(){
+      $.mobile.showPageLoadingMsg();
+      window.location = $(this).attr('href');
+      return false;
+    });
+    $('.level_collapsed_unlocked_unplayed').unbind('click').click(function(){
+      $("#program_budge_collapsed_"+$(this).attr('data-program_budge_id')).hide();
+      $("#program_budge_"+$(this).attr('data-program_budge_id')).fadeIn();
+    });
+    $('.level_unlocked_unplayed').unbind('click').click(function(){
+      $("#program_budge_"+$(this).attr('data-program_budge_id')).hide();
+      $("#program_budge_collapsed_"+$(this).attr('data-program_budge_id')).fadeIn();
+    });
+    $('.level_collapsed_unlocked_played').unbind('click').click(function(){
+      $("#program_budge_collapsed_"+$(this).attr('data-program_budge_id')).hide();
+      $("#program_budge_"+$(this).attr('data-program_budge_id')).fadeIn();
+    });
+    $('.level_unlocked_played').unbind('click').click(function(){
+      $("#program_budge_"+$(this).attr('data-program_budge_id')).hide();
+      $("#program_budge_collapsed_"+$(this).attr('data-program_budge_id')).fadeIn();
+    });
+    #{endj}
+    
+
+    
+  = render :partial => 'home/mobile_footer'

@@ -1,0 +1,31 @@
+%h1 Listing nag_mode_prompts
+
+%table
+  %tr
+    %th Nag mode
+    %th Day number
+    %th At hour
+    %th At wakeup time
+    %th At bedtime
+    %th Via
+    %th Message
+    %th
+    %th
+    %th
+
+  - @nag_mode_prompts.each do |nag_mode_prompt|
+    %tr
+      %td= nag_mode_prompt.nag_mode_id
+      %td= nag_mode_prompt.day_number
+      %td= nag_mode_prompt.at_hour
+      %td= nag_mode_prompt.at_wakeup_time
+      %td= nag_mode_prompt.at_bedtime
+      %td= nag_mode_prompt.via
+      %td= nag_mode_prompt.message
+      %td= link_to 'Show', [:scaffold, nag_mode_prompt]
+      %td= link_to 'Edit', edit_scaffold_nag_mode_prompt_path(nag_mode_prompt)
+      %td= link_to 'Destroy', [:scaffold, nag_mode_prompt], :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Nag mode prompt', new_scaffold_nag_mode_prompt_path

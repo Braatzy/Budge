@@ -1,0 +1,170 @@
+<%= form_for(@user_budge) do |f| %>
+  <% if @user_budge.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user_budge.errors.count, "error") %> prohibited this user_budge from being saved:</h2>
+
+      <ul>
+      <% @user_budge.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :budge_request_id %><br />
+    <%= f.text_field :budge_request_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trait_id %><br />
+    <%= f.text_field :trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_trait_id %><br />
+    <%= f.text_field :user_trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_user_name %><br />
+    <%= f.text_field :remote_user_name %>
+  </div>
+  <div class="field">
+    <%= f.label :num_supporters %><br />
+    <%= f.text_field :num_supporters %>
+  </div>
+  <div class="field">
+    <%= f.label :num_comments %><br />
+    <%= f.text_field :num_comments %>
+  </div>
+  <div class="field">
+    <%= f.label :secret %><br />
+    <%= f.check_box :secret %>
+  </div>
+  <div class="field">
+    <%= f.label :note %><br />
+    <%= f.text_area :note %>
+  </div>
+  <div class="field">
+    <%= f.label :unread %><br />
+    <%= f.check_box :unread %>
+  </div>
+  <div class="field">
+    <%= f.label :accepted %><br />
+    <%= f.check_box :accepted %>
+  </div>
+  <div class="field">
+    <%= f.label :ignored %><br />
+    <%= f.check_box :ignored %>
+  </div>
+  <div class="field">
+    <%= f.label :blocked %><br />
+    <%= f.check_box :blocked %>
+  </div>
+  <div class="field">
+    <%= f.label :completed %><br />
+    <%= f.check_box :completed %>
+  </div>
+  <div class="field">
+    <%= f.label :expired %><br />
+    <%= f.check_box :expired %>
+  </div>
+  <div class="field">
+    <%= f.label :start_clock %><br />
+    <%= f.datetime_select :start_clock %>
+  </div>
+  <div class="field">
+    <%= f.label :end_clock %><br />
+    <%= f.datetime_select :end_clock %>
+  </div>
+  <div class="field">
+    <%= f.label :num_comments %><br />
+    <%= f.text_field :num_comments %>
+  </div>
+  <div class="field">
+    <%= f.label :short_id %><br />
+    <%= f.text_field :short_id %>
+  </div>
+  <div class="field">
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :alignment %><br />
+    <%= f.text_field :alignment %>
+  </div>
+  <div class="field">
+    <%= f.label :do %><br />
+    <%= f.check_box :do %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_user_id %><br />
+    <%= f.text_field :remote_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_post_id %><br />
+    <%= f.text_field :remote_post_id %>
+  </div>
+  <div class="field">
+    <%= f.label :post_to_facebook %><br />
+    <%= f.check_box :post_to_facebook %>
+  </div>
+  <div class="field">
+    <%= f.label :post_to_twitter %><br />
+    <%= f.check_box :post_to_twitter %>
+  </div>
+  <div class="field">
+    <%= f.label :created_hour_of_day %><br />
+    <%= f.text_field :created_hour_of_day %>
+  </div>
+  <div class="field">
+    <%= f.label :created_day_of_week %><br />
+    <%= f.text_field :created_day_of_week %>
+  </div>
+  <div class="field">
+    <%= f.label :created_week_of_year %><br />
+    <%= f.text_field :created_week_of_year %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_hour_of_day %><br />
+    <%= f.text_field :responded_hour_of_day %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_day_of_week %><br />
+    <%= f.text_field :responded_day_of_week %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_week_of_year %><br />
+    <%= f.text_field :responded_week_of_year %>
+  </div>
+  <div class="field">
+    <%= f.label :num_nonsupporters %><br />
+    <%= f.text_field :num_nonsupporters %>
+  </div>
+  <div class="field">
+    <%= f.label :budge_group_id %><br />
+    <%= f.text_field :budge_group_id %>
+  </div>
+  <div class="field">
+    <%= f.label :budge_set_id %><br />
+    <%= f.text_field :budge_set_id %>
+  </div>
+  <div class="field">
+    <%= f.label :total_views %><br />
+    <%= f.text_field :total_views %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,43 @@
+%div{'data-role' => :page, :style => "background-image: none; background-color: #fff;');", :id => :play_index}
+  = render :partial => 'home/mobile_top_nav'
+  %div{'data-role' => :content, :class => :content}
+    %ul{'data-role' => :listview, :id => :now_playing_list, 'data-theme' => 'd'}
+      - if @now_playing.present? 
+        - @now_playing.each do |program_player|
+          %li.program{:id => "program_player_#{program_player.program.token}", :style => "#{params[:new_program_token] == program_player.program.token ? 'display: none;' : ''}"}
+            %a{:href => url_for(:controller => :play, :action => :program, :id => program_player.program_id), :style => 'border-bottom: 1px solid #ccc;', :class => :noajax}
+            = render :partial => 'play/program_player_status', :locals => {:program_player => program_player}
+  
+      - elsif @program_players.size > 0
+        %li
+          %a{:href => url_for(:controller => :stream, :action => :index), :style => 'border-bottom: 1px solid #ccc;'}
+            %h1{'data-role' => 'ui-icon', :style => 'color: #acd;'} 
+              %span{:style => 'color: #fc3;'} &#9728; 
+              All caught up!
+            %p Enjoy the rest of your day.
+      - else
+        %li.program
+          %a{:href => url_for({:controller => :store, :action => :index, :host => SECURE_DOMAIN, :protocol => 'https://'}), :style => 'border-bottom: 1px solid #ccc;'}
+            %div.program_icon= image_tag("mobile-web/1/store_icon.jpg", {:class => 'ui-li-icon rounded-img'})
+            %div.program_details
+              %h3 Budge Store
+              %p Find your first program!      
+        
+      - if @now_playing.size < @program_players.size
+        %li= link_to raw("See all #{pluralize @program_players.size, 'program'}&hellip;"), {:action => :grid}, {:style => 'border-bottom: 1px solid #ccc;'}
+        
+      - if @program_players.size > 0
+        %li.program
+          %a{:href => url_for({:controller => :store, :action => :index, :host => SECURE_DOMAIN, :protocol => 'https://'}), :style => 'border-bottom: 1px solid #ccc;'}
+            %div.program_icon= image_tag("mobile-web/1/store_icon.jpg", {:class => 'ui-li-icon rounded-img'})
+            %div.program_details
+              %h3 Budge Store
+              %p Find some more programs.
+
+  - if params[:new_program_token].present?
+    :javascript
+      #{startj}
+      $('#program_player_#{params[:new_program_token]}').fadeIn(10000);
+      #{endj}
+         
+  = render :partial => 'home/mobile_footer'

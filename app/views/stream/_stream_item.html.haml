@@ -1,0 +1,174 @@
+%div{:id => "stream_item_entry_#{entry.id}", :class => "stream_item_entry rounded", 'data-entry_id' => entry.id, :style => "#{entry.message_type == 'declare_end' ? 'border: 2px solid orange; padding: 10px; background-color: #fff;' : ''}"}
+
+  .stream_item_body.rounded
+    - if entry.message_type != 'declare_end'
+      %div{:style => 'float: right; width: 50px; color: #fff; text-align: right; padding-right: 0; font-weight: normal; font-size: 11px;'}= entry.time_ago
+    .stream_item_body.rounded= raw auto_link entry.statement
+
+  %div{:style => 'padding: 5px;'}
+    %table
+      %tr{:valign => :top}
+        %td.icon= link_to image_tag(entry.user.photo(:small), {:class => 'rounded-img-small', :style => 'width: 50px; height: 50px;'}), {:controller => :profile, :action => :id, :id => entry.user_id, :back => request.fullpath}, {:class => :noajax}
+        
+        - # Declaring victory or defeat
+        - if entry.message_type == 'declare_end'
+          %td{:style => 'padding: 5px; line-height: 45px;'} &#043;
+          %td.icon
+            = link_to image_tag(entry.program.photo(:small), {:class => 'rounded-img-small', :style => 'width: 50px; height: 50px;'}), {:host => SECURE_DOMAIN, :protocol => 'https://', :controller => :store, :action => :program, :id => entry.program.token, :back => request.fullpath}, {:class => 'noajax'}
+          %td{:style => 'padding: 5px; line-height: 45px;'} &#061;
+          - if entry.metadata[:declaration] == :victory
+            %td.icon
+              = image_tag 'victory_snail.png', {:style => 'width: 50px; height: 50px;'}
+          - elsif entry.metadata[:declaration] == :defeat
+            %td.icon
+              = image_tag 'defeat_snail.png', {:style => 'width: 50px; height: 50px;'}
+          -# Checking in
+        - else
+          %td.summary
+            - if entry.metadata.present? and entry.metadata[:unique_checkin_dates].present?
+              - if entry.metadata[:unique_checkin_string].present?
+                %div{:style => 'font-family: courier; font-size: 13px;'}            
+                  - (0..29).each do |num|
+                    - if num == 0
+                      %span{:style => 'color: orange;'} &bull;                
+                    - elsif entry.metadata[:unique_checkin_string][num] == '0' or entry.metadata[:unique_checkin_string][num] == 48 # 0, or false
+                      %span{:style => 'color: #ccc;'} &bull;
+                    - else
+                      %span{:style => 'color: #000;'} &bull;
+                    - if num == 9 or num == 19
+                      %br   
+          %td{:width => 15, :style => 'padding-top: 0;'}= image_tag 'bracket.png', {:style => 'width: 30px; height: 50px;'}
+          %td.total
+            - if entry.metadata[:checkins].present?
+              %div
+                - entry.metadata[:checkins].each do |checkin_id, metadata_hash|
+                  - if trait = Trait.find(metadata_hash[:trait_id])
+                    - statement_hash = trait.statement_from_metadata(entry.user, metadata_hash[:summary_total], metadata_hash[:summary_num_results], metadata_hash[:percentage_change])
+                    - if statement_hash[:pre_text].present?
+                      %div= statement_hash[:pre_text]
+                    - if statement_hash[:amount].present?
+                      %h1= statement_hash[:amount]                    
+                    - if statement_hash[:post_text].present?
+                      %div= statement_hash[:post_text]
+
+          
+  - if entry.message_type == 'secret' 
+    -if entry.original_message.present?
+      .thread_item
+        .thread_icon= image_tag 'mobile-web/1/icon_secret_ingredient.jpg'
+        .thread_text
+          %span.details{:style => 'color: #9b3;'} My secret ingredient is:
+          = raw auto_link(entry.original_message)
+
+  - elsif entry.message_type == 'nemesis' 
+    -if entry.original_message.present?
+      .thread_item
+        .thread_icon= image_tag 'mobile-web/1/icon_nemesis.jpg'
+        .thread_text
+          %span.details{:style => 'color: #b36;'} My nemesis is:
+          = raw auto_link(entry.original_message)
+  - elsif entry.metadata[:answers].present?
+    - if entry.metadata[:answers][:answer_1].present?
+      .thread_item
+        .thread_icon{:style => 'color: #ccc;'} &middot;
+        .thread_text{:style => 'padding-bottom: 1em;'}
+          %strong.question #{entry.program.required_question_1}:
+          = raw auto_link(entry.metadata[:answers][:answer_1])
+        
+    - if entry.metadata[:answers][:answer_2].present?
+      .thread_item
+        .thread_icon{:style => 'color: #ccc;'} &middot;
+        .thread_text{:style => 'padding-bottom: 1em;'}
+          %strong.question #{entry.program.required_question_2}:
+          = raw auto_link(entry.metadata[:answers][:answer_2])
+
+    - if entry.metadata[:answers][:answer_3].present?
+      .thread_item
+        .thread_icon{:style => 'color: #ccc;'} &middot;
+        .thread_text{:style => 'padding-bottom: 1em;'}
+          %strong.question #{entry.program.optional_question_1}:
+          = raw auto_link(entry.metadata[:answers][:answer_3])
+
+    - if entry.metadata[:answers][:answer_4].present?
+      .thread_item
+        .thread_icon{:style => 'color: #ccc;'} &middot;
+        .thread_text{:style => 'padding-bottom: 1em;'}
+          %strong.question= entry.program.optional_question_2
+          .answer= rawauto_linktextilize(entry.metadata[:answers][:answer_4])
+          
+                         
+  - if entry.likes.present?
+    %div{:class => "likes has_likes", :id => "likes_#{entry.id}"}
+      = render :partial => 'stream/entry_likes', :locals => {:likes => entry.likes}
+  - else
+    %div{:class => "likes", :id => "likes_#{entry.id}"}
+    
+  - if entry.comments.present?
+    %div{:class => "comments has_comments", :id => "comments_#{entry.id}"}
+      - entry.comments.sort_by{|c|c.created_at}.each_with_index do |comment, index|
+        = render :partial => 'stream/entry_comment', :locals => {:comment => comment, :index => index}
+  - else
+    %div{:class => "comments", :id => "comments_#{entry.id}"}
+
+%div.stream_item_entry_bottom{:style => 'padding: 3px;'}
+  - if !current_user
+    .comment_button.rounded #{pluralize entry.comments.size, 'comment'}
+  
+  - else
+    %div{:class => 'comment_form', :id => "comment_form_#{entry.id}"}
+      %input{:type => :text, :id => "comment_text_#{entry.id}", :class => :stylized_input}
+    %div{:style => 'height: 30px;'}
+      - if entry.message_type == 'declare_end'
+        %div{:style => 'float: right; width: 50px; color: #ddd; text-align: right; padding-right: 0; font-weight: normal;'}= entry.time_ago
+      %div{:class => "like_button rounded #{Like.exists_between(current_user, entry) ? 'liked' : ''}", :style => 'padding: 3px;', :id => "like_button_#{entry.id}"} 
+        %span.h &hearts; 
+        %span.t like
+      %div{:class => 'comment_button rounded', :id => "comment_button_#{entry.id}", :style => 'padding: 3px;'} comment
+    :javascript
+      $("#comment_text_#{entry.id}").textinput();
+      $("#comment_button_#{entry.id}").unbind('click').click(function(){
+        $("#comment_form_#{entry.id}").slideToggle();
+        $("#comment_form_#{entry.id}").focus();
+      });
+      $("#like_button_#{entry.id}").unbind('click').click(function(){
+        if ($(this).hasClass('liked')) {
+          $(this).removeClass('liked');
+        } else {
+          $(this).addClass('liked');
+        }
+        $.ajax({
+          url: "#{url_for :controller => :stream, :action => :like, :id => entry.id}",
+          type: 'POST',
+          dataType: 'script',
+          data: {entry_id: "#{entry.id}"},
+          success: function(){},
+          error: function(){}
+        });
+      });
+
+      $("#comment_text_#{entry.id}").unbind('change').change(function(){
+        if ($("#comment_text_#{entry.id}").val().length == 0) {
+          $("#comment_form_#{entry.id}").slideUp();        
+        } else {
+          $.mobile.showPageLoadingMsg();
+          $.ajax({
+            url: "#{url_for :controller => :stream, :action => :add_comment, :id => entry.id}",
+            type: 'POST',
+            dataType: 'script',
+            data: {entry_id: "#{entry.id}",
+                   message: $("#comment_text_#{entry.id}").val(),
+                   latitude: $('#location').attr('data-lat'),
+                   longitude: $('#location').attr('data-lon')},
+            success: function(){$.mobile.hidePageLoadingMsg()},
+            error: function(){$.mobile.hidePageLoadingMsg()}
+          });
+          $("#comment_text_#{entry.id}").val("");
+          $("#comment_form_#{entry.id}").slideUp();
+        }
+      });
+      $("#comment_form_#{entry.id}").live('keydown', function(e) { 
+        var keyCode = e.keyCode || e.which; 
+        if (keyCode == 9) { 
+          e.preventDefault(); 
+        } 
+      });      

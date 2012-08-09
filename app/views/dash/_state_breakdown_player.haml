@@ -1,0 +1,36 @@
+-table_id||='player_states'
+
+-skip_statuses=[]
+-percent_statuses=['no-show', 'perfect', 'passed', 'failed']
+-states_in_order=['scheduled', 'in-progress','in-past', '  no-show','  failed', '  passed','  perfect']
+
+
+-if player_state_counts.present?
+  .simple_table
+    %table{:id=>table_id}
+      %thead
+        %th order
+        %th State
+        %th Attempts
+      %tbody
+        -total=player_state_counts['in-past']
+        -states_in_order.each_with_index do |state_name,i|
+          -state=state_name.strip()
+          -next if skip_statuses.include? state
+          -count=player_state_counts[state]
+          %tr
+            %td.hidden=i
+            %td=raw state_name
+            -if percent_statuses.include? state
+              %td.num_column{:title=>"#{count} level attempts"}=get_percentage(count,total)
+            -else
+              %td.num_column=count
+
+  :javascript
+    $(document).ready(function() {
+      tbl=$("##{table_id}").dataTable( {
+        "bPaginate": false,
+        "aoColumns": [ { "bVisible":    false },null,null],
+        "aaSorting": [[ 0, "asc" ]]
+         });   
+    } );

@@ -1,0 +1,25 @@
+%div{'data-role' => :page, :id => :checkin}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name, :current=>'play'}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    - if @program_player.victorious?
+      %div{:style => 'text-align: center;'}
+        = image_tag 'victory_snail.png'
+    - elsif @program_player.defeated?
+      %div{:style => 'text-align: center;'}
+        = image_tag 'defeat_snail.png'
+      
+    - if current_user.valid_program_players.size > 3
+      = button "Start playing again", {:controller => :play, :action => :too_many_programs}, {:class => 'noajax'}
+    - else
+      = button "Start playing again", {:controller => :play, :action => :map, :id => @program.id}, {:class => 'noajax'}
+
+    - if @program_players.present?
+      %div{:style => 'margin-top: 3em;'}
+        %h1.thin{:style => 'margin-bottom: 0; padding-bottom: 0;'}
+          - if @program_player.victorious?
+            The Victors
+          - elsif @program_player.defeated?
+            The Defeated
+        - @program_players.each do |program_player|
+          = link_to image_tag(program_player.user.photo(:small), {:class => 'rounded-img', :style => 'width: 75px; height: 75px; margin: 5px 12px 12px 5px;'}), {:controller => :profile, :action => :t, :id => program_player.user.twitter_username}, {:class => :noajax}
+      

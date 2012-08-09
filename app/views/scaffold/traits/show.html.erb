@@ -1,0 +1,56 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @trait.trait_name %></h1>
+<%= render :partial => 'scaffold/packs/pack_and_traits_nav' %>
+
+<p>
+  <b>Verb:</b>
+  <%= @trait.verb %>
+</p>
+<p>
+  <b>Noun:</b>
+  <%= @trait.noun %>
+</p>
+<p>
+  <b>Answer type:</b>
+  <%= @trait.answer_type %>
+</p>
+<p>
+  <b>Daily question:</b>
+  <%= @trait.daily_question %>
+</p>
+
+
+<p>
+  <b>Do name:</b>
+  <%= @trait.do_name %>
+</p>
+
+<p>
+  <b>Dont name:</b>
+  <%= @trait.dont_name %>
+</p>
+
+<p>
+  <b>Token:</b>
+  <%= @trait.token %>
+</p>
+
+<p>
+  <b>Primary pack token:</b>
+  <%= @trait.primary_pack_token %>
+</p>
+
+<p>
+  <b>Parent trait:</b>
+  <%= @trait.parent.present? ? link_to(@trait.parent.name, [:scaffold, @trait.parent]) : '' %>
+</p>
+
+<p>
+  <b>Setup required:</b>
+  <%= @trait.setup_required %>
+</p>
+
+
+<%= link_to 'Edit', edit_scaffold_trait_path(@trait) %> |
+<%= link_to 'Back', scaffold_traits_path %>

@@ -1,0 +1,17 @@
+- if @message.present?
+  = raw textilize @message
+    
+    
+      
+  
+- if @data.present?
+  :plain
+    
+    
+    
+    ================
+    Raw data for ya:
+  
+    #{@data.to_yaml}
+  
+  

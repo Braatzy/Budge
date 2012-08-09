@@ -1,0 +1,31 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  system_budge: true
+  budger_user_id: 
+  budge_species_token: onboarding
+  budge_species_level: 1
+  trait_id: 1
+  user_trait_id: 1
+  num_supporters: 1
+  secret: false
+  note: MyText
+  unread: true
+  completed: false
+  ignored: false
+
+two:
+  user_id: 2
+  system_budge: true
+  budger_user_id: 
+  budge_species_token: onboarding
+  budge_species_level: 1
+  trait_id: 1
+  user_trait_id: 1
+  num_supporters: 1
+  secret: false
+  note: MyText
+  unread: true
+  completed: false
+  ignored: false

@@ -1,0 +1,56 @@
+.page-header
+  %h1 Budge Dashboard
+
+.users.page-header
+  %h1=link_to 'Users', '/dash/users'
+  .row
+    .span4
+      %h3 Summary (in beta)
+      =render :partial=>'state_breakdown_user',:locals=>{:user_group_state_counts=>@beta_user_state_counts,:show_not_in_beta=>false}     
+    .well.span4 
+      %div Total: #{@user_count[:all]}
+      %div Beta: #{@user_count[:beta]}
+      - if @cohorts
+        - @cohorts.sort_by{|cohort|cohort.count}.each do |cohort|
+          %div Cohort (#{cohort.cohort_tag}): #{cohort.count}
+  
+.programs.page-header
+  %h1=link_to 'Programs', '/dash/programs'
+  %p 
+    #{@program_count[:store]} in store (below), 
+    #{@program_count[:dev]} in
+    =link_to 'development','/dash/programs'
+  
+  .simple_table
+    %table#programs
+      %thead
+        %tr
+          %th Program 
+          %th{:title=>'total number of users'} Users
+          -#%th{:title=>'have not checked in any actions'} No actions
+          -#%th{:title=>'have not checked in within the past 30 days'}  Long-lost
+          -#%th{:title=>'have not checked in within the past 3 days'} Off-wagon
+          -#%th{:title=>'scheduled within the next 1 week'}  Scheduled
+          -#%th{:title=>'checked in within the past 3 days'} Engaged
+          -#%th{:title=>'completed the program'} Completed
+      %tbody
+        -@programs_active.each do |program|
+          -states=@states_per_program[program.id]
+          -total=program.total_players
+          %tr
+            %td=link_to "#{program.name}","/dash/program/#{program.id}" 
+            %td.num_column=program.total_players
+            -#%td.num_column{:title=>"#{states['no actions']} players"}=get_percentage(states['no actions'], total)
+            -#%td.num_column{:title=>"#{states['long-lost']} players"}=get_percentage(states['long-lost'], total)
+            -#%td.num_column{:title=>"#{states['off-wagon']} players"}=get_percentage(states['off-wagon'], total)
+            -#%td.num_column{:title=>"#{states['scheduled']} players"}=get_percentage(states['scheduled'], total)
+            -#%td.num_column{:title=>"#{states['engaged']} players"}=get_percentage(states['engaged'], total)
+            -#%td.num_column{:title=>"#{states['completed']} players"}=get_percentage(states['completed'], total)
+
+  :javascript
+    $(document).ready(function() {
+      tbl=$('#programs').dataTable( {
+        "bPaginate": false,
+        "aaSorting": [[ 1, "desc" ]]
+         });
+     });

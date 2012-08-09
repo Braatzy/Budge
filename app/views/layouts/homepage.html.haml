@@ -1,0 +1,46 @@
+!!!
+%html{:manifesto => "/budge.manifest?v=#{@manifest_version}", :lang => 'en'}
+  %head{:prefix => (@facebook_object.present? ? "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# #{OPEN_GRAPH_NS}: http://ogp.me/ns/#{OPEN_GRAPH_NS}#" : '')}
+    %title Budge
+    %meta{:name => "google-site-verification", :content => "Nb9KPDJqBPhz0Az5DEfbVaqnV0D3EHXpFv3VDXufv9E"}
+    %meta{:name => "bitly-verification", :content => "ea29b6eeaa7f"}
+    %meta{:name => 'viewport', :content => 'width=320, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'}
+    %meta{:name => 'apple-mobile-web-app-status-bar-style', :content => 'black'}
+    = javascript_include_tag 'application', "#{request.protocol}ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js", "#{request.protocol}ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"
+    
+    = stylesheet_link_tag 'application'
+    
+    - if Rails.env.production?
+      :javascript
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-24995026-1']);
+        _gaq.push(['_trackPageview']);
+      
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+          var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+        var KM_COOKIE_DOMAIN = "#{COOKIE_DOMAIN}";
+        var _kmq = _kmq || [];
+        function _kms(u){
+        setTimeout(function(){
+        var s = document.createElement('script'); var f = document.getElementsByTagName('script')[0]; s.type = 'text/javascript'; s.async = true;
+        s.src = u; f.parentNode.insertBefore(s, f);
+        }, 1);
+        }
+        _kms('//i.kissmetrics.com/i.js');_kms('//doug1izaerwt3.cloudfront.net/513bcd9de83351ce578a9717af6573dc55fa46ec.1.js');
+    
+  %body{:class => "home"}
+    .wrapper
+      .container-fluid= yield
+      .push
+        //footer
+    %footer.container-fluid
+      .row-fluid
+        .span12{:style=>'padding-top: 10px;'}
+          %center=link_to 'made with love by Habit Labs', 'http://habitlabs.com'
+    
+    
+    

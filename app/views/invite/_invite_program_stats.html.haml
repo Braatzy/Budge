@@ -1,0 +1,26 @@
+%h3.handwriting{:style => 'margin-bottom: 0; font-size: 16px;'}
+  = image_tag program_player.program.photo(:tiny), {:style => 'height: 1em; margin-right: 5px;', :class => 'rounded-img-small', :align => :left}
+  Invite people to 
+  %strong= program_player.program.name
+%table
+  %tr
+    %td.rounded{:style => 'padding: 10px; text-align: center; background-color: #fff; width: 33%;'}
+      %h1{:style => 'margin-bottom: 0;'}
+        - if program_player.num_invites_available > 0
+          %span{:color => '#369;'}= program_player.num_invites_available
+        - else
+          0
+      %div.small.subtle Invites
+    %td &nbsp;
+    %td.rounded{:style => 'padding: 10px; text-align: center; background-color: #fff; width: 33%;'}
+      %h1{:style => 'margin-bottom: 0;'}
+        = program_player.num_invites_sent
+      %div.small.subtle Sent
+    %td &nbsp;
+    %td.rounded{:style => 'padding: 10px; text-align: center; background-color: #fff; width: 33%;'}
+      %h1{:style => 'margin-bottom: 0;'}
+        - if program_player.num_invites_sent > 0
+          = number_to_percentage (program_player.num_invites_accepted.to_f/program_player.num_invites_sent)*100, :precision => 0
+        - else
+          &ndash;
+      %div.small.subtle Accepted

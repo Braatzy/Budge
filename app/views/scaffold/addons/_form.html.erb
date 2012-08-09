@@ -1,0 +1,53 @@
+<%= form_for(@addon) do |f| %>
+  <% if @addon.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@addon.errors.count, "error") %> prohibited this addon from being saved:</h2>
+
+      <ul>
+      <% @addon.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_id %><br />
+    <%= f.text_field :parent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :purchasable %><br />
+    <%= f.text_field :purchasable %>
+  </div>
+  <div class="field">
+    <%= f.label :visible_at_level %><br />
+    <%= f.text_field :visible_at_level %>
+  </div>
+  <div class="field">
+    <%= f.label :auto_unlocked %><br />
+    <%= f.check_box :auto_unlocked %>
+  </div>
+  <div class="field">
+    <%= f.label :level_credit_cost %><br />
+    <%= f.text_field :level_credit_cost %>
+  </div>
+  <div class="field">
+    <%= f.label :dollar_cost %><br />
+    <%= f.text_field :dollar_cost %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

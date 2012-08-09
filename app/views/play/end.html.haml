@@ -1,0 +1,62 @@
+-# http://beta.getbudged.com/play/end/33
+%div{'data-role' => :page, :id => :checkin}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Other options", :current=>'play'}
+  %div{'data-role' => :content, :class => :content, :style => ''}
+    - if @program_player.present? and @program_player.completed?
+      %h2 You rock! You completed #{@program.name}!  
+    - else
+      %h2 End #{@program.name} 
+
+    = form_tag url_for(:controller => :play, :action => :declare_end, :id => @program.id), {:id => 'end_form'} do |f|
+      = hidden_field :program_player, :victorious
+      = hidden_field :entry, :private
+      = hidden_field :entry, :post_to_twitter
+      = hidden_field :entry, :post_to_facebook
+      - if @program.required_question_1.present?
+        %p 
+          %h3.thin= @program.required_question_1
+          = text_area :program_player, :required_answer_1, {:class => 'stylized_input', :placeholder => ""}
+
+      - if @program.required_question_2.present?
+        %p 
+          %h3.thin= @program.required_question_2
+          = text_area :program_player, :required_answer_2, {:class => 'stylized_input', :placeholder => ""}
+      
+      - if @program.optional_question_1.present?
+        %p 
+          %h3.thin= @program.optional_question_1
+          = text_area :program_player, :optional_answer_1, {:class => 'stylized_input', :placeholder => ""}
+      
+      - if @program.optional_question_2.present?
+        %p 
+          %h3.thin= @program.optional_question_2
+          = text_area :program_player, :optional_answer_2, {:class => 'stylized_input', :placeholder => ""}
+
+      = render :partial => 'share_buttons'
+
+      - if @program_player.present? and @program_player.completed?
+        =button 'Declare victory!', {}, {:class => 'button_important submit_end_form', 'data-form-id' => :end_form, :id => :victory}        
+        =button 'Keep playing', {:controller => :play, :action => :map, :id => @program.id}, {:class => 'noajax', :id => :keep_playing}
+      - else
+        %h2.handwriting{:style => 'margin-bottom: 0; padding-bottom: 0;'} I declare&hellip;
+        .ui-grid-a
+          .ui-block-a= button 'Defeat', {}, {:class => 'button_cancel submit_end_form','data-form-id' => :end_form, :id => :defeat}
+          .ui-block-b= button 'Victory', {}, {:class => 'button_important submit_end_form','data-form-id' => :end_form, :id => :victory}
+      
+  :javascript
+    $('.submit_end_form').click(function(){
+      $('#entry_private').val($('#keep_private').attr('data-private'));
+      $('#entry_post_to_twitter').val($('#share_twitter').attr('data-twitter'));
+      $('#entry_post_to_facebook').val($('#share_facebook').attr('data-facebook'));
+      
+      if ($(this).attr('id') == 'victory') {
+        $('#program_player_victorious').val('1');
+      } else if ($(this).attr('id') == 'defeat') {
+        $('#program_player_victorious').val('0');      
+      } else {
+        $('#program_player_victorious').val('');      
+      }
+      $('#'+$(this).attr('data-form-id')).submit();
+      return false;
+    });
+  

@@ -1,0 +1,46 @@
+-message_exist=false
+-use_week_ticks= !params[:all]
+
+.page-header
+  %h2{:id=>program_player.program.id}
+    =program_player.program.name
+    %span.label.label-success.small{:style=>'font-family: sans serif'} began #{basic_datestamp(program_player.created_at)}
+  
+.time_line
+  %h4=link_to_collapse 'Timeline',"#timeline#{program_player.id}"
+  .collapse.in{:id=>"timeline#{program_player.id}"}
+  :javascript
+    make_player_timeline(
+      #{@checkins_info[program_player.program.id].to_json},
+      #{@budges_info[program_player.program.id].to_json},
+      #{@player_messages_info[program_player.program.id].to_json},
+      #{program_player.program.number_levels},
+      #{@range_time.to_json},
+      "timeline#{program_player.id}",
+      #{use_week_ticks}
+    );  
+  
+.level_attempts
+  %h4=link_to_collapse 'Level attempts',"#levels_table#{program_player.id}"
+  .simple_table.collapse{:id=>"levels_table#{program_player.id}"}=render :partial=>'level_attempts',:locals=>{:budges=>budges,:table_id=>"program_budges#{program_player.program.id}"}
+
+.checkins
+  %h4=link_to_collapse 'Checkins',"#checkins_table#{program_player.id}"
+  .simple_table.collapse{:id=>"checkins_table#{program_player.id}"}=render :partial=>'user_checkins',:locals=>{:table_id=>"checkins#{program_player.program.id}",:checkins=>@checkins[program_player.program.id]}
+
+.messages
+  %h4=link_to_collapse 'Messages',"#messages_table#{program_player.id}"
+  .collapse{:id=>"messages_table#{program_player.id}"}=render :partial=>'messages', :locals=>{:messages=>messages,:table_id=>"messages#{program_player.program.id}",:show_user_info=>false,:show_program_name=>false}
+
+:javascript
+  $(document).ready(function() {
+    $("#program_budges#{program_player.program.id}").dataTable( {
+     "bPaginate": false,
+     "aaSorting": [[ 3, "desc" ]]
+      });
+      
+    $("#checkins#{program_player.program.id}").dataTable( {
+     "bPaginate": false,
+     "aaSorting": [[ 1, "desc" ]]
+      });
+  });

@@ -1,0 +1,57 @@
+# == Schema Information
+#
+# Table name: twitter_scores
+#
+#  id                        :integer(4)      not null, primary key
+#  date                      :date
+#  twitter_id                :integer(4)
+#  twitter_screen_name       :string(255)
+#  klout_score               :decimal(5, 2)   default(0.0)
+#  klout_slope               :decimal(5, 2)   default(0.0)
+#  klout_class_id            :integer(4)
+#  klout_class_name          :string(255)
+#  klout_network_score       :decimal(5, 2)   default(0.0)
+#  klout_amplification_score :decimal(5, 2)   default(0.0)
+#  klout_true_reach          :integer(4)      default(0)
+#  klout_delta_1day          :decimal(5, 2)   default(0.0)
+#  klout_delta_5day          :decimal(5, 2)   default(0.0)
+#  num_followers             :integer(4)      default(0)
+#  num_following             :integer(4)      default(0)
+#  num_tweets                :integer(4)      default(0)
+#  created_at                :datetime
+#  updated_at                :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  twitter_id: 1
+  twitter_screen_name: MyString
+  klout_score: 9.99
+  klout_slope: 9.99
+  klout_class_id: 1
+  klout_class_name: MyString
+  klout_network_score: 9.99
+  klout_amplification_score: 9.99
+  klout_true_reach: 9.99
+  klout_delta_1day: 9.99
+  klout_delta_5day: 9.99
+  num_followers: 1
+  num_following: 1
+  num_tweets: 1
+
+two:
+  twitter_id: 1
+  twitter_screen_name: MyString
+  klout_score: 9.99
+  klout_slope: 9.99
+  klout_class_id: 1
+  klout_class_name: MyString
+  klout_network_score: 9.99
+  klout_amplification_score: 9.99
+  klout_true_reach: 9.99
+  klout_delta_1day: 9.99
+  klout_delta_5day: 9.99
+  num_followers: 1
+  num_following: 1
+  num_tweets: 1

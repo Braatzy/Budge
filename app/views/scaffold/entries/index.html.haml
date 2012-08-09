@@ -1,0 +1,36 @@
+%h1= t('.title')
+%p= link_to t('.new_entry'), new_scaffold_entry_path
+
+%table
+  %thead
+    %tr
+      %th= Entry.human_attribute_name :user_id
+      %th= Entry.human_attribute_name :program_player_id
+      %th= Entry.human_attribute_name :program_id
+      %th= Entry.human_attribute_name :program_budge_id
+      %th= Entry.human_attribute_name :player_message_id
+      %th= Entry.human_attribute_name :tweet_id
+      %th= Entry.human_attribute_name :facebook_post_id
+      %th= Entry.human_attribute_name :location_context_id
+      %th= Entry.human_attribute_name :message
+      %th= Entry.human_attribute_name :message_type
+      %th= Entry.human_attribute_name :privacy_setting
+      %th{:colspan => 3}= t 'actions'
+  
+  %tbody
+    - for entry in @entries
+      %tr{ :class => cycle(:odd, :even) }
+        %td= entry.user_id
+        %td= entry.program_player_id
+        %td= entry.program_id
+        %td= entry.program_budge_id
+        %td= entry.player_message_id
+        %td= entry.tweet_id
+        %td= entry.facebook_post_id
+        %td= entry.location_context_id
+        %td= entry.message
+        %td= entry.message_type
+        %td= entry.privacy_setting
+        %td.action= link_to t('show'), [:scaffold, entry]
+        %td.action= link_to t('edit'), edit_scaffold_entry_path(entry)
+        %td.action= link_to t('destroy'), [:scaffold, entry], :confirm => t('are_you_sure'), :method => :delete

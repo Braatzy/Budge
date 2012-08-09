@@ -1,0 +1,48 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:current=>"stream"}
+  %div{'data-role' => :content, :class => :content, :style => (@browser_type == 'mobile' ? 'width: 320px; padding: 15px 0;' : 'padding: 0 15px;')}
+    - if @program_players.present?
+      = render :partial => 'play/your_program_grid', :locals => {:program_players => @program_players, :has_archive => @archived_program_players.present?, :can_invite => @can_invite_people}
+      %br{:clear => :all}
+    - else
+      %p= button "Take the tour", {:host => DOMAIN, :protocol => 'http://', :controller => :home, :action => :tour}, {:class => :noajax}
+      %p= button "Explore habits", {:host => SECURE_DOMAIN, :protocol => 'http://', :controller => :store, :action => :index}, {:class => :noajax}
+      
+    %div{:style => 'text-align: center; margin-bottom: 1em;'}
+      - if session[:filter] == 'everyone'
+        %strong Everyone 
+        &middot;
+        = link_to "Your Friends", {:controller => :stream, :action => :filter, :filter => :friends}, {:class => 'noajax dashed', :rel => :external}
+      - else
+        = link_to "Everyone", {:controller => :stream, :action => :filter, :filter => :everyone}, {:class => 'noajax dashed', :rel => :external}
+        &middot;
+        %strong Your Friends 
+
+    %div{:style => (@browser_type == 'mobile' ? 'padding: 0 15px;' : '')}
+      - if @entries.present?
+        %div{:id => :stream_index_list}
+          = render :partial => 'stream_list_items', :locals => {:entries => @entries}
+        - if @entries.total_entries > @entries.size
+          %div{:id => 'stream_index_more', :class => :stream_list, 'data-next-page' => 2}      
+            %div{:id => 'more_entries', 'data-icon' => 'false', :style => 'text-align: center;'}
+              = link_to raw("Load more&hellip;"), {:controller => :stream, :action => :more_entries}, {:id => 'more_link'}
+          
+          :javascript
+            #{startj}
+            $('#more_entries a').unbind('click').click(function(){
+              $('#more_link').html("Loading more&hellip;");
+              $.ajax({
+                url: $(this).attr('href'),
+                type: 'POST',
+                dataType: 'script',
+                data: {page: $('#stream_index_more').attr('data-next-page'), 
+                       filter: "#{@filter}"}
+              });
+              return false;
+            });
+            #{endj}
+  
+      - else
+        %p Nothing here yet.
+
+  = render :partial => 'home/mobile_footer'

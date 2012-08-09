@@ -1,0 +1,24 @@
+.row
+  .span3
+    .sidebar-nav
+      %ul.nav.nav-list
+        %li.nav-header Info
+        %li{:class => (params[:action] == 'index' ? 'active' : '')}
+          = link_to "Introduction", {:action => 'index'}
+        - if false and current_user and current_user.admin?
+          %li{:class => (params[:action] == 'button' ? 'active' : '')}
+            = link_to 'Habit Button', {:action => :button}
+          %li
+            = link_to 'Log out', {:controller => :home, :action => :logout}
+        
+  .span9
+    .hero-unit
+      %h1.hidden-phone Practice Changing
+      %h2.visible-phone Practice Changing
+      %h3{:style => 'font-weight: normal;'} A 3-week online habit mentorship program for people who want help lighting a fire under their ass.
+    
+    %h2{:style => 'font-weight: normal; margin-bottom: 1em;'} If you succeed at changing a habit, you'll be good for a while (until you fall off the wagon). But if you learn the art of changing (so you can add, edit, and remove habits whenever you want), then you're good for a lifetime.
+    
+    %h3{:style => 'font-weight: normal; margin-bottom: 1em;'} [photo of how to succeed at anything]
+    
+    

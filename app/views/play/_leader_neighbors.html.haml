@@ -1,0 +1,28 @@
+- one_up ||= nil
+- one_down ||= nil
+
+- if my_score.present?
+  %h3{:style => 'margin-top: 2em;'} In the last 30 days&hellip;
+  %table
+    - if one_up.present?
+      %tr
+        %td
+          = image_tag one_up.user.photo.url(:tiny), {:class => 'rounded-img-small'}
+        %td
+          %strong= one_up.user.name
+          = Trait.statement(one_up.user, :past, one_up.program.leaderboard_trait, one_up.score)
+  
+    %tr
+      %td
+        = image_tag my_score.user.photo.url(:tiny), {:class => 'rounded-img-small'}
+      %td
+        %strong You
+        = Trait.statement(my_score.user, :past, my_score.program.leaderboard_trait, my_score.score)
+  
+    - if one_down.present?
+      %tr
+        %td
+          = image_tag one_down.user.photo.url(:tiny), {:class => 'rounded-img-small'}
+        %td
+          %strong= one_down.user.name
+          = Trait.statement(one_down.user, :past, one_down.program.leaderboard_trait, one_down.score)

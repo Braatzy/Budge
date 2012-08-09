@@ -1,0 +1,38 @@
+%div{'data-role' => :page, :id => :support}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Support #{@supporter.program_player.user.name}!"}
+  %div{'data-role' => :content, :class => :content}
+
+    %div{:class => :rounded, :style => 'background-color: #fff; width: 270px;'}
+      %h1.handwriting{:style => 'margin-top: 0;'} Dear #{@supporter.user_name},
+      - if @supporter.invite_message.present?
+        %p= raw textilize @supporter.invite_message
+      - else
+        %p I need help playing the #{@supporter.program.name}.
+
+      %p Let's do this!
+    
+      %p
+        %div Signed,
+        %div= @supporter.program_player.user.name
+
+      
+    %h3 Interested?
+    %div Awesome! Claim your Budge account using Twitter.
+
+    %p=button "Yes, I will help!", {:controller => :home, :action => :become_supporter, :id => @supporter.id}, {:class => 'noajax'}
+
+    %p=button "No thanks", {:controller => :home, :action => :decline_supporter, :id => @supporter.id}, {:class => 'noajax'}
+
+    %div{:class => 'horiz_line_2'} &nbsp;
+
+    %p
+      %strong What is Budge?
+      %br
+      Budge is a mobile app where you can play a variety of health-improvement programs.  You're here right now because your friend, #{@supporter.program_player.user.name}, wants your help with the #{@program.name} program.  
+
+    %p
+      = raw textilize "<strong>What is the #{@program.name} program all about?</strong><br /> #{@program.description}"
+    
+
+  = render :partial => 'home/mobile_footer'
+    

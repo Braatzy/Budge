@@ -1,0 +1,33 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+      
+  %div{'data-role' => :content, :class => :content}
+  
+    - if @player_budge.blank? or @player_budge.completed?
+      %h1.handwriting Time to choose a new level!
+      =button "View map",{:controller => :play, :action => :map, :id => @program.id}
+    - else
+      - if @player_budge.last_completed_date.present?
+        %h1.handwriting All done for now!
+      - elsif @player_budge.day_of_budge == 0
+        %h1.handwriting Look for something from us tomorrow!
+      - elsif @player_budge.day_of_budge < 0
+        %h1.handwriting Paused        
+      - elsif @player_budge.scheduled? and @player_budge.day_starts_at.present? and @player_budge.day_starts_at.to_date == Time.zone.today+1
+        %h1.handwriting Come back tomorrow!
+      - elsif @player_budge.scheduled? and @player_budge.day_starts_at.present? and @player_budge.day_starts_at.to_date > Time.zone.today
+        %h1.handwriting Come back in #{@player_budge.day_starts_at.to_date-Time.zone.today} days!
+      - elsif @player_budge.days_remaining_round_down > 0
+        %h1.handwriting #{@player_budge.days_remaining_round_down} days to go!
+      
+      =button "Go live your life",{:controller => :play, :action => :byebye, :id => @program.id},{ :class=>'button_important', 'data-transition' => 'fade'}
+      
+    - if @player_budge.blank? or @player_budge.completed?
+      -# Nothing... already prompted to 
+    - elsif @player_budge.last_completed_date.present? and false
+      - if @player_budge.last_completed_date >= (Time.zone.today.to_date)
+        =button "Edit today",{:controller => :play, :action => :checkin, :id => @program.id, :date => Time.zone.today.to_date}, {:id => @program.id}
+      - elsif @player_budge.last_completed_date >= (Time.zone.today.to_date-1)
+        =button "Play today",{:controller => :play, :action => :checkin, :id => @program.id, :date => Time.zone.today.to_date}, {:id => @program.id}
+
+  = render :partial => 'home/mobile_footer'

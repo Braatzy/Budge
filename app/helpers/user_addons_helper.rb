@@ -1,0 +1,2 @@
+module UserAddonsHelper
+end

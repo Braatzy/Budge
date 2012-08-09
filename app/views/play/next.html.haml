@@ -1,0 +1,93 @@
+-text_yes=if @no_new_player_budge then 'Save' else 'Accept &amp; continue' end
+-text_no =if @no_new_player_budge then 'Change' else 'No thanks' end
+
+%div{'data-role' => :page, :id => 'next'}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+      
+  %div{'data-role' => :content, :class => :content}
+  
+    // # STILL PLAYING
+    - if @still_playing
+      %h1{:class => 'handwriting thanks_msg'} Thanks for playing!
+
+      %h3{:class => 'next_instructions rounded'}
+        - days_remaining = @current_player_budge.days_remaining_round_down
+        - if days_remaining == 0
+          You have the rest of today to finish #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}}. You can do it!
+        - else
+          You have #{pluralize days_remaining, 'day'} left on #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}}. Look for a reminder from us soon!
+
+      = render :partial => 'next_budge_preview', :locals => {:player_budge => @current_player_budge}                  
+      %p= render :partial => 'byebye_button', :locals => {:program => @program}      
+      %p=# render :partial => 'hungry_programs', :locals => {:program_players => @now_playing}
+      
+
+      // # STARTED NEW BUDGE
+    - elsif @started_playing 
+      %h1{:class => 'handwriting banner', :style => "color: #369; padding: 0; background-image: url('#{image_path('mobile-web/1/scene_pretty_good_sm.png')}'); font-size: 40px; line-height: 70px;"} Let's do this!&nbsp;&nbsp;&nbsp;
+        
+        
+      %h3{:class => 'next_instructions'}
+        You are scheduled to #{@current_player_budge.day_of_budge > 1 ? 'continue' : 'play'} #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}} 
+        #{@current_player_budge.day_of_budge > 1 ? '' : 'starting'} 
+        #{select :schedule, :budge, @current_player_budge.select_start_date_options, :selected => @current_player_budge.day_starts_date}
+
+      = render :partial => 'next_budge_preview', :locals => {:player_budge => @current_player_budge}                  
+      = render :partial=>'next_budge_Y_N', :locals=>{:text_yes=>text_yes,:text_no=>text_no,:program_id=> @program.id,:start_date=>@current_player_budge.day_starts_date}
+    
+
+    - elsif @replaying
+      // REPLAYING SAME BUDGE: DIDN'T PASS
+      - if @replaying == 'completed' or @replaying == 'failed'
+        - if @replaying == 'completed'
+          %h1{:class => 'handwriting banner', :style => "color: #900; padding: 0; background-image: url('#{image_path('mobile-web/1/scene_fail_salt_sm.png')}'); font-size: 40px; line-height: 70px;"} Do-over?
+        
+        - elsif @replaying == 'failed'
+          %h1{:class => 'handwriting banner', :style => "color: #900; padding: 0; background-image: url('#{image_path('mobile-web/1/scene_fail_beer_sm.png')}'); font-size: 40px; line-height: 70px;"} Do-over?
+        
+        %h3{:class => 'next_instructions'}
+          I scheduled you to replay #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}} starting 
+          #{select :schedule, :budge, @current_player_budge.select_start_date_options, :selected => @current_player_budge.day_starts_date}
+  
+        
+        // # STILL PLAYING: BUT PASSED
+      - elsif @replaying == 'passed'
+        %h1{:class => 'handwriting banner', :style => "color: #c60; padding: 0; background-image: url('#{image_path('mobile-web/1/scene_pretty_good_sm.png')}'); font-size: 40px; line-height: 70px;"} Pretty good!&nbsp;&nbsp;&nbsp;
+        %h3{:class => 'next_instructions'}
+          I scheduled you to play #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}} one more time starting 
+          #{select :schedule, :budge, @current_player_budge.select_start_date_options, :selected => @current_player_budge.day_starts_date}
+
+      = render :partial => 'next_budge_preview', :locals => {:player_budge => @current_player_budge}                  
+      = render :partial=>'next_budge_Y_N', :locals=>{:text_yes => text_yes, :text_no => text_no, :program_id => @program.id, :start_date => @current_player_budge.day_starts_date}
+              
+      // # LEVELED UP
+    - elsif @leveled_up
+      %h1{:class => 'handwriting banner', :style => "color: purple; padding: 0; background-image: url('#{image_path('mobile-web/1/scene_success_hills_sm.png')}');"} Sweet victory!&nbsp; &nbsp; &nbsp;
+      %h3{:class => 'next_instructions'}
+        I scheduled you to play #{link_to @current_player_budge.program_budge.name, '#', {:id => "level_preview_#{@current_player_budge.program_budge_id}"}} starting 
+        #{select :schedule, :budge, @current_player_budge.select_start_date_options, :selected => @current_player_budge.day_starts_date}
+     
+      = render :partial => 'next_budge_preview', :locals => {:player_budge => @current_player_budge}                  
+      = render :partial => 'next_budge_Y_N', :locals=>{:text_yes=>text_yes,:text_no=>text_no,:program_id=> @program.id,:start_date=>@current_player_budge.day_starts_date}
+    
+    - if @current_player_budge.present?
+      :javascript
+        $("#level_preview_#{@current_player_budge.program_budge_id}").unbind('click').click(function(){
+          $("#level_preview_panel_#{@current_player_budge.program_budge_id}").slideToggle();
+          return false;
+        });
+        $('#accept_current_budge').unbind('click').click(function(){
+          if ($('#schedule_budge').val() == $(this).attr('data_current_start_date')) {
+            // Do the normal thing
+          } else {
+            $.mobile.showPageLoadingMsg();    
+            window.location = "#{url_for :controller => :play, :action => :reschedule_player_budge, :id => @current_player_budge.id}?date="+$('#schedule_budge').val();
+            return false;
+          }
+        });
+  
+    - if @my_score.present? and current_user.admin?
+      = render :partial => 'leader_neighbors', :locals => {:my_score => @my_score, :one_up => @one_up, :one_down => @one_down}        
+        
+  = render :partial => 'home/mobile_footer'
+  

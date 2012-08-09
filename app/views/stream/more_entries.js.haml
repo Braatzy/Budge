@@ -1,0 +1,8 @@
+$('#stream_index_list').append("#{escape_javascript(render :partial => 'stream_list_items', :locals => {:entries => @entries})}");
+$('#more_link').html("Load more&hellip;")
+$('#more_entries').removeClass('ui-btn-active');
+- if @entries.blank?
+  $('#more_link').slideUp();
+- else
+  $('#stream_index_more').attr('data-next-page', "#{params[:page].to_i+1}");
+

@@ -1,0 +1,61 @@
+<%= form_for(@oauth_token) do |f| %>
+  <% if @oauth_token.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@oauth_token.errors.count, "error") %> prohibited this oauth_token from being saved:</h2>
+
+      <ul>
+      <% @oauth_token.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :site_token %><br />
+    <%= f.text_field :site_token %>
+  </div>
+  <div class="field">
+    <%= f.label :site_name %><br />
+    <%= f.text_field :site_name %>
+  </div>
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :secret %><br />
+    <%= f.text_field :secret %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_name %><br />
+    <%= f.text_field :remote_name %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_username %><br />
+    <%= f.text_field :remote_username %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_user_id %><br />
+    <%= f.text_field :remote_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :cached_user_info %><br />
+    <%= f.text_area :cached_user_info %>
+  </div>
+  <div class="field">
+    <%= f.label :cached_datetime %><br />
+    <%= f.datetime_select :cached_datetime %>
+  </div>
+  <div class="field">
+    <%= f.label :working %><br />
+    <%= f.check_box :working %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,200 @@
+%div{:id => 'invite', 'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header'} 
+    = back_button
+    %h1 Send a budge
+  %div{'data-role' => 'content'}
+    -# Choose your budge
+    %h4{:style => ''} What kind of budge?
+    = render :partial => 'choose_budge_to_send_dropdown'
+          
+    -# Pick your people
+    %h4{:style => 'margin-bottom: 0;'} Pick some friends
+    %div{:id => 'num_remaining', 'data-max' => "#{current_user.num_sent_budges_left_today}"} 
+      (You can budge <span>#{current_user.num_sent_budges_left_today > 0 ? current_user.num_sent_budges_left_today : 'no'}</span> more people today)
+    %ul{'data-role' => 'listview', 'data-inset' => 'true', :id => 'who_to_budge'}
+      %li
+        %a{:href => '', :id => :send_by_budge, :class => :select, 'data-group' => :budge} Budge users          
+      - if @facebook = current_user.oauth_for_site_token('facebook')
+        %li{:id => :send_by_facebook} 
+          %a{:href => '', :id => :send_by_facebook, :class => :select, 'data-group' => :facebook} Facebook friends
+      - else
+        %li{} 
+          %a{:href => '', :id => :send_by_facebook, :class => :connect} Facebook friends              
+  
+      - if @twitter = current_user.oauth_for_site_token('twitter')
+        %li{} 
+          %a{:href => '', :id => :send_to_twitter, :class => :select, 'data-group' => :twitter} Twitter friends
+      - else
+        %li{} 
+          %a{:href => '', :id => :connect_to_twitter, :class => :connect} Twitter friends              
+
+    -# Sending to these people
+    %ul{:id => 'sending_to'}
+
+    - if false
+      %h4{:style => 'margin-bottom: 0; padding-bottom: 5px;'} Add something budgey (or not)
+      %textarea{:id => 'user_budge_message', :style => 'height: 100px', :name => 'user_budge_message', :value => ''}
+      %div{:style => 'font-size: 12px; text-align: right;'}
+        %span{:id => 'char_count', :style => 'font-weight: bold;'} 120 chars left
+
+    %div{'data-inline' => 'true', 'data-grid' => 'a'}
+      %a{:id => :send_user_budge, 'data-role' => 'button', :class => 'ui-block-a', 'data-theme' => 'b'} Send
+
+
+    :javascript
+      #{startj}
+      //$('#user_budge_message').keyup(function(){
+        //$('#char_count').html(120-parseInt($('#user_budge_message').val().length));
+      //});
+      $('.connect').click(function(){
+        $.mobile.showPageLoadingMsg();
+        if ($(this).attr('id') == 'connect_to_twitter') {
+          window.location = '/oauth/twitter?redirect_to=/home/send_budge';
+          return false;
+        } else if ($(this).attr('id') == 'connect_to_foursquare') {
+          window.location = '/oauth/foursquare?redirect_to=/home/send_budge';
+          return false;
+        } else if ($(this).attr('id') == 'connect_to_facebook') {
+          window.location = '/oauth/facebook?redirect_to=/home/send_budge';
+          return false;
+        }
+      });
+      
+      // Find users from a particular network, and load people that they've budged from here in the past
+      $('.select').click(function(){
+        // Load people they've budged in the past...
+        if ($(this).attr('data-group') == 'budge') {
+          $.mobile.changePage('#choose_budge_friends');
+          if ($('#budge_list input').size() < 1) {
+            $.ajax({
+              url: "#{url_for :controller => :budge, :action => :load_common_budge_users}",
+              type: 'POST',
+              dataType: 'script'
+            });
+          }
+        
+        } else if ($(this).attr('data-group') == 'facebook') {
+          $.mobile.changePage('#choose_facebook_friends');
+        
+        } else if ($(this).attr('data-group') == 'twitter') {
+          $.mobile.changePage('#choose_twitter_friends');
+        
+        } else if ($(this).attr('data-group') == 'email') {
+          $.mobile.changePage('#choose_email_friends');
+        
+        }
+      });
+      
+      $('#send_user_budge').click(function(){
+        sending_ids = [];
+        $('ul#sending_to').children('li').each(function(idx, element) {
+          sending_ids.push({id: element.id, name: $(this).attr('data-name')});
+        }); 
+        $.ajax({
+          url: "#{url_for :controller => :budge, :action => :send_budge}",
+          type: 'POST',
+          dataType: 'script',
+          data: {sending_ids: sending_ids,
+                 user_budge_message: $('#user_budge_message').val(),
+                 trait_id: $('#trait_id').val(),
+                 trait_do: $('#trait_do').val(),
+                 trait_alignment: $('#trait_alignment').val(),
+                 trait_name: $('#trait_name').val(),
+                 latitude: $('#location').attr('data-lat'),
+                 longitude: $('#location').attr('data-lon'),
+                 trait_duration: $('#trait_duration').val(),
+                 trait_quantity: $('#trait_quantity').val()}
+        });
+      });
+      #{endj}
+
+  = render :partial => 'home/footer'
+
+%div{:id => 'choose_budge_friends', 'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header', 'data-backbtn' => 'false'}
+    %h1 Budge friends
+    %a{:href => '/home/send_budge', 'data-icon' => 'plus', :class => "done ui-btn-right", 'data-direction' => 'reverse'} Done
+  %div{'data-role' => 'content'}
+    %form{:id => :search_budge_form, :class => :find_users, :method => :post, :action => '/budge/search_budge_users'}
+      %label{:for => :search_budge_field} Search by name or email address
+      %input{:id => :search_budge_field, :name => :q, :type => :search}
+      %br
+      %br
+    %div{:id => :budge_fieldcontain, 'data-role' => 'fieldcontain', :style => 'padding-top: 3px'}
+      %fieldset{:id => 'budge_list', 'data-role' => 'controlgroup'}        
+  
+%div{:id => 'choose_facebook_friends', 'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header', 'data-backbtn' => 'false'}
+    %h1 Facebook friends
+    %a{:href => '/home/send_budge', 'data-icon' => 'plus', :class => "done ui-btn-right", 'data-direction' => 'reverse'} Done
+  %div{'data-role' => 'content'}
+    %form{:id => :search_facebook_form, :class => :find_users, :method => :post, :action => '/budge/search_facebook_users'}
+      %label{:for => :search_facebook_field} Search by full name on Facebook
+      %input{:id => :search_facebook_field, :name => :q, :type => :search}
+      %br
+      %br
+    %div{:id => :budge_fieldcontain, 'data-role' => 'fieldcontain', :style => 'padding-top: 3px'}
+      %fieldset{:id => 'facebook_list', 'data-role' => 'controlgroup'}        
+
+%div{:id => 'choose_twitter_friends', 'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header', 'data-backbtn' => 'false'}
+    %h1 Twitter friends
+    %a{:href => '/home/send_budge', 'data-icon' => 'plus', :class => "done ui-btn-right", 'data-direction' => 'reverse'} Done
+  %div{'data-role' => 'content'}
+    %form{:id => :search_twitter_form, :class => :find_users, :method => :post, :action => '/budge/search_twitter_users'}
+      %label{:for => :search_twitter_field} Add by Twitter username
+      %input{:id => :search_twitter_field, :name => :q, :type => :search}
+      %br
+      %br
+    %div{:id => :budge_fieldcontain, 'data-role' => 'fieldcontain', :style => 'padding-top: 3px'}
+      %fieldset{:id => 'twitter_list', 'data-role' => 'controlgroup'}        
+
+%div{:id => 'choose_email_friends', 'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'header', 'data-backbtn' => 'false'}
+    %h1 Email addresses
+    %a{:href => '/home/send_budge', 'data-direction' => 'reverse', :class => "done ui-btn-right", 'data-icon' => 'plus', 'data-transition' => 'fade'} Done
+  %div{'data-role' => 'content'}
+    %form{:id => :add_email_form, :class => :find_users, :method => :post, :action => '/budge/add_email'}
+      %label{:for => :add_email_field} Add an email address
+      %input{:id => :add_email_field, :name => :q, :type => :search}
+      %br
+      %br
+    %ul{:id => 'email_list', 'data-role' => 'listview'}
+
+:javascript
+  #{startj}
+  $('.done').click(function(){
+    $.mobile.changePage('#invite', 'fade', true, true);
+    return false;
+  });
+  $('#invite').live('pageshow', function(){
+    $('#who_to_budge').listview('refresh');
+  });
+  $('.find_users').submit(function(){ 
+    $.mobile.showPageLoadingMsg();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'POST',
+      dataType: 'script',
+      data: {q: $(this).find("input").val()},
+      success: function(){
+        $.mobile.hidePageLoadingMsg();
+      },
+      error: function(){
+        $.mobile.hidePageLoadingMsg();  
+      }
+    });
+    return false;
+  });
+  $('#choose_facebook_friends').live('pageshow', function(){
+    $('#search_facebook_field').focus();
+  });
+  $('#choose_twitter_friends').live('pageshow', function(){
+    $('#search_twitter_field').focus();
+  });
+  $('#choose_email_friends').live('pageshow', function(){
+    $('#add_email_field').focus();
+  });
+  #{endj}
+
+= render :partial => 'choose_budge_pack_pages'

@@ -1,0 +1,2 @@
+$('#pack_traits_<%= @pack.id %>').html("<%= escape_javascript(render :partial => 'pack_traits', :locals => {:pack => @pack}) %>");
+$('#pack_<%= @pack.id %>_trait_<%= @trait.id %>').effect('highlight', {duration: 3000});

@@ -1,0 +1,4 @@
+-# Send in through User.contact_them
+- message_data ||= Hash.new
+- user = message_data[:data] 
+= render :partial => 'coach/coach_report', :locals => {:user => user, :player_buckets => ProgramPlayer.player_buckets_for_coach(user), :suppress_form => true}

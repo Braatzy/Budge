@@ -1,0 +1,7 @@
+%div{'data-role' => :page, 'data-theme' => @data_theme, :id => "pack_#{@pack.token}", 'data-url' => "pack_#{@pack.token}"}
+  %div{'data-role' => :header, :class => :page_header}
+    %h1 #{@pack.name}
+  %div{'data-role' => :content}
+    = render :partial => 'budge/select_traits_list', :locals => {:traits => @pack.traits.select{|t|t.parent_trait_id.blank?}.sort_by{|t|t.token}, :budge_request => @budge_request, :user => @user}        
+  = render :partial => 'home/footer'
+

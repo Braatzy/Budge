@@ -1,0 +1,58 @@
+<%= form_for([:scaffold, @trait]) do |f| %>
+  <% if @trait.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@trait.errors.count, "error") %> prohibited this trait from being saved:</h2>
+
+      <ul>
+      <% @trait.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :verb %><br />
+    <%= f.text_field :verb %>
+  </div>
+  <div class="field">
+    <%= f.label :noun %><br />
+    <%= f.text_field :noun %>
+  </div>
+  <div class="field">
+    <%= f.label :answer_type %><br />
+    <%= f.text_field :answer_type %>
+  </div>
+  <div class="field">
+    <%= f.label :daily_question %> (no question mark at end)<br />
+    <%= f.text_field :daily_question %>
+  </div>
+
+  <div class="field">
+    <%= f.label :do_name %><br />
+    <%= f.text_field :do_name %>
+  </div>
+  <div class="field">
+    <%= f.label :dont_name %><br />
+    <%= f.text_field :dont_name %>
+  </div>
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :primary_pack_token %><br />
+    <%= f.text_field :primary_pack_token %>
+  </div>
+  <div class="field">
+    <%= f.label :parent_trait_id %><br />
+    <%= f.text_field :parent_trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :setup_required %><br />
+    <%= f.check_box :setup_required %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

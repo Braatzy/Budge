@@ -1,0 +1,5 @@
+- if Rails.env == 'production' and @kissmetrics_record.present?
+  _kmq.push(['record', "#{@kissmetrics_record}"]);      
+
+window.location = "/waiting_room";
+

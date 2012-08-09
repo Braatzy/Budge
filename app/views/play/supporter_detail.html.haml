@@ -1,0 +1,23 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @supporter.user.present? ? @supporter.user.name : @supporter.user_data[:user_name]}
+  %div{'data-role' => :content, :class => :content}
+
+    %h3 You've asked #{@supporter.user.present? ? @supporter.user.name : @supporter.user_data[:user_name]} for help
+    %div.rounded{:id => "supporter_action_results_#{@supporter.id}", :style => 'background-color: #9c9; display: none;'}
+
+    %div{:class => 'ui-grid-a'}
+      %div{:class => 'ui-block-a'}= link_to "Back", '#coaches', {'data-rel' => 'back', 'data-role' => :none, :class => :button_half_a}
+      %div{:class => 'ui-block-b'}      
+        - if @supporter.active?
+          = button "Fire", '#', {'data-supporter-id' => "#{@supporter.id}", :class => 'fire_supporter_button'} 
+        - else
+          = button "Resend invite", '#', {'data-supporter-id' => "#{@supporter.id}", :class => 'resend_supporter_button'} 
+
+    :javascript
+      #{startj}
+      $('.fire_supporter_button').unbind('click').click(function(e){
+        return false;
+      });
+      #{endj}
+    
+  = render :partial => 'home/mobile_footer'

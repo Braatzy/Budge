@@ -1,0 +1,20 @@
+%h1= t '.title'
+%p
+  = link_to t('back'), scaffold_supporters_path
+  = link_to t('edit'), edit_scaffold_supporter_path(@supporter)
+
+%dl
+  %dt= Supporter.human_attribute_name :program_player_id
+  %dd= @supporter.program_player_id
+  %dt= Supporter.human_attribute_name :program_id
+  %dd= @supporter.program_id
+  %dt= Supporter.human_attribute_name :user_id
+  %dd= @supporter.user_id
+  %dt= Supporter.human_attribute_name :invite_token
+  %dd= @supporter.invite_token
+  %dt= Supporter.human_attribute_name :active
+  %dd= @supporter.active
+  %dt= Supporter.human_attribute_name :user_data
+  %dd= @supporter.user_data
+  %dt= Supporter.human_attribute_name :invitation_data
+  %dd= @supporter.invitation_data

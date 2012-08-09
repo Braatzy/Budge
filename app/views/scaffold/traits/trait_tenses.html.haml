@@ -1,0 +1,118 @@
+%div{'data-role' => :page}
+  %div{'data-role' => :content, :style => 'font-family: helvetica;'}
+    %h1 Trait Tense Testing
+    
+    %p #{Trait::TENSES.sort.map{|verb,tenses|verb}.join(', ')}
+    
+    %table
+      - @traits.each do |trait|
+        %tr{:valign => 'top'}
+          %td
+            - if trait.do_name.present?
+              %div{:style => 'font-size: 16px; color: green;'} 
+                DO template:
+                %strong= trait.do_name
+              %p FUTURE BUDGE 
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  singular: 
+                  %strong #{raw trait.name_with_formatting(:do)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*")}
+                %li 
+                  multiple: 
+                  %strong #{raw trait.name_with_formatting(:do, custom_name = nil, 3)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*", 3)}
+
+              %p PAST (#{trait.verb} -> #{Trait::TENSES[trait.verb][:past] rescue "no verb for #{trait.id}"})
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  singular: 
+                  %strong #{raw trait.name_with_formatting(:do, custom_name = nil, 1, :past)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*", 1, :past)}
+                %li 
+                  multiple: 
+                  %strong #{raw trait.name_with_formatting(:do, custom_name = nil, 3, :past)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*", 3, :past)}
+
+              %p PRESENT (#{trait.verb} -> #{Trait::TENSES[trait.verb][:present] rescue "no verb for #{trait.id}"})
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  singular: 
+                  %strong #{raw trait.name_with_formatting(:do, custom_name = nil, 1, :present)} once a week
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*", 1, :present)} once a week
+                %li 
+                  multiple: 
+                  %strong #{raw trait.name_with_formatting(:do, custom_name = nil, 3, :present)} a week
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:do, "*user input*", 3, :present)} a week
+                                
+          %td
+            - if trait.dont_name.present?
+              %div{:style => 'font-size: 16px; color: #900;'} 
+                DON'T template:
+                %strong= trait.dont_name
+              %p FUTURE BUDGE
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  singular: 
+                  %strong #{raw trait.name_with_formatting(:dont)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:dont, "*user input*")}
+                %li 
+                  multiple: 
+                  %strong #{raw trait.name_with_formatting(:dont, custom_name = nil, 3)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:dont, "*user input*", 3)}
+
+              %p PAST (#{trait.verb} -> #{Trait::TENSES[trait.verb][:past] rescue "no verb for #{trait.id}"})
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  singular: 
+                  %strong #{raw trait.name_with_formatting(:dont, custom_name = nil, 1, :past)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:dont, "*user input*", 1, :past)}
+                %li 
+                  multiple: 
+                  %strong #{raw trait.name_with_formatting(:dont, custom_name = nil, 3, :past)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:dont, "*user input*", 3, :past)}
+
+
+              %p PRESENT  (#{trait.verb} -> #{Trait::TENSES[trait.verb][:present] rescue "no verb for #{trait.id}"})
+              %ul{:style => 'font-size: 14px;'}
+                %li 
+                  zero: 
+                  %strong #{raw trait.name_with_formatting(:dont, custom_name = nil, 0, :present)}
+                - if trait.setup_substitution_type
+                  %li
+                    with substitution:
+                    %strong #{raw trait.name_with_formatting(:dont, "*user input*", 0, :present)}
+                  
+        %tr
+          %td{:colspan => 2}
+            %hr

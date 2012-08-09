@@ -1,0 +1,2 @@
+$('#user_action_#{@user_action.id}').html("#{escape_javascript(render :partial => 'user_action_checkin_form', :locals => {:user_action => @user_action, :date => @date, :program_action_template => @user_action.program_action_template, :index => @index, :checkins_hash => @checkins_hash})}");
+$('#user_action_#{@user_action.id}').attr('data-answered', "#{@checkins_hash[:todays_checkins].present? ? 1 : 0}");

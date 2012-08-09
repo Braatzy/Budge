@@ -1,0 +1,49 @@
+<h1>Listing notifications</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Short ID</th>
+    <th>Via</th>
+    <th>Notification number</th>
+    <th>Delivered at</th>
+    <th>Responded at</th>
+    <th>Style</th>
+    <th>Streak</th>
+    <th>Responded minutes</th>
+    <th>Num clicks</th>
+    <th>Responded</th>
+    <th>Completed response</th>
+    <th>Method of response</th>
+    <th>Shared results</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @notifications.each do |notification| %>
+  <tr>
+    <td><%= notification.user ? notification.user.name : '' %></td>
+    <td><%= notification.short_id %></td>
+    <td><%= notification.delivered_via %></td>
+    <td><%= notification.notification_number %></td>
+    <td><%= notification.delivered_at %></td>
+    <td><%= notification.responded_at %></td>
+    <td><%= notification.message_style_token %></td>
+    <td><%= notification.streak %></td>
+    <td><%= notification.responded_minutes %></td>
+    <td><%= notification.total_clicks %></td>
+    <td><%= notification.responded %></td>
+    <td><%= notification.completed_response %></td>
+    <td><%= notification.method_of_response %></td>
+    <td><%= notification.shared_results %></td>
+    <td><%= link_to 'Show', notification %></td>
+    <td><%= link_to 'Edit', edit_notification_path(notification) %></td>
+    <td><%= link_to 'Destroy', notification, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Notification', new_notification_path %>

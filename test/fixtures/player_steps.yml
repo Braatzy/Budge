@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  program_player_id: 1
+  program_step_id: 1
+  response_token: MyString
+  response_id: 1
+
+two:
+  program_player_id: 1
+  program_step_id: 1
+  response_token: MyString
+  response_id: 1

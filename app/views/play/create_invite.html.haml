@@ -1,0 +1,33 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}      
+  %div{'data-role' => :content, :class => :content}
+
+    - if @supporter
+      %h1.handwriting Invite #{@user_info['name']} with a letter.
+      %h1 Dear #{@user_info['name']},
+      - form_for(@supporter, :url => {:controller => :play, :action => :create_invite, :id => @program_player.id}, :html => {'data-direction' => :reverse, :id => :create_invite_form}) do |f|
+        %p= text_area :invitation, :message, {:class => :stylized_input}
+        %p [Some stuff about the #{@program.name} program and Budge in general.]
+        =button "Send 'er off!", '#' ,{:id => :send_invitation}
+        
+      :javascript
+        #{startj}
+        $('#send_invitation').unbind('click').click(function(){
+          $.mobile.showPageLoadingMsg();
+          $.ajax({
+            url: "#{url_for :controller => :play, :action => :send_invite, :id => @program_player.id}",
+            type: 'POST',
+            dataType: 'script',
+            data: {user_name: "#{@user_info['name']}",
+                   user_twitter_username: "#{@user_info['screen_name']}",
+                   invite_message: $('#invitation_message').val()}
+          });
+        });
+        #{endj}
+        
+
+    - else
+      %h1.handwriting Oops, you can only invite people who follow you on Twitter.
+      %p Can you think of someone else?
+      %p= button "Back", '#', {'data-rel' => 'back'}
+  

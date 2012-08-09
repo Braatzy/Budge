@@ -1,0 +1,20 @@
+%div{'data-role' => :page, :id => :checkin, :style => 'background-color: #fafafa;'}
+  %div{'data-role' => :content, :class => :content, :style => 'margin: 0 auto; padding: 0; background-color: #fafafa;'}
+    %div{:style => 'text-align: right; padding: 15px 5px;'}
+      = link_to "Log in", {:controller => :sessions, :action => :new}, {'data-ajax' => 'false', :style => 'color: #aaa;'}
+    .tour_image{:id => 'tour_page_1', 'data-next' => 2}
+      = image_tag 'tour/budge_tour_1.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+    .tour_image{:id => 'tour_page_2', 'data-next' => 3}
+      = image_tag 'tour/budge_tour_2.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+    .tour_image{:id => 'tour_page_3', 'data-next' => 4}
+      = image_tag 'tour/budge_tour_3.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+    .tour_image{:id => 'tour_page_4', 'data-next' => 5}
+      = image_tag 'tour/budge_tour_4.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+    .tour_image{:id => 'tour_page_5', 'data-next' => 6}
+      = image_tag 'tour/budge_tour_5.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+    .tour_image{:id => 'tour_page_6', 'data-next' => 7}
+      %a{:href => "https://#{SECURE_DOMAIN}/store", :class => :noajax, 'data-ajax' => 'false'}= image_tag 'tour/budge_tour_6.jpg', {:style => "width: #{@browser_type == 'mobile' ? '300' : '400'}px;"}
+      .tour_divide{:style => 'font-size: 18px;'}
+        = button "Come play now", {:host => SECURE_DOMAIN, :protocol => 'https://', :controller => :store}, {:class => :button_important}
+        (It's free while we're in beta!)
+    

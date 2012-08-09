@@ -1,0 +1,5 @@
+%div{'data-role' => :page}
+  - @countries.sort.each do |country, data|
+    %div
+      "#{country}" => {:short => '#{data[:short]}', :long => '#{data[:long]}', :code => '#{data[:code]}'},
+  

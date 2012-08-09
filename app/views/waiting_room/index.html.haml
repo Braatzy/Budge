@@ -1,0 +1,38 @@
+.row-fluid{:style=>'margin-top: 20px'}
+  -if not params[:login]
+    .span12=link_to 'beta login via Twitter', '/oauth/twitter',{:style=>'float: right;'}
+.row-fluid
+  .span12
+    -if @browser_type=='mobile'
+      %center=link_to image_tag('budge-logo-300.png',:width=>"100%"), 'http://bud.ge'
+    -else
+      %center=link_to image_tag('budge-logo.png',:width=>"50%"), 'http://bud.ge'
+      
+    %h3.handwriting{:style => "text-align: center;"} Get healthy, or whatever.
+
+-if params[:invited] or @show_waiting_msg==true
+  #success.row-fluid
+    %center.span12
+      - if params[:email_confirmed]
+        %p Thanks! You're on the list. 
+        We'll be in touch soon.
+      -elsif @show_waiting_msg==true
+        %p Darn, the secret snail portal only works for people already in the beta. 
+        But now you're on the waiting list. Don't worry, you'll be in soon.
+      - else
+        %p Thanks! Check your inbox for a confirmation link. 
+        We'll be in touch soon.      
+-elsif params[:failed]
+  #success.row-fluid
+    %center.span12
+      %p{:style=>'color: #D16587;'} Whoops! Can you try that again?
+  .row-fluid
+    #invite_take_two.span12=render 'invite_form'
+-else
+  -if not params[:login]
+    .row-fluid
+      #invite.span12=render 'invite_form'
+  -else
+    -#This is the bud.ge/beta page
+    .row-fluid{:style=>"margin-top: 20px"}
+      %center=link_to 'Sign me up!', '/oauth/twitter', {:class=>'btn btn-primary btn-large'}

@@ -1,0 +1,25 @@
+- program ||= nil
+- program_budge ||= ProgramBudge.new
+%li.rounded{:id => "program_budge_#{program_budge.id}", :style=>'border: 1px solid lightgray; padding: 10px; margin-top: 10px'}
+  - if program.present? and !program.new_record?
+    %h3
+      %span.handle
+        ⇕
+        =program_budge.budge_name_and_level
+      %span.edit (#{link_to "edit", :controller => :dash, :action => :edit_program_budge, :id => program_budge.id})
+
+
+    %div{:style => 'padding: 5px 0 5px 10px; border-left: 5px solid #eee;'}
+      
+      - if program_budge.program_action_templates.present?
+        = render :partial => 'program_budge_action_templates', :locals => {:program_budge => program_budge, :program_action_templates => program_budge.program_action_templates}
+      - else
+        %div
+          %em No actions added to this budge yet
+      %p
+        %strong Message from the coach
+        - if program_budge.coach_message.present?
+          %div= raw textilize program_budge.coach_message
+        - else
+          %div
+            %em Coach message not set yet

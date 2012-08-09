@@ -1,0 +1,4 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => "Time passes..."}
+  %div{'data-role' => :content, :class => :content}
+    %p [link from an email to turn on #{link_to "nag mode", {:controller => :profile, :action => :user_info, :id => :nag_mode}, {:style => 'noajax'}}]

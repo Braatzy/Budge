@@ -1,0 +1,3 @@
+- if @user_comment
+  $('#comment_text_#{@user_budge.id}').val('').blur();
+  $('#user_budge_comments_#{@user_budge.id}').prepend("#{escape_javascript(render :partial => 'budge/user_comment', :locals => {:user_comment => @user_comment})}");

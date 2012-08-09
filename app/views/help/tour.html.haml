@@ -1,0 +1,39 @@
+%div{:id => 'program_get_started', 'data-role' => :page, :id => :tour}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => 'Tour of Budge'}
+  %div{'data-role' => :content, :class => :content}
+    %div.light_box.rounded
+      %h2.handwriting Letter to our special early testers&hellip;
+      
+      %p 
+        First of all, 
+        %strong THANK YOU
+        for being a part of our very early test of Budge.
+        
+      %p There are a few limitations that we want to let you know about.  First of all, you'll have probably noticed that it requires a Twitter account, and a mobile phone.  We understand that this is not convenient for everyone, and will be opening it up to a broader audience eventually.  If you want to wait until then to delve deeper into the app, you won't hurt our feelings.  
+      
+      %p Your account has been primed with #{number_to_currency User::DOLLARS_ON_SIGNUP} so you can play as much as you want, in exchange for your honest feedback.  The version of Budge you see today is a labor of love and is definitely a work in progress.  We're listening very closely and you'll be seeing lots of updates on a weekly, if not daily, basis for the next several months.
+      
+      %h3 How to get started
+      
+      %p 
+        The best way to jump in and get started is to find a program in the Budge Store that resonates with you.  If none of them do, please let us know what kinds of programs you'd like to see on our 
+        %a{:href => 'http://budge.uservoice.com'} Uservoice Forum
+        or by #{mail_to "support@bud.ge", "emailing us", :encode => :javascript}.
+        
+      %p For extra bonus points, once you start your program, hire a coach or invite a friend to be your coach.  
+  
+      %h3 How to send us feedback
+      
+      %p Depending on your preference, you can send us feedback in a couple different ways.
+      %ul
+        %li Email us at #{mail_to "support@bud.ge", "support@bud.ge", :encode => :javascript}
+        %li 
+          Send us feedback on our 
+          %a{:href => "http://budge.uservoice.com/forums/142059-general"} Uservoice
+          page
+        %li Send a carrier snail to deliver your message
+      
+      %p What are you waiting for, find yourself a program and get a Budgin'!
+      %p= button "Browse Programs", {:controller => :store, :action => :index, :protocol => 'https://', :host => SECURE_DOMAIN}
+  
+  = render :partial => 'home/mobile_footer'

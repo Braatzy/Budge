@@ -1,0 +1,82 @@
+%h1=link_to 'Links clicked','/dash/links'
+
+
+
+-if @best_notifications.present?
+  %h2 Top links clicked
+  %table#top_links
+    %thead
+      %th Time
+      %th link
+      %th type
+      %th clicks
+      %th notifications
+      %th signups
+    %tbody      
+      -@best_notifications.each do |n|
+        %tr
+          %td.datetime_column=basic_timestamp n.created_at
+          %td=link_to n.for_object=='gentle_nudge'? "nudge" : "#{n.for_id}", {:for_object => n.for_object, :for_id => n.for_id}
+          %td=n.for_object.humanize
+          %td.num_column=n.sum_clicks
+          %td.num_column=n.sum_notifications
+          %td.num_column=n.num_signups
+          
+  :javascript
+    $(document).ready(function() {
+      tbl=$('#top_links').dataTable( {
+        "sScrollY": "400px",
+        "bPaginate": false,
+        "aaSorting": [[ 3, "desc" ]]
+         });   
+    } );
+  
+.recently_clicked{:style=>'margin-top: 20px'}
+  - if @notifications.present?
+    - if params[:for_object].present?
+      %h2 Recently clicked links that match #{params[:for_object].humanize}: #{params[:for_id]}
+    - else
+      %h2 Recently clicked links
+    
+    - @notifications.each do |notification|
+      .notification{:style => ' border-bottom: 1px solid #ccc; margin: 1em auto; width: 600px;'}
+        /notification.id
+        /notification.for_object
+        %table{:style=>'table-layout: fixed'}
+          %tr 
+            %td{:style=>'width: 450px'}
+              .photo{:style => 'float: left; width: 30px;'}
+                - if notification.user
+                  %img{:src => notification.user.photo.url(:tiny), :style => 'padding-right: 20px;'}
+
+              .who_when{:style => 'margin-bottom: 1em; margin-left: 33px;'}
+                %span{:style=>'color: lightgray'}
+                  = time_ago_in_words notification.updated_at
+                  ago
+                %br
+                - if notification.user
+                  =link_to_user notification.user
+                - else
+                  A visitor
+                clicked the link
+              %p.message
+                %span.from=notification.from_user.nil? ? 'budge' : link_to_user(notification.from_user)
+                %span.divider=":"
+                %span.msg=notification.get_message
+            %td.notification_details{:style=>'width: 150px'}
+              .stats=link_to "Stats for link", {:for_object => notification.for_object, :for_id => notification.for_id}
+              %ul{:style => 'font-size: 11px; color: #666;'}
+                %li Minutes to response: #{notification.responded_minutes.to_i}
+                %li Total clicks: #{notification.total_clicks}
+                %li Num signups through link: #{notification.num_signups}
+                - if notification.ref_site.present?
+                  %li 
+                    Referral from: #{notification.ref_site}: 
+                    %span.shorten
+                      %a{:href=>notification.ref_url} #{notification.ref_url}
+                /ID related to message type: #{notification.for_id}
+                %li 
+                  Link clicked: 
+                  %a{:href => url_for(:controller => :stream, :action => :view_notification, :id => notification.short_id, :suppress_stats => 1), :target => "links"} http://#{DOMAIN}#{url_for :controller => :stream, :action => :view_notification, :id => notification.short_id}
+      
+    %p= will_paginate @notifications

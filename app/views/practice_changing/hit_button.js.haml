@@ -1,0 +1,7 @@
+- stats_hash ||= @stats_hash
+- stats_hash ||= {}
+$('#habitbutton a').addClass('results');
+$('#habitbutton a h1').html('Thanks!');
+- if stats_hash[:day_streak].present? and stats_hash[:day_streak] > 0
+  $('#habitbutton a #subtext').html("#{stats_hash[:day_streak]} day streak.");
+$('#habitbutton_stats').html("#{escape_javascript(render :partial => 'button_stats', :locals => {:stats_hash => stats_hash})}");

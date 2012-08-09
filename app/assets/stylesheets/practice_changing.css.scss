@@ -1,0 +1,41 @@
+@import "global_styles";
+@import "bootstrap";
+@import "bootstrap-responsive";
+
+@font-face {
+  font-family: 'Sensibility_Italic';
+  src: url('/fonts/Sensibility_Italic.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body.practice {
+  #habitbutton a {
+    display: block;
+    border: 5px solid $budge_green;
+    background-color: $light_green;
+    padding: 50px 20px;
+    text-decoration: none;
+    h1 {
+      color: #000;
+      font-size: 40px;
+      font-family: $handwriting;
+      line-height: 40px;
+    }
+    #subtext {
+      color: #333;
+      font-size: 16px;
+      line-height: 25px;
+    }
+  }
+  #habitbutton a:hover, #habitbutton a:active {
+    color: #000;
+    border: 5px solid #000;
+    background-color: $budge_green;
+  }
+  #habitbutton a.results {
+    color: #666;
+    border: 5px solid #000;
+    background-color: #ccc;  
+  }
+}

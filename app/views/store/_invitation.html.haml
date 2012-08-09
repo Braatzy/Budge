@@ -1,0 +1,17 @@
+%div.light_box.rounded
+  %h3 You were invited here by #{invitation.user.name}
+  %table
+    %tr{:valign => :top}
+      %td
+        %p= image_tag invitation.user.photo.url(:tiny), {:class => 'rounded-img-small tiny-profile-iamge', :style => 'margin-right: 5px;'}
+      - if invitation.message.present?
+        %td= raw textilize "<strong>From #{invitation.user.first_name}:</strong> #{invitation.message}"
+      - else
+        %td #{invitation.user.name} really thinks you'll like Budge. First program is on us!
+  %h3.thin{:style => 'margin-bottom: 1em;'} 
+    %strong Budge 
+    is a new magical motivational tool that helps you start new healthy habits.
+  %h3.thin 
+    To redeem your free game, and 
+    %strong #{number_to_currency User::DOLLARS_ON_SIGNUP_WHEN_INVITED, :scale => 0} in Budge credits, 
+    try playing the first level below.

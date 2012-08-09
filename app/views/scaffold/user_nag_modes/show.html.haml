@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @user_nag_mode.user_id
+%p
+  %b Nag mode:
+  = @user_nag_mode.nag_mode_id
+%p
+  %b Start date:
+  = @user_nag_mode.start_date
+%p
+  %b End date:
+  = @user_nag_mode.end_date
+%p
+  %b Program:
+  = @user_nag_mode.program_id
+%p
+  %b Program player:
+  = @user_nag_mode.program_player_id
+
+= link_to 'Edit', edit_scaffold_user_nag_mode_path(@user_nag_mode)
+\|
+= link_to 'Back', scaffold_user_nag_modes_path

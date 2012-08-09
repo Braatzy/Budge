@@ -1,0 +1,24 @@
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => @program.name}
+  %div{'data-role' => :content, :class => :content}
+    %h1 Your instructions
+    %div.light_box.rounded
+      %h3= @player_budge.program_budge.name
+      - if @player_budge.program_budge.present?
+        = raw textilize @player_budge.program_budge.coach_message
+      - if @player_budge.program_budge.program_action_templates.size > 0
+        %ul.action_wording{:style => 'list-style-type: disc;'}
+          - @player_budge.program_budge.action_templates_for_day_number(@player_budge.day_of_budge).each do |program_action_template|
+            %li
+              = program_action_template.action_wording
+    
+    %div{:style => 'margin-top: 1em;'}
+      - if @player_budge.in_progress?
+        =button 'Do it now',{:controller => :play, :action => :checkin, :id => @program.id, :collapse_instructions => 1}, {:class=>'button_important'}
+        =button 'Re-schedule it',{:controller => :play, :action => :schedule_player_budge, :id => @player_budge.id}
+      - elsif Time.zone.today+1.day == @player_budge.day_starts_date
+        %p Your program is all ready to start tomorrow!
+      - else
+        %h1{:class => 'handwriting', :style => 'text-align: center;'} Starting in #{time_ago_in_words Time.zone.parse(@player_budge.day_starts_date.to_s)}
+       
+  = render :partial => 'home/mobile_footer'

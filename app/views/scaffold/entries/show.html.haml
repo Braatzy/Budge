@@ -1,0 +1,28 @@
+%h1= t '.title'
+%p
+  = link_to t('back'), scaffold_entries_path
+  = link_to t('edit'), edit_scaffold_entry_path(@entry)
+
+%dl
+  %dt= Entry.human_attribute_name :user_id
+  %dd= @entry.user_id
+  %dt= Entry.human_attribute_name :program_player_id
+  %dd= @entry.program_player_id
+  %dt= Entry.human_attribute_name :program_id
+  %dd= @entry.program_id
+  %dt= Entry.human_attribute_name :program_budge_id
+  %dd= @entry.program_budge_id
+  %dt= Entry.human_attribute_name :player_message_id
+  %dd= @entry.player_message_id
+  %dt= Entry.human_attribute_name :tweet_id
+  %dd= @entry.tweet_id
+  %dt= Entry.human_attribute_name :facebook_post_id
+  %dd= @entry.facebook_post_id
+  %dt= Entry.human_attribute_name :location_context_id
+  %dd= @entry.location_context_id
+  %dt= Entry.human_attribute_name :message
+  %dd= @entry.message
+  %dt= Entry.human_attribute_name :message_type
+  %dd= @entry.message_type
+  %dt= Entry.human_attribute_name :privacy_setting
+  %dd= @entry.privacy_setting

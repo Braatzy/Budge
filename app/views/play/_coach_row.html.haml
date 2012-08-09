@@ -1,0 +1,67 @@
+- program_coach ||= nil
+- program_player ||= nil
+- coach_icon_size ||= :small
+- show_info ||= false
+%div{:class => 'coach_row'}
+  %div{:class => :coach_icon}
+    = image_tag program_coach.user.photo(coach_icon_size), {:class => 'rounded-img'}
+  %div{:class => :coach_details}
+    %h3{:style => 'margin-bottom: 0;'}
+      = program_coach.user.name
+    %div
+      - if program_coach.avg_rating.present? and program_coach.avg_rating > 0
+        %strong Average rating: 
+        #{(program_coach.avg_rating*100).to_i/100}
+
+    - unless show_info
+      - if program_player.present? and program_player.program_coach_id == program_coach.id
+        %p= link_to "See more info", '#', {:id => "coach_row_more_link_#{program_coach.id}", :class => :dashed}    
+      - else
+        %p= link_to "See ratings and price", '#', {:id => "coach_row_more_link_#{program_coach.id}", :class => :dashed}
+  %br{:clear => :all}
+  %div{:id => "coach_row_more_#{program_coach.id}", :class => 'rounded light_box coach_row_more', :style => "#{show_info ? 'display: block;' : ''}"}    
+    %h3 About #{program_coach.user.first_name}
+    - if program_coach.coaching_style.present?  
+      %p
+        %strong Coaching style:
+        = program_coach.coaching_style
+    - if program_coach.message.present?
+      %p= raw textilize program_coach.message
+    - if program_coach.present? and program_coach.total_players > 0
+      %p
+        %strong Coaching stats:
+      %ul{:style => 'padding: 0 20px;'}
+        %li #{pluralize program_coach.total_players, 'person'} coached
+        %li #{pluralize program_coach.num_completed, 'person'} completed program
+    - else
+      %p #{program_coach.user.name} is a brand new coach on the loose! If you hire #{program_coach.user.him_or_her}, be sure to rate #{program_coach.user.him_or_her} so that future players will have something to judge them by!
+
+    %p
+      %h3 
+        Price:
+        %span{:style => 'color: green;'} #{number_to_currency(program_coach.price)}/mo 
+      (auto-cancels if unused)
+    - if program_player.present? and program_player.program_coach_id == program_coach.id
+      = button "Fire me", '#', {'data-coach-id' => "#{program_coach.id}", :class => 'fire_program_coach_button'} 
+    - elsif program_player.present?
+      = button "Hire me!", '#', {'data-coach-id' => "#{program_coach.id}", :class => 'buy_program_coach_button'} 
+
+- if program_player
+  :javascript
+    #{startj}
+    $('.fire_program_coach_button').unbind('click').click(function(e){
+      window.location = "https://#{SECURE_DOMAIN}/store/cancel_subscription_id/?program_player_id=#{program_player.id}&redirect_to=#{request.url}";
+      return false;
+    });
+    $('.buy_program_coach_button').unbind('click').click(function(e){
+      window.location = "https://#{SECURE_DOMAIN}/store/pay/"+$(this).attr('data-coach-id')+"/program_coach";
+      return false;
+    });
+    #{endj}
+
+:javascript
+  #{startj}
+  $("#coach_row_more_link_#{program_coach.id}").unbind('click').click(function(){
+    $("#coach_row_more_#{program_coach.id}").slideToggle();
+  });
+  #{endj}

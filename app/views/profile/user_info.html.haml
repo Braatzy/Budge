@@ -1,0 +1,281 @@
+- if params[:id] == 'phone'
+  - title = "Phone Number"
+- elsif params[:id] == 'name'
+  - title = "Name"
+- elsif params[:id] == 'photo'
+  - title = "Photo"
+- elsif params[:id] == 'gender'
+  - title = "Gender"
+- elsif params[:id] == 'communication_pref'
+  - title = "How to talk to me"
+- elsif params[:id] == 'birthday'
+  - title = "Birthday"
+- elsif params[:id] == 'time_zone'
+  - title = "Time Zone"
+- elsif params[:id] == 'credit_card'
+  - title = "Credit Card"
+- elsif params[:id] == 'nag_mode'
+  - title = "Nag Mode"
+- elsif params[:id] == 'close_account'
+  - title = "The Ultimate Bye Bye"
+- else
+  - title = "Settings"
+  
+%div{'data-role' => :page}
+  = render :partial => 'home/mobile_top_nav', :locals => {:title => title}
+  
+  %div{'data-role' => :content, :class => :content}
+
+    - if params[:id] == 'phone'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'phone_form'} do |f|
+        %h3 Your cell phone number (US-only)
+        %input{:type => :text_field, :name => 'phone', :value => current_user.phone, :placeholder => '(123) 456-7890', :class => 'stylized_input', :style => 'font-size: 16px; width: 95%; padding: 5px;'}
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'phone_form'}
+
+    - elsif params[:id] == 'communication_pref'
+      = render :partial => 'communication_pref_form'
+
+    - elsif params[:id] == 'name'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'name_form'} do |f|
+        %h3 The name you'd like to use 
+        = text_field :user, :name, {:class => :stylized_input}
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'name_form'}
+
+    - elsif params[:id] == 'photo'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'photo_form', :multipart => true} do |f|
+        %h3 My best photo 
+
+        - if current_user.photo?
+          %p= image_tag current_user.photo(:medium)
+          %p Replace it with:
+
+        = f.file_field :photo
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'photo_form'}
+
+    - elsif params[:id] == 'email'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'email_form'} do |f|
+        %h3 The best email address you have
+        = text_field :user, :email, {:class => :stylized_input}
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'email_form'}
+
+    - elsif params[:id] == 'gender'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'gender_form'} do |f|
+        %h3 Male, female, or something in between?
+        = select :user, :gender, [['-',''],["Something in between",'opt-out'],['Male','male'],['Female','female']]
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'gender_form'}
+
+    - elsif params[:id] == 'birthday'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'birthday_form'} do |f|
+        %h3 Your holy day of birth
+        = date_select :user, :birthday, {:start_year => Date.today.year, :end_year => Date.today.year-70, :include_blank => true}, {'data-role' => :none}
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'birthday_form'}
+    - elsif params[:id] == 'time_zone'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'time_zone_form'} do |f|
+        %h3 Your time zone 
+        = time_zone_select :user, :time_zone, ActiveSupport::TimeZone.us_zones, :include_blank => true
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'time_zone_form'}
+
+    - elsif params[:id] == 'nag_mode'
+      - if current_user.nag_mode_is_on? and @user_nag_mode = current_user.user_nag_mode
+        = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id], :turn_nag_mode_off => 1), {:id => 'nagmode_form'} do |f|
+          %h2 Nag Mode is ON!
+          %h3.thin 
+            You have some relentless nagging coming your way, with the  
+            %strong #{@user_nag_mode.nag_mode.name}
+            personality.  The current plan is to nag you about 
+            %strong= link_to @user_nag_mode.program.name, {:controller => :play, :action => :program, :id => @user_nag_mode.program_id}, {:class => :noajax}
+            until 
+            %strong #{@user_nag_mode.end_date.strftime("%a %b %d")}.  
+            You can turn it off at any time if things get too intense.
+          %p
+            = button "Turn it off", {}, {:class => :submit_form, 'data-form-id' => 'nagmode_form'}
+          - if current_user and current_user.twitter_username == 'budge_april'
+            =link_to "robocall", {:controller => :play, :action => :launch_demo_robocall}, {:style => 'color: #eee;', :class => 'noajax'}          
+          
+      - else
+        = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'nagmode_form', 'data-ajax' => 'false'} do |f|
+          %h2 Activate NAG MODE
+          %h3.thin Ready to get real? Nag Mode bugs you - with up to 4 text messages a day and a personal phone call - every day for a week until catch up in your program of choice. It also pauses all your other programs so you can focus, hardcore. Use at your own risk!
+
+          - if params[:program_id]
+            %h3.thin 
+              Make 
+              %strong= Program.find(params[:program_id]).name
+              your TOP PRIORITY
+          - else
+            %h3.thin
+              Choose your
+              %strong TOP PRIORITY.
+            %p= select :user_nag_mode, :program_id, current_user.valid_program_players.map{|pp|[pp.program.name, pp.program.id]}
+            - if current_user.valid_program_players.size > 1
+              %div.subtle{:style => 'margin-bottom: 1em;'} We will pause your other programs during this intense time so you can FOCUS FOCUS FOCUS.
+            
+          - if NagMode.count == 1
+            %input{:type => :hidden, :name => "user_nag_mode[nag_mode_id]", :value => NagMode.first.id}
+            %h3.thin 
+            .nag_modes.light_box.rounded
+              %h1 Get nagged by #{NagMode.first.name}
+              %h3.thin
+                = number_to_currency NagMode.first.price
+                for 
+                = pluralize NagMode.first.num_days, 'day'
+                of nagging
+              %p= raw NagMode.first.description
+          
+          - else
+            %h3.thin
+              Pick a  
+              %strong personality
+              to nag you relentlessly for a week.
+            %p= select :user_nag_mode, :nag_mode_id, NagMode.all.map{|n|[n.name, n.id]}
+            - NagMode.all.each do |nag_mode|
+              .nag_modes.light_box.rounded{:style => "display: none;", :id => "nag_mode_#{nag_mode.id}"}
+                %h1= nag_mode.name
+                %h3.thin
+                  = number_to_currency nag_mode.price
+                  for 
+                  = pluralize nag_mode.num_days, 'day'
+                  of nagging
+                %p= raw nag_mode.description
+            :javascript
+              $('#user_nag_mode_nag_mode_id').change(function(){
+                $('.nag_modes').hide();
+                $('#nag_mode_'+$(this).val()).fadeIn();
+              });
+          = button "Turn it on", {}, {:class => :submit_form, 'data-form-id' => 'nagmode_form'}
+
+    - elsif params[:id] == 'unit_prefs'
+      = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'unit_prefs_form'} do |f|
+        %h3 Your preference for distance units
+        = select :user, :distance_units, [['Miles',0],["Kilometers",1]]
+        %h3 Your preference for weight units
+        = select :user, :weight_units, [['Pounds',0],["Kilograms",1]]
+        = button "Save", {}, {:class => :submit_form, 'data-form-id' => 'unit_prefs_form'}
+    - elsif params[:id] == 'coaches'
+      %h1.handwriting Your friendly coaches         
+      - if @program_players.present?
+        - @program_players.each do |program_player|
+          - if program_player.program_coach.present?
+            %table
+              %tr
+                %td= image_tag program_player.program_coach.user.photo(:small), {:class => 'rounded-img'}
+                %td{:style => 'padding-left: 10px;'}
+                  %p{:style => 'margin-top: 0;'}
+                    %strong= program_player.program_coach.user.name
+                    is coaching you on 
+                    %strong= program_player.program.name
+                  = raw textilize program_player.program_coach.message
+                  - if program_player.program_coach_rating.present?
+                    %strong Your rating: #{pluralize program_player.program_coach_rating, 'star'}
+            %p= button "Rate or cancel this coach", {:controller => :profile, :action => :rate_coach, :id => program_player.id}
+          - elsif program_player.supporters.where(:active => true).present?
+            - program_player.supporters.where(:active => true).each do |supporter|
+              %table
+                %tr
+                  %td= image_tag supporter.user.photo(:small), {:class => 'rounded-img'}
+                  %td{:style => 'padding-left: 10px;'}
+                    %p{:style => 'margin-top: 0;'}
+                      %strong= supporter.user.name
+                      is friend-coaching you on 
+                      %strong= supporter.program.name
+              %p= button "Fire this coach", {:controller => :home, :action => :cancel_supporter, :id => supporter.id}
+          - else
+            %h2= program_player.program.name
+            %p= button "Find a coach", {:controller => :play, :action => :buy_coach, :id => program_player.program_id, :host => SECURE_DOMAIN, :protocol => 'https://'}
+            
+          %hr
+          
+      - else
+        %p No current subscriptions.
+
+    - elsif params[:id] == 'close_account'
+      %div#pick_your_poison
+        %h3 Pick your poison
+        %p
+          = button "Turn off notifications", '#', {:id => 'poison_notification_link'}
+        %p
+          = button "Pause my programs", '#', {:id => 'poison_pause_link'}
+        %p
+          = button "Delete my account", '#', {:id => 'poison_delete_link', :class => 'button_cancel'}
+
+      %div#poison_notifications.rounded.light_box.hide
+        = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'close_account_form'} do |f|
+          - if current_user.get_notifications?
+            %h3 Turning off notifications
+            %p This is one quick and easy way to stop getting reminders from us.  You'll still be able to play your programs, we just won't keep bugging you about it. 
+            %input{:type => :hidden, :name => :get_notifications, :value => 0}
+            = button "Stop reminding me", {}, {:class => :submit_form, 'data-form-id' => 'close_account_form'}
+          - else
+            %h3 Turning notifications back on
+            %p Notifications are turned off, but you can turn them back on if you like.
+            %input{:type => :hidden, :name => :get_notifications, :value => 1}
+            = button "Remind me sometimes", {}, {:class => :submit_form, 'data-form-id' => 'close_account_form'}
+        
+      %div#poison_pause.rounded.light_box.hide
+        %h3 Pausing my programs
+        %p You can put your whole account on pause if you'd like to take a break from playing for a while.  Choose your hibernation period and we'll leave you alone until you're ready to come back.
+        = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'pause_account_form', 'data-ajax' => 'false'} do |f|
+
+          %fieldset{'data-role' => :controlgroup}
+            %legend Pause for how long?
+            %div
+              %input{:type => :radio, :id => :pause_1_week, :name => :pause_duration, :value => 7} 
+              %label{:for => :pause_1_week} 1 week
+            %div
+              %input{:type => :radio, :id => :pause_1_month, :name => :pause_duration, :value => 30}
+              %label{:for => :pause_1_month} 1 month
+            %div
+              %input{:type => :radio, :id => :pause_3_months, :name => :pause_duration, :value => 91}
+              %label{:for => :pause_3_months} 3 months
+            %div
+              %input{:type => :radio, :id => :pause_6_months, :name => :pause_duration, :value => 182}
+              %label{:for => :pause_6_months} 6 months
+            %div
+              %input{:type => :radio, :id => :pause_1_year, :name => :pause_duration, :value => 365}
+              %label{:for => :pause_1_year} 1 year
+            %div
+              %input{:type => :radio, :id => :pause_10_years, :name => :pause_duration, :value => 3650}
+              %label{:for => :pause_10_years} 10 years
+            
+          = button "Pause all my programs", {}, {:class => :submit_form, 'data-form-id' => 'pause_account_form'}
+
+      %div#poison_delete.rounded.light_box.hide
+        %h3 Delete my account!
+        %p Click here to wipe the database clean of your Budgely existance, including all of your personal information, data, and heart-shaped doodles in the margins of your account file.
+        %p 
+          For a less severe approach, consider 
+          %a{:href => '#', 'data-role' => :none, :id => 'poison_pause_link_b'} pausing everything for a year or ten?
+        %p If you're sure you want to do this, let us know your final words, and pull the switch below.
+        = form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'bye_bye_form', 'data-ajax' => 'false'} do |f|
+          %input{:type => :hidden, :name => :delete_account, :value => 1}
+          %p
+            %textarea{:name => "final_words", :id => "final_words", :class => :stylized_input, :placeholder => "Why are you leaving?"}
+          = button "Bye bye!", '#', {:class => :submit_form, 'data-form-id' => 'bye_bye_form'}
+        
+        
+      :javascript
+        $('#poison_notification_link').click(function(){
+          $('#pick_your_poison').hide();
+          $('#poison_notifications').fadeIn();
+        });
+        $('#poison_pause_link').click(function(){
+          $('#pick_your_poison').hide();
+          $('#poison_pause').fadeIn();
+        });
+        $('#poison_pause_link_b').click(function(){
+          $('#pick_your_poison').hide();
+          $('#poison_delete').hide();
+          $('#poison_pause').fadeIn();
+        });
+        $('#poison_delete_link').click(function(){
+          $('#pick_your_poison').hide();
+          $('#poison_delete').fadeIn();
+        });
+        
+  :javascript
+    $('.submit_form').unbind('click').click(function(){
+      $('#'+$(this).attr('data-form-id')).submit();
+      return false;
+    });
+  
+  = render :partial => 'home/mobile_footer'

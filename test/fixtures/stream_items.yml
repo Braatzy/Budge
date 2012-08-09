@@ -1,0 +1,27 @@
+# == Schema Information
+#
+# Table name: stream_items
+#
+#  id             :integer(4)      not null, primary key
+#  user_id        :integer(4)
+#  item_type      :string(255)
+#  related_id     :integer(4)
+#  related_sub_id :integer(4)
+#  text           :text
+#  data           :text
+#  private        :boolean(1)      default(FALSE)
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  item_type: budge_request
+  related_id: 1
+  related_sub_id: 1
+  text: 
+  data: 
+  private: false
+

@@ -1,0 +1,38 @@
+- if Rails.env.production?
+  - if current_user
+    :javascript
+      #{startj}
+      _kmq.push(['identify', "#{current_user.twitter_username}"]);
+      #{endj}
+  
+  - if flash[:kissmetrics_set].present?
+    - @kissmetrics[:set] << flash[:kissmetrics_set]
+    - @kissmetrics[:set].flatten!
+
+  - if @kissmetrics[:set].present?
+    - @kissmetrics[:set].each do |set|
+      :javascript
+        #{startj}
+        _kmq.push(['set', {"#{set[:name]}":"#{set[:value]}"}]);
+        #{endj}
+  
+  - if flash[:kissmetrics_record].present?
+    - @kissmetrics[:record] << flash[:kissmetrics_record]
+    - @kissmetrics[:record].flatten!
+    
+  - if @kissmetrics[:record].present?
+    - @kissmetrics[:record].each do |record|
+      - if record[:properties].present?
+        :javascript
+          #{startj}
+          _kmq.push(['record', "#{record[:name]}", {#{record[:properties].map{|p|'"'+p[:name].to_s+'":"'+p[:value].to_s+'"'}.join(', ')}}]);
+          #{endj}
+          
+      - else
+        :javascript
+          #{startj}
+          _kmq.push(['record', "#{record[:name]}"]);
+          #{endj}
+            
+  - @kissmetrics = {:set => Array.new, :record => Array.new} # So that this doesn't run multiple times
+          

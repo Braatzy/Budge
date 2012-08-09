@@ -1,0 +1,129 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :hashed_password %><br />
+    <%= f.text_field :hashed_password %>
+  </div>
+  <div class="field">
+    <%= f.label :salt %><br />
+    <%= f.text_field :salt %>
+  </div>
+  <div class="field">
+    <%= f.label :time_zone %><br />
+    <%= f.time_zone_select :time_zone, {}, {:include_blank => true} %>
+  </div>
+  <div class="field">
+    <%= f.label :gender %><br />
+    <%= f.text_field :gender %>
+  </div>
+  <div class="field">
+    <%= f.label :birthday_day %><br />
+    <%= f.text_field :birthday_day %>
+  </div>
+  <div class="field">
+    <%= f.label :birthday_month %><br />
+    <%= f.text_field :birthday_month %>
+  </div>
+  <div class="field">
+    <%= f.label :birthday_year %><br />
+    <%= f.text_field :birthday_year %>
+  </div>
+  <div class="field">
+    <%= f.label :email_verified %><br />
+    <%= f.check_box :email_verified %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :phone_normalized %><br />
+    <%= f.text_field :phone_normalized %>
+  </div>
+  <div class="field">
+    <%= f.label :phone_verified %><br />
+    <%= f.check_box :phone_verified %>
+  </div>
+  <div class="field">
+    <%= f.label :photo_file_name %><br />
+    <%= f.text_field :photo_file_name %>
+  </div>
+  <div class="field">
+    <%= f.label :photo_content_type %><br />
+    <%= f.text_field :photo_content_type %>
+  </div>
+  <div class="field">
+    <%= f.label :photo_file_size %><br />
+    <%= f.text_field :photo_file_size %>
+  </div>
+  <div class="field">
+    <%= f.label :get_notifications %><br />
+    <%= f.check_box :get_notifications %>
+  </div>
+  <div class="field">
+    <%= f.label :get_news %><br />
+    <%= f.check_box :get_news %>
+  </div>
+  <div class="field">
+    <%= f.label :no_notifications_before %><br />
+    <%= f.text_field :no_notifications_before %>
+  </div>
+  <div class="field">
+    <%= f.label :no_notifications_after %><br />
+    <%= f.text_field :no_notifications_after %>
+  </div>
+  <div class="field">
+    <%= f.label :last_logged_in %><br />
+    <%= f.datetime_select :last_logged_in %>
+  </div>
+  <div class="field">
+    <%= f.label :use_metric %><br />
+    <%= f.check_box :use_metric %>
+  </div>
+  <div class="field">
+    <%= f.label :bio %><br />
+    <%= f.text_area :bio %>
+  </div>
+  <div class="field">
+    <%= f.label :admin %><br />
+    <%= f.check_box :admin %>
+  </div>
+  <div class="field">
+    <%= f.label :relationship_status %><br />
+    <%= f.text_field :relationship_status %>
+  </div>
+  <div class="field">
+    <%= f.label :level_up_credits %><br />
+    <%= f.text_field :level_up_credits %>
+  </div>
+  <div class="field">
+    <%= f.label :max_concurrent_traits %><br />
+    <%= f.text_field :max_concurrent_traits %>
+  </div>
+  <div class="field">
+    <%= f.label :num_concurrent_traits %><br />
+    <%= f.text_field :num_concurrent_traits %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

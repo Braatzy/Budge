@@ -1,0 +1,101 @@
+!!!
+%html{:manifesto => "/budge.manifest?", :lang => 'en'}
+  %head
+    %title #{@title ? (@title+" - Budge Dash") : "Budge Dash"}
+    %link{:rel => 'icon shortcut', :href => "#{image_path('favicon.ico')}", :type => 'image/png'} 
+    = javascript_include_tag 'application'
+    = javascript_include_tag '/jquery/jquery.dataTables.min.js'
+    = javascript_include_tag 'jquery/jquery-qtip.js'
+    = javascript_include_tag '/jquery/chosen.jquery.min.js'
+    = javascript_include_tag 'bootstrap-scrollspy.js'
+    = javascript_include_tag 'bootstrap-collapse.js'
+    = javascript_include_tag 'bootstrap-dropdown.js'
+
+    = stylesheet_link_tag 'jquery/chosen.css'
+    = stylesheet_link_tag 'jquery/jquery-qtip.css'
+    = stylesheet_link_tag 'dash'
+    = stylesheet_link_tag 'timeseries.css'
+    = csrf_meta_tag
+    
+  %body.dash{'data-spy'=>'scroll'}
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container
+          %a.brand{:href=>'/dash'}
+            =image_tag('budge-snail-transparent-50w.png',:width=>'10px')
+            Budge Dash
+          %ul.nav
+            %li=link_to 'Users', '/dash/users'
+            %li=link_to 'Programs','/dash/programs'
+            / %li=link_to 'Metrics','/dash/metrics'
+            %li#metrics_menu.dropdown
+              %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#metrics_menu"}
+                Metrics
+                %b.caret
+              %ul.dropdown-menu
+                %li=link_to 'Cohort','/dash/metrics'
+                %li=link_to 'Aggregate','/dash/metrics_aggregate'            
+            %li=link_to 'Other','/dash/other'
+    .container= yield
+
+:javascript
+  $(document).ready(function()
+    {
+      // Match all <A/> links with a title tag and use it as the content (default).
+      $('th[title],td[title]').qtip(
+      {position: { my: 'bottom center', at: 'top center' }}
+      );
+    });
+
+    //Percent sort
+    jQuery.fn.dataTableExt.oSort['percent-asc'] = function(a, b)
+    {
+        var x = a == "-" ? 0 : a.replace(/\./g, "");
+        var y = b == "-" ? 0 : b.replace(/\./g, "");
+        x = x.replace(/,/, ".");
+        y = y.replace(/,/, ".");
+        x = x.replace(/%/, "");
+        y = y.replace(/%/, "");
+
+        x = parseFloat(x);
+        y = parseFloat(y);
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    };
+
+    jQuery.fn.dataTableExt.oSort['percent-desc'] = function(a, b)
+    {
+        var x = a == "-" ? 0 : a.replace(/\./g, "");
+        var y = b == "-" ? 0 : b.replace(/\./g, "");
+        x = x.replace(/,/, ".");
+        y = y.replace(/,/, ".");
+        x = x.replace(/%/, "");
+        y = y.replace(/%/, "");
+
+        x = parseFloat(x);
+        y = parseFloat(y);
+        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    };
+    jQuery.fn.dataTableExt.aTypes.unshift(
+       function(sData)
+       {
+           var sValidChars = "0123456789.-,";
+           var Char;
+
+           /* Check the numeric part */
+           for (i = 0; i < sData.length - 1; i++)
+           {
+               Char = sData.charAt(i);
+               if (sValidChars.indexOf(Char) == -1)
+               {
+                   return null;
+               }
+           }
+
+           /* Check sufix % */
+           if (sData.charAt(sData.length - 1) == "%")
+           {
+               return 'percent';
+           }
+           return null;
+       }
+    );

@@ -1,0 +1,141 @@
+<%= form_for(@checkin) do |f| %>
+  <% if @checkin.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@checkin.errors.count, "error") %> prohibited this checkin from being saved:</h2>
+
+      <ul>
+      <% @checkin.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_budge_id %><br />
+    <%= f.text_field :user_budge_id %>
+  </div>
+  <div class="field">
+    <%= f.label :is_budgee %><br />
+    <%= f.check_box :is_budgee %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :trait_id %><br />
+    <%= f.text_field :trait_id %>
+  </div>
+  <div class="field">
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :did_action %><br />
+    <%= f.check_box :did_action %>
+  </div>
+  <div class="field">
+    <%= f.label :was_desired %><br />
+    <%= f.check_box :was_desired %>
+  </div>
+  <div class="field">
+    <%= f.label :completed_budge %><br />
+    <%= f.check_box :completed_budge %>
+  </div>
+  <div class="field">
+    <%= f.label :comment %><br />
+    <%= f.text_area :comment %>
+  </div>
+  <div class="field">
+    <%= f.label :disputable_by %><br />
+    <%= f.text_field :disputable_by %>
+  </div>
+  <div class="field">
+    <%= f.label :disputed %><br />
+    <%= f.text_field :disputed %>
+  </div>
+  <div class="field">
+    <%= f.label :disputed_reason %><br />
+    <%= f.text_area :disputed_reason %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_integer %><br />
+    <%= f.text_field :amount_integer %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_decimal %><br />
+    <%= f.text_field :amount_decimal %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_string %><br />
+    <%= f.text_field :amount_string %>
+  </div>
+  <div class="field">
+    <%= f.label :amount_text %><br />
+    <%= f.text_area :amount_text %>
+  </div>
+  <div class="field">
+    <%= f.label :hour_of_day %><br />
+    <%= f.text_field :hour_of_day %>
+  </div>
+  <div class="field">
+    <%= f.label :day_of_week %><br />
+    <%= f.text_field :day_of_week %>
+  </div>
+  <div class="field">
+    <%= f.label :week_of_year %><br />
+    <%= f.text_field :week_of_year %>
+  </div>
+  <div class="field">
+    <%= f.label :checkin_via %><br />
+    <%= f.text_field :checkin_via %>
+  </div>
+  <div class="field">
+    <%= f.label :needs_confirmation %><br />
+    <%= f.check_box :needs_confirmation %>
+  </div>
+  <div class="field">
+    <%= f.label :confirmed %><br />
+    <%= f.check_box :confirmed %>
+  </div>
+  <div class="field">
+    <%= f.label :post_to_facebook %><br />
+    <%= f.check_box :post_to_facebook %>
+  </div>
+  <div class="field">
+    <%= f.label :post_to_twitter %><br />
+    <%= f.check_box :post_to_twitter %>
+  </div>
+  <div class="field">
+    <%= f.label :post_to_foursquare %><br />
+    <%= f.check_box :post_to_foursquare %>
+  </div>
+  <div class="field">
+    <%= f.label :facebook_post_id %><br />
+    <%= f.text_field :facebook_post_id %>
+  </div>
+  <div class="field">
+    <%= f.label :tweet_id %><br />
+    <%= f.text_field :tweet_id %>
+  </div>
+  <div class="field">
+    <%= f.label :foursquare_checkin_id %><br />
+    <%= f.text_field :foursquare_checkin_id %>
+  </div>
+  <div class="field">
+    <%= f.label :foursquare_category_id %><br />
+    <%= f.text_field :foursquare_category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :end_clock_remaining %><br />
+    <%= f.text_field :end_clock_remaining %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

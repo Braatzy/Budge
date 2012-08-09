@@ -1,0 +1,111 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_budge_id: 1
+  is_budgee: false
+  user_id: 1
+  trait_id: 1
+  latitude: 1
+  longitude: 1
+  did_action: false
+  was_desired: false
+  completed_budge: false
+  comment: MyText
+  disputable_by: 1
+  disputed: 1
+  disputed_reason: MyText
+  amount_integer: 1
+  amount_decimal: 9.99
+  amount_string: MyString
+  amount_text: MyText
+  hour_of_day: 1
+  day_of_week: 1
+  week_of_year: 1
+  checkin_via: MyString
+  needs_confirmation: false
+  confirmed: false
+  post_to_facebook: false
+  post_to_twitter: false
+  post_to_foursquare: false
+  facebook_post_id: MyString
+  tweet_id: MyString
+  foursquare_checkin_id: MyString
+  foursquare_category_id: MyString
+  end_clock_remaining: 1
+
+two:
+  user_budge_id: 1
+  is_budgee: false
+  user_id: 1
+  trait_id: 1
+  latitude: 1
+  longitude: 1
+  did_action: false
+  was_desired: false
+  completed_budge: false
+  comment: MyText
+  disputable_by: 1
+  disputed: 1
+  disputed_reason: MyText
+  amount_integer: 1
+  amount_decimal: 9.99
+  amount_string: MyString
+  amount_text: MyText
+  hour_of_day: 1
+  day_of_week: 1
+  week_of_year: 1
+  checkin_via: MyString
+  needs_confirmation: false
+  confirmed: false
+  post_to_facebook: false
+  post_to_twitter: false
+  post_to_foursquare: false
+  facebook_post_id: MyString
+  tweet_id: MyString
+  foursquare_checkin_id: MyString
+  foursquare_category_id: MyString
+  end_clock_remaining: 1
+
+# == Schema Information
+#
+# Table name: checkins
+#
+#  id                           :integer(4)      not null, primary key
+#  user_id                      :integer(4)
+#  is_player                    :boolean(1)      default(TRUE)
+#  user_action_id               :integer(4)
+#  trait_id                     :integer(4)      not null
+#  latitude                     :decimal(15, 10)
+#  longitude                    :decimal(15, 10)
+#  did_action                   :boolean(1)      default(FALSE)
+#  desired_outcome              :boolean(1)      default(TRUE)
+#  comment                      :text
+#  amount_integer               :integer(4)      default(0)
+#  amount_decimal               :decimal(10, 2)
+#  amount_string                :string(255)
+#  amount_text                  :text
+#  checkin_datetime             :datetime
+#  checkin_datetime_approximate :boolean(1)      default(FALSE)
+#  hour_of_day                  :integer(4)
+#  day_of_week                  :integer(4)
+#  week_of_year                 :integer(4)
+#  checkin_via                  :string(255)
+#  end_clock_remaining          :integer(4)
+#  created_at                   :datetime
+#  updated_at                   :datetime
+#  player_leveled_up            :boolean(1)      default(FALSE)
+#  coach_leveled_up             :boolean(1)      default(FALSE)
+#  amount_units                 :string(255)
+#  user_trait_id                :integer(4)      not null
+#  date                         :date
+#  remote_id                    :string(255)
+#  stars_for_participation      :decimal(11, 10) default(0.0)
+#  stars_for_mastery            :decimal(11, 10) default(0.0)
+#  stars_for_commenting         :decimal(11, 10) default(0.0)
+#  stars_total                  :decimal(11, 10) default(0.0)
+#  player_budge_id              :integer(4)
+#  duplicate                    :boolean(1)      default(FALSE)
+#  program_player_id            :integer(4)
+#  raw_text                     :text
+#
+

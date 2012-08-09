@@ -1,0 +1,140 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Username:</b>
+  <%= @user.username %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @user.name %>
+</p>
+
+<p>
+  <b>Email:</b>
+  <%= @user.email %>
+</p>
+
+<p>
+  <b>Hashed password:</b>
+  <%= @user.hashed_password %>
+</p>
+
+<p>
+  <b>Salt:</b>
+  <%= @user.salt %>
+</p>
+
+<p>
+  <b>Time zone:</b>
+  <%= @user.time_zone %>
+</p>
+
+<p>
+  <b>Gender:</b>
+  <%= @user.gender %>
+</p>
+
+<p>
+  <b>Birthday day:</b>
+  <%= @user.birthday_day %>
+</p>
+
+<p>
+  <b>Birthday month:</b>
+  <%= @user.birthday_month %>
+</p>
+
+<p>
+  <b>Birthday year:</b>
+  <%= @user.birthday_year %>
+</p>
+
+<p>
+  <b>Email verified:</b>
+  <%= @user.email_verified %>
+</p>
+
+<p>
+  <b>Photo file name:</b>
+  <%= @user.photo_file_name %>
+</p>
+
+<p>
+  <b>Photo content type:</b>
+  <%= @user.photo_content_type %>
+</p>
+
+<p>
+  <b>Photo file size:</b>
+  <%= @user.photo_file_size %>
+</p>
+
+<p>
+  <b>Get notifications:</b>
+  <%= @user.get_notifications %>
+</p>
+
+<p>
+  <b>Get news:</b>
+  <%= @user.get_news %>
+</p>
+
+<p>
+  <b>No notifications before:</b>
+  <%= @user.no_notifications_before %>
+</p>
+
+<p>
+  <b>No notifications after:</b>
+  <%= @user.no_notifications_after %>
+</p>
+
+<p>
+  <b>Last logged in:</b>
+  <%= @user.last_logged_in %>
+</p>
+
+<p>
+  <b>Use metric:</b>
+  <%= @user.use_metric %>
+</p>
+
+<p>
+  <b>Bio:</b>
+  <%= @user.bio %>
+</p>
+
+<p>
+  <b>Facebook UID:</b>
+  <%= @user.facebook_uid %>
+</p>
+
+<p>
+  <b>Relationship status:</b>
+  <%= @user.relationship_status %>
+</p>
+
+<p>
+  <b>Admin:</b>
+  <%= @user.admin %>
+</p>
+
+<p>
+  <b>Level Up Credits:</b>
+  <%= @user.level_up_credits %>
+</p>
+
+<p>
+  <b>Max Concurrent Traits:</b>
+  <%= @user.max_concurrent_traits %>
+</p>
+
+<p>
+  <b>Num Concurrent Traits:</b>
+  <%= @user.num_concurrent_traits %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_path(@user) %> |
+<%= link_to 'Back', users_path %>

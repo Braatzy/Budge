@@ -1,0 +1,45 @@
+<h1>Listing location_contexts</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Context about</th>
+    <th>Context</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th>Pop. density</th>
+    <th>Temperature f</th>
+    <th>Weather conditions</th>
+    <th>Simplegeo context</th>
+    <th>Foursquare place</th>
+    <th>Foursquare category</th>
+    <th>Foursquare checkin</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @location_contexts.each do |location_context| %>
+  <tr>
+    <td><%= location_context.user_id %></td>
+    <td><%= location_context.context_about %></td>
+    <td><%= location_context.context_id %></td>
+    <td><%= location_context.latitude %></td>
+    <td><%= location_context.longitude %></td>
+    <td><%= location_context.population_density %></td>
+    <td><%= location_context.temperature_f %></td>
+    <td><%= location_context.weather_conditions %></td>
+    <td><%= location_context.simplegeo_context %></td>
+    <td><%= location_context.foursquare_place_id %></td>
+    <td><%= location_context.foursquare_category_id %></td>
+    <td><%= location_context.foursquare_checkin_id %></td>
+    <td><%= link_to 'Show', location_context %></td>
+    <td><%= link_to 'Edit', edit_location_context_path(location_context) %></td>
+    <td><%= link_to 'Destroy', location_context, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Location context', new_location_context_path %>

@@ -1,0 +1,11 @@
+= form_for(player_budge, :url => {:controller => :play, :action => :reschedule_player_budge, :id => player_budge.id}, :html => {'data-direction' => :reverse, 'data-ajax' => 'false', :method => :post, :id => :save_pause_form}) do |f|
+  = f.select :start_date, player_budge.select_pause_options
+  = button "Pause this program",{}, {:class=>'button_important',:id => :save_pause}
+
+:javascript
+  #{startj}
+  $('#save_pause').unbind('click').click(function(){
+    $('#save_pause_form').submit();
+    return false;
+  });
+  #{endj}

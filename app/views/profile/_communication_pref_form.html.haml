@@ -1,0 +1,15 @@
+= form_tag url_for(:controller => :profile, :action => :user_info, :id => params[:id]), {:id => 'communication_form'} do |f|
+
+  %div.rounded.light_box
+    %h3{:style => 'margin-bottom: 1em;'} Dear Budge,
+    %h3.thin{:style => 'margin-bottom: 1em;'} The latest that I wake up is #{select :user, :no_notifications_before, User.select_options_for_hours_of_day, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} so please don't send me any text messages before then.  
+    %h3.thin{:style => 'margin-bottom: 1em;'} The earliest I go to bed is #{select :user, :no_notifications_after, User.select_options_for_hours_of_day, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} so please don't send me any text messages after that.
+    %h3.thin{:style => 'margin-bottom: 1em;'} Otherwise, I get grumpy.
+    %h3.thin{:style => 'margin-bottom: 1em;'} Glad I got that out of the way.
+    
+    %h3.thin{:style => 'margin-bottom: 1em;'} The other things is, I #{select :user, :contact_by_email_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting email, I #{select :user, :contact_by_sms_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting text messages, I #{select :user, :contact_by_dm_tweet_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting direct messages on Twitter, I #{select :user, :contact_by_public_tweet_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} public replies on Twitter, and I #{select :user, :contact_by_robocall_pref, User.select_options_for_contact_pref, {}, {:style => 'padding: 4px; width: 100px;', 'data-role' => :none}} getting phone calls.  
+    
+    %h3.thin{:style => 'margin-bottom: 1em;'} Got it?
+    
+    %p Your friend,
+    = button current_user.name, {}, {:class => :submit_form, 'data-form-id' => 'communication_form'}

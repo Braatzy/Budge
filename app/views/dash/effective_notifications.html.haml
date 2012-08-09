@@ -1,0 +1,54 @@
+%h1 Effective Notifications
+
+%ul
+  - @programs.each do |program|
+    %li= link_to program.name, {:controller => :dash, :action => :effective_notifications, :id => program.id}
+    
+- if @program.present?
+  %h1 Effectiveness of notifications for #{@program.name}
+  - form_tag url_for(:controller => :dash, :action => :effective_notifications, :id => @program.id), :method => 'get' do |f|
+    filter out hours with less than 
+    %input{:type => 'text', :name => 'filter', :value => params[:filter]}
+    delivered notifications
+    %input{:type => 'submit', :value => 'filter'}
+    
+  %table#hours
+    %thead
+      %tr
+        %th Hour
+        %th Time
+        %th Delivered
+        %th Responded
+        %th % responded
+        %th 10 mins
+        %th 1 hour
+        %th 3 hours
+        %th 1 day
+        %th >1 day
+    %tbody
+      - @hour_stats.sort.each do |hour, stats|
+        - next unless stats[:delivered] >= (params[:filter].present? ? params[:filter].to_i : 0)
+        %tr
+          %td= hour
+          %td
+            - if hour == 0
+              midnight
+            - elsif hour < 12
+              #{hour}am
+            - elsif hour == 12
+              noon
+            - else
+              #{hour-12}pm
+          %td= stats[:delivered]
+          %td= stats[:responded]
+          %td= number_to_percentage (stats[:responded].to_f*100/stats[:delivered]), :precision => 1
+          %td= number_to_percentage (stats[:responded_10].to_f*100/stats[:delivered]), :precision => 1
+          %td= number_to_percentage (stats[:responded_60].to_f*100/stats[:delivered]), :precision => 1
+          %td= number_to_percentage (stats[:responded_80].to_f*100/stats[:delivered]), :precision => 1
+          %td= number_to_percentage (stats[:responded_1440].to_f*100/stats[:delivered]), :precision => 1
+          %td= number_to_percentage (stats[:responded_later].to_f*100/stats[:delivered]), :precision => 1
+
+  :javascript
+    $(document).ready(function() {
+      tbl=$('#hours').dataTable({"bPaginate": false});   
+    });

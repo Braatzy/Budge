@@ -1,0 +1,12 @@
+-table_id||='checkins'
+%table{:id=>table_id,:style=>'margin-bottom: 20px'}
+  %thead
+    %th{:title=>'level number'} Level
+    %th{:title=>'time'} Time
+    %th{:title=>'amount'} Amount
+  %tbody
+    -checkins.each do |c|
+      %tr.checkin{:class=>"checkin#{c.player_budge.id}",:id=>"checkin#{c.id}"}
+        %td=c.level_number
+        %td.datetime_column=basic_timestamp c.created_at
+        %td.num_column=c.amount_decimal

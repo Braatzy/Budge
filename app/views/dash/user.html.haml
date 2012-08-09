@@ -1,0 +1,144 @@
+=javascript_include_tag 'show_player_timeline.js'
+%header
+  .row{:style=>'padding-bottom: 10px'}
+    %h1.span10
+      =@user.name
+      %small
+        -if @user.in_beta?
+          is #{@user.get_state}, was seen #{time_ago_in_words @user.get_latest_login_date} ago, and checked in #{time_ago_in_words @user.get_latest_checkin_date} ago
+        -else
+          isn't in the beta yet
+    .offset10=image_tag(@user.photo.url(:small),:width=>75,:class=>'rounded')
+  .subnav
+    %ul.nav.nav-pills
+      %li=link_to 'Actions','#actions'
+      %li=link_to 'Contact','#contact'
+      -@user.get_program_players.each do |pp|
+        %li=link_to "#{pp.program.name}","##{pp.id}"
+      - if @referred_by.present? or @referred.present?
+        %li=link_to 'Invites','#invites'
+  
+%section.contact_actions{:style=>'margin-bottom: 60px'}
+  .row.some_top_margin
+    #actions.span6
+      - if @user.user_traits.present?  
+        %h2
+          Actions 
+          %small in the past 30 days
+        %table
+          %thead
+            %th type
+            %th times
+            %th sum
+            %th average
+          - @user.user_traits.sort_by{|ut|ut.id}.reverse.each do |user_trait|
+            - next unless user_trait.trait.present?
+            - results=user_trait.summary_results
+            - next unless results[:total]>0
+            %tr.action
+              %td #{Trait::TENSES[user_trait.trait.verb][:past]} #{user_trait.trait.noun}
+              %td= results[:num_results]
+              %td= results[:total]
+              %td= results[:average]
+
+    #contact.span6
+      %h2 Contact info
+      %ul
+        %li
+          =link_to "@#{@user.twitter_username}","http://twitter.com/#{@user.twitter_username}"
+          -if not @user.twitter_scores.last.nil?
+            %small 
+              is a "#{@user.twitter_scores.last.klout_class_name}" 
+              following #{@user.twitter_scores.last.num_following} and 
+              followed by #{@user.twitter_scores.last.num_followers} 
+              with  klout of #{@user.twitter_scores.last.klout_score.to_i}.
+        -unless @user.email.nil?
+          %li=link_to "User voice","https://budge.uservoice.com/admin/tickets/#!search?term=#{@user.email}"
+        %li 
+          Email:
+          =link_to @user.email.nil? ? "" : "#{@user.email}",  @user.email.nil? ? "": "mailto:#{@user.email}"
+        %li
+          Phone:
+          =@user.phone.nil? ? "" : number_to_phone(@user.phone, :delimiter => ".")
+        %li 
+          Facebook:
+          -unless @user.facebook_username.nil?
+            =link_to "#{@user.facebook_username}","http://facebook.com/#{@user.facebook_username}"
+        %li Accounts connected: #{@user.list_accounts_connected}
+      #toggle_beta.btn-group
+        -if @user.in_beta?
+          %a.btn.btn-info{:href=>"#"} in beta
+          %a.btn{:href=>"/dash/toggle_in_beta/#{@user.id}"} remove from beta
+        -else
+          %a.btn{:href=>"#"} add to beta
+          %a.btn.btn-info{:href=>"#"} not in beta
+    
+.programs
+  -@program_players.each do |program_player|
+    -next if program_player.program.nil?
+    -prog_id=program_player.program.id
+    
+    %section.program_player{:id=>program_player.id,:style=>'padding-bottom: 60px'}=render :partial=>'user_program_player', :locals => {:program_player => program_player, :messages => @player_messages[prog_id], :budges => @budges[prog_id]}
+
+
+- if @referred_by.present? or @referred.present?
+  #invites
+    %h2 Invites
+    - if @referred_by.present?
+      %p 
+        Referred to Budge by
+        =link_to "#{@referred_by.followed_user.name}", "/dash/user/#{@referred_by.followed_user_id}"
+
+    - if @referred.present?
+      %h4 Friends they signed up (#{@referred.size})
+      .simple_table
+        %table#friends
+          %thead
+            %tr
+              %th friend
+              %th signed up
+          %tbody
+            - @referred.each do |relationship|
+              %tr
+                %td.twitter_column=link_to "@#{relationship.user.twitter_username}", "/dash/user/#{relationship.user.id}"
+                %td.date_column=relationship.user.created_at.strftime('%Y-%m-%d')  
+
+
+=javascript_include_tag 'show_player_timeline'
+:javascript
+  $(document).ready(function() {
+    tbl=$('#friends').dataTable( {
+      "sScrollY": "200px",
+      "bPaginate": false,
+      "aaSorting": [[ 1, "desc" ]]
+       });
+    
+    //tooltips for the timelines
+    $('circle[title], path[title]').qtip( {position: { my: 'bottom center', at: 'top center' }} ); 
+    
+    //highlight the corresponding row for timeline level when clicked
+    
+    $('.subnav').scrollspy()
+    // fix sub nav on scroll
+      var $win = $(window)
+        , $nav = $('.subnav')
+        , navTop = $('.subnav').length && $('.subnav').offset().top - 40
+        , isFixed = 0
+
+      processScroll()
+
+      $win.on('scroll', processScroll)
+
+      function processScroll() {
+        var i, scrollTop = $win.scrollTop()
+        if (scrollTop >= navTop && !isFixed) {
+          isFixed = 1
+          $nav.addClass('subnav-fixed')
+        } else if (scrollTop <= navTop && isFixed) {
+          isFixed = 0
+          $nav.removeClass('subnav-fixed')
+        }
+      }
+  } );
+
+

@@ -1,0 +1,2 @@
+$('input').blur();
+$('##{@list_div_id}').html("#{escape_javascript(render :partial => 'common_users_list', :locals => {:users => @users, :users_from => @users_from, :search => @search, :list_div_id => @list_div_id})}");

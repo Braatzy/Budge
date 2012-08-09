@@ -1,0 +1,53 @@
+-# Send in through User.contact_them
+- message_data ||= Hash.new
+- program_player = ProgramPlayer.find(message_data[:data][:program_player_id]) if message_data[:data][:program_player_id].present?
+- player_budge = PlayerBudge.find(message_data[:data][:player_budge_id]) if message_data[:data][:player_budge_id].present?
+- player_budge ||= program_player.player_budge if program_player.present?
+- user_actions = player_budge.user_actions_for_checkin if player_budge.present?
+
+- if program_player.present?
+  - if player_budge.blank?
+    %h3 Here is your mission for today, if you choose to accept it.  
+  - elsif player_budge.scheduled?
+    %h2 Here is your mission for #{player_budge.day_starts_date.strftime('%A, %B %d')}, if you choose to accept it.  
+  - else
+    %h2 Here is your mission for today, if you choose to accept it. 
+
+  - if player_budge.present? and player_budge.program_budge.present?
+    %div{:style => 'font-size: 16px;'}
+      = raw textilize player_budge.program_budge.coach_message
+
+    - if user_actions.present?
+      %ul{:style => 'padding: 5px; font-size: 16px;'}
+        - user_actions.each do |user_action|
+          %li
+            = user_action.action_wording
+    - else
+      %ul{:style => 'padding: 15px; font-size: 16px;'}
+        %li Take a day of rest. You deserve it!
+    
+    - if player_budge.scheduled?
+      %h3
+        %a{:href => @notification_url} Edit your start date, or pick another level
+    - else
+      %h3
+        %a{:href => @notification_url} Do it now!
+    
+  %div{:style => 'background-color: #eee; padding: 20px; border-top: 1px dashed #000;'}
+    %table
+      %tr{:valign => :top}
+        %td= image_tag program_player.program.photo(:small), {:style => '-moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; border: 1px solid #ccc;'}
+        %td{:style => 'padding-left: 15px;'}
+          %h2{:style => 'margin: 0;'}
+            %a{:href => @notification_url}= program_player.program.name
+  
+          - if player_budge.present? and player_budge.program_budge.present?
+            - if player_budge.day_of_budge > 0
+              %div{:style => 'margin-top: 1em;'} Your current level:
+              %h3{:style => 'margin: 0;'}= player_budge.program_budge.name
+              %div{:style => 'font-size: 11px; color: #999;'} #{player_budge.program_budge.budge_level} &middot; Day #{player_budge.day_of_budge} of #{player_budge.program_budge.duration_in_days}
+            - else
+              %div{:style => 'margin-top: 1em;'} Paused for now:
+              %h3{:style => 'margin: 0;'}= player_budge.program_budge.name
+              %div{:style => 'font-size: 11px; color: #999;'} #{player_budge.program_budge.budge_level}
+    

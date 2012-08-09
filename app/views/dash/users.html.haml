@@ -1,0 +1,68 @@
+-table_options={:show_action=> lambda{|user| link_to "#{user.name}", "/dash/users/#{user.id}"}, :row_layout =>['twitter_username','in_beta']}
+
+%h1 Users
+%h2 Summary (in beta)
+=render :partial=>'state_breakdown_user',:locals=>{:user_group_state_counts=>@beta_user_state_counts} 
+
+%p{:style=>'font-size: 10px'} User states are updated daily. (#{link_to 'update now', '/dash/update_user_states_now'})
+
+%p=link_to 'Email Signup List','/dash/email_list'
+
+
+.user_table.page-header
+  %h2 Users
+  .btn-group
+    %a.btn#beta_switch{:href=>"javascript:void(0);"} beta users
+    %a.btn.btn-info#all_switch{:href=>"javascript:void(0);"} all users
+
+  -# =paginate @users
+  %table#users
+    %thead
+      %tr
+        %th beta
+        %th twitter
+        %th name
+        %th created
+        %th latest show
+        -#note: requires a whole bunch of queries right now
+        %th latest checkin 
+        %th status
+    %tbody
+      -@users.each do |user|
+        %tr{:id => dom_id(user)}
+          -if user.in_beta==true
+            %td{:style=>"text-align: center"} &#10003;
+          -else
+            %td{:style=>"text-align: center"}=link_to 'add',{:controller => :dash, :action => :toggle_in_beta, :id => user.id, :page => params[:page]}
+          %td{:style=>"width: 8em"}
+            =link_to "#{user.twitter_username.nil? ? '?' : '@'+user.twitter_username}", "/dash/user/#{user.id}"
+          %td=user.name
+          %td.date_column
+            =user.created_at.strftime('%Y-%m-%d')
+          %td.date_column
+            =user.get_latest_login_date
+          %td.date_column=user.get_latest_checkin_date
+          %td=user.status
+
+-#=paginate @users
+//$("#beta_switch").show();
+//$("#all_switch").hide();
+
+:javascript
+  $(document).ready(function() {
+    tbl=$('#users').dataTable( {
+      "sScrollY": "500px",
+      "bPaginate": false,
+      "aaSorting": [[ 3, "desc" ]]
+       });   
+    $("#beta_switch").click(function() {
+      tbl.fnFilter( '✓',0,true,false ); //search for beta users only
+      $("#beta_switch").toggleClass('btn-info');
+      $("#all_switch").toggleClass('btn-info');
+    });
+    $("#all_switch").click(function() {
+      tbl.fnFilter("", 0, false,false); //unfilter the table to get all users
+      $("#all_switch").toggleClass('btn-info');
+      $("#beta_switch").toggleClass('btn-info');
+    });
+  } );

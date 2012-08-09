@@ -1,0 +1,51 @@
+<h1>Listing user_traits</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Trait</th>
+    <th>Visible to user</th>
+    <th>Num notifications</th>
+    <th>Num checkins</th>
+    <th>Desired notification frequency</th>
+    <th>Level</th>
+    <th>Last notification datetime</th>
+    <th>Num budges received</th>
+    <th>Num budges given</th>
+    <th>Num budges completed</th>
+    <th>Num budges ignored</th>
+    <th>Response rate</th>
+    <th>Avg response time</th>
+    <th>Streak</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @user_traits.each do |user_trait| %>
+  <tr>
+    <td><%= user_trait.user_id %></td>
+    <td><%= user_trait.trait_id %></td>
+    <td><%= user_trait.visible_to_user %></td>
+    <td><%= user_trait.num_notifications %></td>
+    <td><%= user_trait.num_checkins %></td>
+    <td><%= user_trait.desired_notification_frequency %></td>
+    <td><%= user_trait.level %></td>
+    <td><%= user_trait.last_notification_datetime %></td>
+    <td><%= user_trait.num_budges_received %></td>
+    <td><%= user_trait.num_budges_given %></td>
+    <td><%= user_trait.num_budges_completed %></td>
+    <td><%= user_trait.num_budges_ignored %></td>
+    <td><%= user_trait.response_rate %></td>
+    <td><%= user_trait.avg_response_time %></td>
+    <td><%= user_trait.streak %></td>
+    <td><%= link_to 'Show', user_trait %></td>
+    <td><%= link_to 'Edit', edit_user_trait_path(user_trait) %></td>
+    <td><%= link_to 'Destroy', user_trait, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New User trait', new_user_trait_path %>

@@ -1,0 +1,4 @@
+- if program_player.coach_flag.present?
+  %span{:class => "flagged_#{program_player.coach_flag}"}
+    Flagged: 
+    = ProgramPlayer::COACH_FLAG[program_player.coach_flag]

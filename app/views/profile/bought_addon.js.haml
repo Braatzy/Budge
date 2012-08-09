@@ -1,0 +1,20 @@
+- if @user_addon and @user_addon.activated?
+  $('#toggle_#{@addon.token}').html("#{escape_javascript(render :partial => 'profile/addon_switch')}").page();
+  if ($('.addon_state_#{@addon.token}').length) {
+  $('.addon_state_#{@addon.token}').each(function(){
+  $(this).css('color', 'green');
+  $(this).html('on');
+  });
+  }
+- elsif @user_addon
+  $('#toggle_#{@addon.token}').html("#{escape_javascript(render :partial => 'profile/addon_switch')}").page();
+  if ($('.addon_state_#{@addon.token}').length) {
+  $('.addon_state_#{@addon.token}').each(function(){
+  $(this).css('color', 'red');
+  $(this).html('off');
+  });
+  }
+- elsif params[:action] == 'buy_addon_with_money'
+  alert("Coming soon!");
+- else 
+  alert("You can't afford this, yet!");

@@ -1,0 +1,45 @@
+<%= form_for(@tracked_action) do |f| %>
+  <% if @tracked_action.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tracked_action.errors.count, "error") %> prohibited this tracked_action from being saved:</h2>
+
+      <ul>
+      <% @tracked_action.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :num_triggers %><br />
+    <%= f.text_field :num_triggers %>
+  </div>
+  <div class="field">
+    <%= f.label :trigger_data %><br />
+    <%= f.text_field :trigger_data %>
+  </div>
+  <div class="field">
+    <%= f.label :tag_week %><br />
+    <%= f.text_field :tag_week %>
+  </div>
+  <div class="field">
+    <%= f.label :tag_month %><br />
+    <%= f.text_field :tag_month %>
+  </div>
+  <div class="field">
+    <%= f.label :tag_year %><br />
+    <%= f.text_field :tag_year %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

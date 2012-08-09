@@ -1,0 +1,110 @@
+= form_for(:auto_message, :url => {:controller => :dash, :action => :save_program_budge_auto_message, :id => (@auto_message.present? ? @auto_message.id : nil)}, :html => {:id => 'save_auto_message_form'}) do |f|
+  = hidden_field :program, :id
+  = hidden_field :program_budge, :id
+  = f.text_area :content, {:rows => 4, :style => 'width: 98%; font-size: 16px;'}
+  %div{:style => 'float: right; font-size: 11px; color: #666;', :id => :auto_message_char_count}
+  %table{:style => 'clear: right;'}
+    %tr
+      %td{:colspan => 2}
+        = f.check_box :include_link
+        = f.label :include_link, "Include a link to the player's program page at the end of the message?"
+    - if true
+      = f.hidden_field :auto_message_type, :value => AutoMessage::AUTO_MESSAGE_TYPE_ACTIVE
+    - else
+      %tr
+        %td Type of auto message:
+        %td= f.select :auto_message_type, AutoMessage.options_for_auto_message_types, {:include_blank => false}
+    %tr
+      %td Publish status:
+      %td= f.select :status, AutoMessage.options_for_status, {:include_blank => false}
+    %tr
+      %td Send via:
+      %td= f.select :deliver_via, AutoMessage.options_for_deliver_via, {:include_blank => false}
+    %tr
+      %td{:colspan => 2}
+        %strong Specific constraints
+    %tr
+      %td Specify the day:
+      %td
+        = f.select :day_number, 1.upto(program_budge.duration_in_days).map{|num|["Day #{num}",num]}, {:prompt => 'Day #'}
+        %br
+        at
+        = f.select :hour, 1.upto(23).map{|num|["#{num < 13 ? num : num-12}#{num < 12 ? 'am' : 'pm'}", num]}, {:include_blank => true}
+        = f.select :delivery_window, AutoMessage.options_for_delivery_window, {:include_blank => true}
+    %tr
+      %td{:colspan => 2}
+        %strong Location-based constraints (leave specific constraints blank if you use these)
+    %tr
+      %td When they checkin:
+      %td
+        = f.select :trigger_trait_id, FoursquareCategory.foursquare_category_traits.map{|t|["at #{t.article} #{t.noun}", t.id]}, {:include_blank => true}
+
+  %div{:style => 'margin-top: 1em;'}
+    = f.submit "Shorten links", {:style => 'font-size: 25px;', :id => 'shorten_links'}
+    &middot; or &middot; 
+    = f.submit 'Save auto message', {:style => 'font-size: 25px;', :id => 'submit_auto_message'}
+    
+    - if @auto_message.present? and !@auto_message.new_record?
+      &middot; or #{link_to "delete this auto message", {:controller => :dash, :action => :delete_auto_message, :id => @auto_message.id}, {:confirm => "Are you sure?"}}
+  
+:javascript 
+  
+  var tweet_chars = 120;
+
+  function calculate_chars() {
+    var chars = parseInt($('#auto_message_content').val().length);
+    if ($('#auto_message_include_link').is(':checked')) {
+      tweet_chars = 100;
+    } else {
+      tweet_chars = 120;
+    }
+    if ((tweet_chars-parseInt($('#auto_message_content').val().length)) > 0) {
+      $('#auto_message_char_count').html("Chars left if tweeting: "+(tweet_chars-chars));            
+    } else if ((tweet_chars+40-parseInt($('#auto_message_content').val().length)) > 0) {
+      $('#auto_message_char_count').html("Chars left if smsing: "+(tweet_chars+40-chars));                          
+    } else {
+      $('#auto_message_char_count').html("Too long to tweet or sms... email still works though.");
+    }
+  }
+  calculate_chars();
+  $('#auto_message_include_link').unbind('change').change(function(){calculate_chars()});
+  $('#auto_message_content').keyup(function(){calculate_chars()});
+
+  $('#submit_auto_message').click(function(){
+    if (parseInt($('#auto_message_content').val().length) <= 0) {
+      alert("There's nothing to save. Try typing something clever first. :)");
+    } else if (($('#auto_message_deliver_via').val() == '0' || $('#auto_message_deliver_via').val() == '1') && (tweet_chars-parseInt($('#auto_message_content').val().length)) < 0) {
+      alert("This is too long for Twitter, sorry. Try another delivery method.");
+    } else if ($('#auto_message_deliver_via').val() == '2' && (tweet_chars+40-parseInt($('#auto_message_content').val().length)) < 0) {
+      alert('This is too long for SMS/text message, sorry. Try another delivery method.');
+    } else {
+      $.ajax({
+        type: "POST",
+        url: $('#save_auto_message_form').attr('action'),
+        data: {program_id: $("#program_id").val(), 
+               program_budge_id: $('#program_budge_id').val(),
+               auto_message_content: $('#auto_message_content').val(),
+               auto_message_type: $('#auto_message_auto_message_type').val(),
+               auto_message_status: $('#auto_message_status').val(),
+               auto_message_deliver_via: $('#auto_message_deliver_via').val(),
+               auto_message_day_number: $('#auto_message_day_number').val(),
+               auto_message_hour: $('#auto_message_hour').val(),
+               auto_message_trigger_trait_id: $('#auto_message_trigger_trait_id').val(),
+               auto_message_delivery_window: $('#auto_message_delivery_window').val(),
+               auto_message_include_link: $('#auto_message_include_link').is(':checked')}    
+      });
+    }
+    return false;
+  
+  });
+  $('#shorten_links').click(function(){
+    $.ajax({
+      type: "POST",
+      url: "#{url_for :controller => :dash, :action => :convert_to_link_resource_links}",
+      data: {text: $('#auto_message_content').val(),
+             input_id: '#auto_message_content'}
+    });
+    return false;
+  });
+
+

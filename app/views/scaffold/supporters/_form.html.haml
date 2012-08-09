@@ -1,0 +1,39 @@
+= form_for([:scaffold, @supporter]) do |f|
+  - if @supporter.errors.any?
+    #errorExplanation
+      %h2= "#{pluralize(@supporter.errors.count, 'error')} prohibited this user from being saved:"
+      %ul
+      - @supporter.errors.full_messages.each do |msg|
+        %li= msg
+  
+  .field
+    = f.label :program_player_id
+    %br
+    = f.text_field :program_player_id
+  .field
+    = f.label :program_id
+    %br
+    = f.text_field :program_id
+  .field
+    = f.label :user_id
+    %br
+    = f.text_field :user_id
+  .field
+    = f.label :invite_token
+    %br
+    = f.text_field :invite_token
+  .field
+    = f.label :active
+    %br
+    = f.check_box :active
+  .field
+    = f.label :user_data
+    %br
+    = f.text_area :user_data
+  .field
+    = f.label :invitation_data
+    %br
+    = f.text_area :invitation_data
+
+  .actions
+    = f.submit

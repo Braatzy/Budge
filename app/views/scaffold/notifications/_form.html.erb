@@ -1,0 +1,138 @@
+<%= form_for(@notification) do |f| %>
+  <% if @notification.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@notification.errors.count, "error") %> prohibited this notification from being saved:</h2>
+
+      <ul>
+      <% @notification.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :short_id %><br />
+    <%= f.text_field :short_id %>
+  </div>
+  <div class="field">
+    <%= f.label :notification_number %><br />
+    <%= f.text_field :notification_number %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_at %><br />
+    <%= f.datetime_select :delivered_at %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_hour_of_day %><br />
+    <%= f.text_field :delivered_hour_of_day %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_day_of_week %><br />
+    <%= f.text_field :delivered_day_of_week %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_week_of_year %><br />
+    <%= f.text_field :delivered_week_of_year %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_at %><br />
+    <%= f.datetime_select :responded_at %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_hour_of_day %><br />
+    <%= f.text_field :responded_hour_of_day %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_day_of_week %><br />
+    <%= f.text_field :responded_day_of_week %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_week_of_year %><br />
+    <%= f.text_field :responded_week_of_year %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_via %><br />
+    <%= f.text_field :delivered_via %>
+  </div>
+  <div class="field">
+    <%= f.label :message_style_token %><br />
+    <%= f.text_field :message_style_token %>
+  </div>
+  <div class="field">
+    <%= f.label :streak %><br />
+    <%= f.text_field :streak %>
+  </div>
+  <div class="field">
+    <%= f.label :responded_minutes %><br />
+    <%= f.text_field :responded_minutes %>
+  </div>
+  <div class="field">
+    <%= f.label :total_clicks %><br />
+    <%= f.text_field :total_clicks %>
+  </div>
+  <div class="field">
+    <%= f.label :responded %><br />
+    <%= f.check_box :responded %>
+  </div>
+  <div class="field">
+    <%= f.label :completed_response %><br />
+    <%= f.check_box :completed_response %>
+  </div>
+  <div class="field">
+    <%= f.label :method_of_response %><br />
+    <%= f.text_field :method_of_response %>
+  </div>
+  <div class="field">
+    <%= f.label :shared_results %><br />
+    <%= f.check_box :shared_results %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_user_id %><br />
+    <%= f.text_field :remote_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_site_token %><br />
+    <%= f.text_field :remote_site_token %>
+  </div>
+  <div class="field">
+    <%= f.label :remote_post_id %><br />
+    <%= f.text_field :remote_post_id %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_immediately %><br />
+    <%= f.check_box :delivered_immediately %>
+  </div>
+  <div class="field">
+    <%= f.label :num_signups %><br />
+    <%= f.text_field :num_signups %>
+  </div>
+  <div class="field">
+    <%= f.label :for %><br />
+    <%= f.text_field :for %>
+  </div>
+  <div class="field">
+    <%= f.label :for_id %><br />
+    <%= f.text_field :for_id %>
+  </div>
+  <div class="field">
+    <%= f.label :from_system %><br />
+    <%= f.check_box :from_system %>
+  </div>
+  <div class="field">
+    <%= f.label :from_user_id %><br />
+    <%= f.text_field :from_user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :delivered_off_hours %><br />
+    <%= f.check_box :delivered_off_hours %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

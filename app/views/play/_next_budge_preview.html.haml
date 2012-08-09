@@ -1,0 +1,11 @@
+- player_budge ||= nil
+- if player_budge.present?   
+  %div{:id => "level_preview_panel_#{player_budge.program_budge_id}", :style => 'display: none;', :class => 'rounded next_preview'}
+    - if player_budge.program_budge.present?
+      %h3{:style => 'font-weight: normal;'}= raw textilize player_budge.program_budge.coach_message
+    - if player_budge.program_budge.program_action_templates.size > 0
+      %ul.action_wording{:style => 'list-style-type: disc;'}
+        - player_budge.program_budge.action_templates_for_day_number(player_budge.day_of_budge).each do |program_action_template|
+          %li
+            = program_action_template.action_wording
+      %p= button "Other options", {:controller => :play, :action => :options, :id => player_budge.program_player.program_id, :back => request.fullpath}

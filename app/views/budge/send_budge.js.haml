@@ -1,0 +1,25 @@
+- if @budge_request
+  $.mobile.changePage("#{url_for :controller => :stream, :action => :view_budge_request, :id => @budge_request.id}", 'fade');
+
+- elsif @review_budge # We still need to select budgees
+  $('#trait_id').val('#{@trait.id}');
+  $('#trait_do').val('#{@trait_do}');
+  $('#trait_alignment').val('#{@trait_alignment}');
+  $('#trait_duration').val('#{@trait_duration}');
+  $('#trait_quantity').val('#{@trait_quantity}');
+  $('#trait_name').val("#{h @trait_name}");
+  $('#selected_trait_type').html("Your #{@trait_alignment} budge:");
+  $('#selected_trait_name').html("#{h @trait_name}")
+  $('#selected_trait_display').show();
+  $.mobile.changePage("#invite", false, false);              
+    
+- else
+  $.mobile.changePage("#{url_for :controller => :home, :action => :stream}", 'fade');
+  - if @new_stream_items.present?
+    - @new_stream_items.each do |stream_item|
+      :javascript
+        if ($('#the_stream').length) {
+          unless ($('#stream_item_#{stream_item.id}').length) {
+            $('#the_stream').prepend("#{escape_javascript(render :partial => 'stream/stream_item_in_list', :collection => @new_stream_items, :as => :stream_item)}");
+          }
+        }

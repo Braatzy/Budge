@@ -1,0 +1,47 @@
+-messages||=[]
+-table_id||='messages'
+-show_user_info= true if show_user_info.nil?
+-show_program_name=true if show_program_name.nil?
+-use_simple_table=true if use_simple_table.nil?
+-use_data_table=true if use_data_table.nil?
+-messages_exist=false
+
+%div{:class=>"#{use_simple_table ? 'simple_table' : ''}"}
+  %table{:id=>table_id}
+    %thead
+      %tr
+        %th{:title=>'scheduled time of delivery'} Delivery
+        -if show_program_name
+          %th{:title=>'name of program that originated the message'} Program
+        %th{:title=>'level number'}  Level
+        -if show_user_info
+          %th Twitter
+        %th Message
+        %th Via
+        %th{:title=>"modify this message for this user"} edit
+        %th{:title=>"don't send this message for this user"} delete
+    %tbody
+      -messages.each do |message|
+        -next if message.deliver_at.nil? or message.to_user_id.nil?
+        -messages_exist=true
+        %tr{:class=>"message#{message.player_budge_id}",:id=>"message#{message.id}"}
+          %td.datetime_column=message.deliver_at.strftime('%Y-%m-%d %H:%M')
+          -if show_program_name
+            %td=message.program_name
+          %td=message.level_number
+          -if show_user_info
+            %td.twitter_column=link_to "@#{message.to_twitter_username}","/dash/messages/#{message.to_user_id}"
+          %td
+            .shorten{:title=>message.content}=message.content
+          %td=message.via_name
+          %td=link_to "#{message.delivered ? '' : 'edit'}","/dash/edit_player_message/#{message.id}"
+          %td.centered=link_to "#{message.delivered ? '' : 'x'}","/dash/delete_player_message/#{message.id}"
+
+-if messages_exist and use_data_table
+  :javascript
+    $(document).ready(function() {
+      $("##{table_id}").dataTable( {
+        "bPaginate": false,
+        "aaSorting": [[ 0, "desc" ]]
+         });
+    });

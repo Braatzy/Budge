@@ -1,0 +1,156 @@
+- checkins_hash ||= []
+- say_thanks ||= false
+- day_number ||= user_action.player_budge.day_of_budge
+
+- if program_action_template.blank? or !program_action_template.active?
+  -# Skip... it's not time to do this one yet, or we have deleted this question from the budge
+  
+- elsif user_action.victorious?
+  - if program_action_template.present?
+    %h3.thin= program_action_template.action_wording
+  %h2.handwriting
+    = image_tag 'mobile-web/1/check_mark_green_sm.png', {:class => 'big_checkmark', :align => :absmiddle}
+    Victory!
+- elsif say_thanks
+  - if program_action_template.present?
+    %h3.thin= program_action_template.question
+  - else
+    %h3.thin Oops... I forgot what I was going to ask you.
+  %h2.handwriting
+    = image_tag 'mobile-web/1/check_mark_green_sm.png', {:class => 'big_checkmark', :align => :absmiddle}
+    Thank you!
+
+- elsif user_action.started?
+  %h3.thin{:style => 'margin-bottom: 0;padding-top: 10px;'}= program_action_template.question
+
+  - if checkins_hash.present? and checkins_hash[:checkins].present?
+    %div{:id => "checkins_for_#{user_action.id}", :class => "#{checkins_hash[:checkins].size > 1 ? :hide : ''}"}
+      - checkins_hash[:checkins].sort_by{|c|c.date}.each do |checkin|
+        = render :partial => 'checkin_statement', :locals => {:checkin => checkin, :user_action => user_action, :index => index, :date => @current_checkin_date}  
+    - if checkins_hash[:checkins].size > 1
+      %p.subtle{:id => "view_checkins_for_#{user_action.id}"}
+        %span.dashed See answer history (#{checkins_hash[:checkins].size})
+  
+
+  -# If we have information for this date already, thank them here, hide the input form, and let them re-open it
+  - @hide_form = false
+  - if user_action.last_checkin_at.present? and user_action.last_checkin_at.to_date >= date
+    - @hide_form = true
+    %h2{:id => "user_action_thanks_#{user_action.id}", :class => :handwriting}
+      = image_tag 'mobile-web/1/check_mark_green_sm.png', {:class => 'big_checkmark', :align => :absmiddle}
+      Thanks!
+      %span.sans_serif.small
+        = link_to "#{user_action.trait.cumulative_results? ? 'Add to' : 'Edit'} your answer", '#', {:id => "user_action_edit_answers_#{user_action.id}", :class => :dashed}
+  
+  %div{:id => "user_action_answer_form_#{user_action.id}", :class => "#{@hide_form ? :hide : ''}"}
+    - if user_action.answer_type == ':boolean'
+      %div{:class => 'ui-grid-a'}
+        %div{:class => 'ui-block-a'}= button 'Yes', {}, {:class => 'save_boolean', 'data-boolean' => :yes, 'data-user_action_id' => user_action.id, 'data-index' => index}
+        %div{:class => 'ui-block-b'}= button 'No', {}, {:class => 'save_boolean', 'data-boolean' => :no, 'data-user_action_id' => user_action.id, 'data-index' => index}
+  
+    - elsif user_action.answer_type == ':text'
+      %textarea{:class => "user_action_amount_text stylized_input", :name => "amount_#{index}", :id => "amount_#{index}", 'data-user_action_id' => user_action.id, 'data-index' => index, :autocapitalize => 'off'}  
+
+    - else
+      %div{:class => 'ui-grid-a'}
+        - if user_action.answer_type == ':seconds'
+          %div{:class => 'ui-block-a'}
+            %input{:type => :text, :placeholder => "MM:SS", :class => "user_action_amount_number stylized_input", :name => "amount_#{index}", :id => "amount_#{index}", 'data-user_action_id' => user_action.id, 'data-index' => index, :value => ""}          
+          %div{:class => 'ui-block-b'}
+            %h3{:class => 'handwriting input_label'} min:sec
+        - else
+          %div{:class => 'ui-block-a'}
+            %input{:type => :number, :class => "user_action_amount_number stylized_input", :name => "amount_#{index}", :id => "amount_#{index}", 'data-user_action_id' => user_action.id, 'data-index' => index, :value => ""}
+          %div{:class => 'ui-block-b'}
+            %h3{:class => 'handwriting input_label'}= user_action.amount_units
+
+  :javascript
+    #{startj}
+    $("#user_action_edit_answers_#{user_action.id}").unbind('click').click(function(){
+      $("#user_action_answer_form_#{user_action.id}").slideToggle();
+    });
+    $("#view_checkins_for_#{user_action.id}").unbind('click').click(function(){
+      $("#view_checkins_for_#{user_action.id}").hide();
+      $("#checkins_for_#{user_action.id}").fadeIn();
+    });
+    
+    $('#user_action_#{user_action.id} .user_action_amount_number').textinput();
+    $('#user_action_#{user_action.id} .user_action_amount_text').textinput();
+  
+    $('#user_action_#{user_action.id} .save_boolean').click(function(){
+      var user_action_id = $(this).attr('data-user_action_id');
+      var index = $(this).attr('data-index');
+      var answer = $(this).attr('data-boolean');
+      $.ajax({
+        url: "#{url_for :controller => :play, :action => :save_checkin}",
+        type: 'POST',
+        dataType: 'script',
+        data: {user_action_id: user_action_id,
+               answer_type: "boolean",
+               answer: answer,
+               date: "#{date}",
+               index: index,
+               latitude: $('#location').attr('data-lat'),
+               longitude: $('#location').attr('data-lon')}
+      });
+      return false        
+    });
+    $("#user_action_#{user_action.id} .user_action_amount_number").unbind('change').change(function(){
+      var index = $(this).attr('data-index');
+      var user_action_id = $(this).attr('data-user_action_id');
+      var answer = $('#amount_'+ index).val();
+      if (!answer) {
+        alert("My robot brain can't compute that. Try typing a number.");
+      } else {
+        $.ajax({
+          url: "#{url_for :controller => :play, :action => :save_checkin}",
+          type: 'POST',
+          dataType: 'script',
+          data: {user_action_id: user_action_id,
+                 answer_type: "number",
+                 answer: answer,
+                 date: "#{date}",
+                 index: index,
+                 latitude: $('#location').attr('data-lat'),
+                 longitude: $('#location').attr('data-lon')}
+        });
+      }
+      return false;
+    });
+
+    $("#user_action_#{user_action.id} .user_action_amount_text").change(function(){
+      var index = $(this).attr('data-index');
+      var user_action_id = $(this).attr('data-user_action_id');
+      var answer = $('#amount_'+ index).val();
+      if (!answer) {
+        alert("My robot brain can't compute that. Try some text.");
+      } else {
+        $.ajax({
+          url: "#{url_for :controller => :play, :action => :save_checkin}",
+          type: 'POST',
+          dataType: 'script',
+          data: {user_action_id: user_action_id,
+                 answer_type: "text",
+                 answer: answer,
+                 date: "#{date}",
+                 index: index,
+                 latitude: $('#location').attr('data-lat'),
+                 longitude: $('#location').attr('data-lon')}
+        });
+      }
+      return false;
+    });
+    #{endj}
+    
+:javascript
+  #{startj}
+  $("#user_action_#{user_action.id} .delete_checkin").click(function(){
+      $.ajax({
+        url: $(this).attr('href'),
+        type: 'POST',
+        dataType: 'script',
+        data: {date: "#{date}", 
+               index: $(this).attr('data-index')}});    
+    return false;
+  });
+  #{endj}

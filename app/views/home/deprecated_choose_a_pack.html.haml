@@ -1,0 +1,58 @@
+- @head_title = "Choose an area"
+%div{'data-role' => 'page', 'data-theme' => @data_theme}
+  %div{'data-role' => 'content'}
+    %h1 Choose an area of your life that you think could use a little budging.
+    - Pack.find(:all, :conditions => ['launched = ? AND public = ? AND requires_unlocking = ?', true, true, false]).each do |pack|
+      %a{'href' => "##{pack.token}", 'data-role' => 'button'} #{pack.name}
+    
+- Pack.find(:all, :conditions => ['launched = ? AND public = ? AND requires_unlocking = ?', true, true, false]).each do |pack|
+  %div{:id => "#{pack.token}", 'data-role' => 'page', 'data-theme' => @data_theme}
+    %div{'data-role' => 'header'}
+      %h1 #{pack.name}
+    %div{'data-role' => 'content'}
+      %h1 Want to do more of this?
+      - pack.traits.sort_by{|b|b.action}.each_with_index do |trait, index|
+        %div{:id => "rec_#{pack.id}_#{index}", :class => 'recs', :style => "#{index > 0 ? 'display: none;' : ''}", 
+             'data-index' => index,
+             'data-pack-id' => pack.id}
+          %h3{:class => 'rounded card'}= trait.action  
+          %a{:href => url_for(:controller => :track, :action => :add_trait, :id => trait.id),
+             'data-role' => 'button', :class => 'yes', 'data-pack-id' => pack.id, 'data-trait-id' => trait.id} Yes!
+          %a{'data-role' => 'button', :class => 'nah', 'data-pack-id' => pack.id, 'data-index' => index} Nah, gimme another
+
+:javascript
+  #{startj}
+  $('.recs').bind("swipeleft", function(){
+      var current_index = parseInt($(this).attr('data-index'));
+      var next_index = current_index+1;
+      var current_pack_id = parseInt($(this).attr('data-pack-id'));
+      if ($('#rec_'+current_pack_id+'_'+next_index).text().length) {
+        $('#rec_'+current_pack_id+'_'+current_index).hide();
+        $('#rec_'+current_pack_id+'_'+next_index).show();
+      } else {
+        $('#rec_'+current_pack_id+'_'+current_index).hide();
+        $('#rec_'+current_pack_id+'_0').show();      
+      }
+  });
+  $('.recs').bind("swiperight", function(){
+      var current_index = parseInt($(this).attr('data-index'));
+      var next_index = current_index-1;
+      var current_pack_id = parseInt($(this).attr('data-pack-id'));
+      if ($('#rec_'+current_pack_id+'_'+next_index).text().length) {
+        $('#rec_'+current_pack_id+'_'+current_index).hide();
+        $('#rec_'+current_pack_id+'_'+next_index).show();
+      }
+  });
+  $('.nah').click(function(){
+      var current_index = parseInt($(this).attr('data-index'));
+      var next_index = current_index+1;
+      var current_pack_id = parseInt($(this).attr('data-pack-id'));
+      if ($('#rec_'+current_pack_id+'_'+next_index).text().length) {
+        $('#rec_'+current_pack_id+'_'+current_index).hide();
+        $('#rec_'+current_pack_id+'_'+next_index).show();
+      } else {
+        $('#rec_'+current_pack_id+'_'+current_index).hide();
+        $('#rec_'+current_pack_id+'_0').show();      
+      }
+  });
+  #{endj}

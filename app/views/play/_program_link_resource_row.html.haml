@@ -1,0 +1,12 @@
+%div{:class => :program_link_resource_icon}
+  - if program_link_resource.link_resource.photo?
+    = image_tag program_link_resource.link_resource.photo(:small), {:class => 'rounded-img'}
+%div{:class => :program_link_resource_details}
+  %h3
+    - if program_link_resource.link_resource.present?
+      = program_link_resource.link_resource.name
+  %p= program_link_resource.link_resource.domain
+  %div
+    - if program_link_resource.short_description.present?
+      %div= program_link_resource.short_description
+

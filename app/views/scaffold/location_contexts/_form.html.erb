@@ -1,0 +1,65 @@
+<%= form_for(@location_context) do |f| %>
+  <% if @location_context.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@location_context.errors.count, "error") %> prohibited this location_context from being saved:</h2>
+
+      <ul>
+      <% @location_context.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br />
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :context_about %><br />
+    <%= f.text_field :context_about %>
+  </div>
+  <div class="field">
+    <%= f.label :context_id %><br />
+    <%= f.text_field :context_id %>
+  </div>
+  <div class="field">
+    <%= f.label :latitude %><br />
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br />
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="field">
+    <%= f.label :population_density %><br />
+    <%= f.text_field :population_density %>
+  </div>
+  <div class="field">
+    <%= f.label :temperature_f %><br />
+    <%= f.text_field :temperature_f %>
+  </div>
+  <div class="field">
+    <%= f.label :weather_conditions %><br />
+    <%= f.text_field :weather_conditions %>
+  </div>
+  <div class="field">
+    <%= f.label :simplegeo_context %><br />
+    <%= f.text_area :simplegeo_context %>
+  </div>
+  <div class="field">
+    <%= f.label :foursquare_place_id %><br />
+    <%= f.text_field :foursquare_place_id %>
+  </div>
+  <div class="field">
+    <%= f.label :foursquare_category_id %><br />
+    <%= f.text_field :foursquare_category_id %>
+  </div>
+  <div class="field">
+    <%= f.label :foursquare_checkin_id %><br />
+    <%= f.text_field :foursquare_checkin_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

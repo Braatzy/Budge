@@ -1,0 +1,27 @@
+- if @message_data[:data].present?
+  - @message_data[:data].each do |program_player_hash|
+    .colored-bar{:style => ''}
+      %div{:style => 'background-color: #eee; border-top: 2px solid #777; font-size: 12px; font-weight: bold; color: #666; padding: 8px;'}
+        %h3{:style => 'margin: 0; padding: 0;'} 
+          Today's 
+          #{link_to program_player_hash[:program_player].program.name, {:host => DOMAIN, :protocol => 'http://', :controller => :play, :action => :program, :id => program_player_hash[:program_player].program_id}} 
+          neighbors
+    
+    .text-box{:style => 'padding: 0 10px;'}
+      %table 
+        - if program_player_hash[:up2]
+          = render :partial => 'leader_row', :locals => {:leader => program_player_hash[:up2]} 
+
+        - if program_player_hash[:up1]
+          = render :partial => 'leader_row', :locals => {:leader => program_player_hash[:up1]} 
+              
+        - if program_player_hash[:you]
+          = render :partial => 'leader_row', :locals => {:leader => program_player_hash[:you]} 
+                            
+        - if program_player_hash[:down]
+          = render :partial => 'leader_row', :locals => {:leader => program_player_hash[:down]} 
+
+    %br
+
+%div{:style => 'padding-left: 10px;'} 
+  %p Get motivated by people that look interesting by going to their profile and clicking the "Follow" button.

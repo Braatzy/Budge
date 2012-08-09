@@ -1,0 +1,43 @@
+<h1>Listing oauth_tokens</h1>
+
+<table>
+  <tr>
+    <th>User</th>
+    <th>Site token</th>
+    <th>Site name</th>
+    <th>Token</th>
+    <th>Secret</th>
+    <th>Remote name</th>
+    <th>Remote username</th>
+    <th>Remote user</th>
+    <th>Cached user info</th>
+    <th>Cached datetime</th>
+    <th>Working</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @oauth_tokens.each do |oauth_token| %>
+  <tr>
+    <td><%= oauth_token.user_id %></td>
+    <td><%= oauth_token.site_token %></td>
+    <td><%= oauth_token.site_name %></td>
+    <td><%= oauth_token.token %></td>
+    <td><%= oauth_token.secret %></td>
+    <td><%= oauth_token.remote_name %></td>
+    <td><%= oauth_token.remote_username %></td>
+    <td><%= oauth_token.remote_user_id %></td>
+    <td><%= oauth_token.cached_user_info %></td>
+    <td><%= oauth_token.cached_datetime %></td>
+    <td><%= oauth_token.working %></td>
+    <td><%= link_to 'Show', oauth_token %></td>
+    <td><%= link_to 'Edit', edit_oauth_token_path(oauth_token) %></td>
+    <td><%= link_to 'Destroy', oauth_token, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Oauth token', new_oauth_token_path %>

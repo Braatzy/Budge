@@ -1,0 +1,6 @@
+- if @auto_message.present? and @auto_messages.present?
+  if ($('#saved_auto_messages').length) {
+  $('#saved_auto_messages').html("#{escape_javascript(render :partial => 'dash/budge_auto_messages', :locals => {:program_budge => @program_budge, :auto_messages => @auto_messages})}");
+  } else {
+  window.location = "#{url_for :controller => :dash, :action => :edit_program_budge, :id => @program_budge.id, :anchor => 'auto_messages'}";
+  }

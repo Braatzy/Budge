@@ -1,0 +1,33 @@
+<h1>Listing visit_stats</h1>
+
+<table>
+  <tr>
+    <th>Constrained by</th>
+    <th>Constrained by</th>
+    <th>Constrained by id2</th>
+    <th>Num visits</th>
+    <th>Total visits</th>
+    <th>Percent visits</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @visit_stats.each do |visit_stat| %>
+  <tr>
+    <td><%= visit_stat.constrained_by %></td>
+    <td><%= visit_stat.constrained_by_id %></td>
+    <td><%= visit_stat.constrained_by_id2 %></td>
+    <td><%= visit_stat.num_visits %></td>
+    <td><%= visit_stat.total_visits %></td>
+    <td><%= visit_stat.percent_visits %></td>
+    <td><%= link_to 'Show', visit_stat %></td>
+    <td><%= link_to 'Edit', edit_visit_stat_path(visit_stat) %></td>
+    <td><%= link_to 'Destroy', visit_stat, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Visit stat', new_visit_stat_path %>
