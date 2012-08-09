@@ -1,3 +1,13 @@
-== Mobile app called Budge
+Required for setup:
 
-Currently in development.
+* add api keys and secrets to oauth.yml
+* add database info to database.yml
+* update initializers
+* update app/models/twilio_api.rb with your Twilio credentials (for SMS)
+* update app/mailers/mailer.rb with your email addresses
+
+I hosted bud.ge on heroku.  Heroku addons that I used in case you feel like doing the same:
+
+Airbrake, Heroku Scheduler, Hostname SSL, New Relic, PG Backups, Sendgrid, StillAlive, Zerigo DNS
+
+If you have questions, don't hesitate to email me at busterbenson at gmail.
